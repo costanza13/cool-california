@@ -59,7 +59,7 @@ Post.init(
       type: DataTypes.DECIMAL,
       allowNull: false,
     },
-    latitude: {
+    longitude: {
       type: DataTypes.DECIMAL,
       allowNull: false,
     },
