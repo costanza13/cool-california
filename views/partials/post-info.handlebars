@@ -1,0 +1,15 @@
+<article class="post">
+  <div class="title">
+    <p id="title">{{title}}</p>
+    <p id="username"> by {{user.username}}</p>
+    <div>
+        <p>{{description}}</p>
+        <p>Coordinates: ({{latitude}}, {{longitude}})</p>
+        <img src={{image}}>
+    </div>
+  </div>
+  <div class="meta">
+      Created at {{format_date created_at}}
+    <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>
+  </div>
+</article>
