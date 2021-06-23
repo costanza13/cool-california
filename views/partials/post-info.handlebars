@@ -3,8 +3,11 @@
     <p id="title">{{title}}</p>
     <p id="username"> by {{user.username}}</p>
     <div>
+        <p id="votes"> Likes: {{vote.likes.length}} /\ Dislikes: {{vote.dislikes.length}}</p>
         <p>{{description}}</p>
         <p>Coordinates: ({{latitude}}, {{longitude}})</p>
+    </div>
+    <div>
         <img src={{image}}>
     </div>
   </div>
