@@ -18,6 +18,9 @@ const tagData = [
   },
   {
     tag_name: 'chilling',
+  },
+  {
+    tag_name: 'swimming'
   }
 ];
 
