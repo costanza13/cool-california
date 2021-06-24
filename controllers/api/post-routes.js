@@ -93,6 +93,9 @@ router.post('/', withAuthApi, (req, res) => {
   Post.create({
     title: req.body.title,
     description: req.body.description,
+    image_url: req.body.image_url,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
     user_id: req.session.user_id
   })
     .then(dbPostData => res.json(dbPostData))
