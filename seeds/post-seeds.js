@@ -23,7 +23,7 @@ const postData = [
     image: '',
     latitude: '39.31862',
     longitude: '-119.92171',
-    user_id: 4
+    user_id: 2
   }
 ];
 
