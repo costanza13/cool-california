@@ -1,0 +1,51 @@
+<div id="sign-in-wrapper">
+  <div class="card sign-in mx-auto">
+    <div class="card-header">
+      <h3>Sign In</h3>
+    </div>
+    <div class="card-body">
+      <form class="login-form">
+        <div class="mb-3">
+          <input type="text" id="username-login" class="form-control" placeholder="username" />
+        </div>
+        <div class="mb-3">
+          <input type="password" id="password-login" class="form-control" placeholder="password" />
+        </div>
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary">sign in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="mx-auto my-1 text-center">
+    <small>Don't have an account? <a id="sign-up-switch" href="#">Sign up!</a></small>
+  </div>
+</div>
+
+<div id="sign-up-wrapper" class="hidden">
+  <div class="card sign-up mx-auto">
+    <div class="card-header">
+      <h3>Sign Up</h3>
+    </div>
+    <div class="card-body">
+      <form class="signup-form">
+        <div class="mb-3">
+          <input type="text" id="username-signup" class="form-control" placeholder="username" />
+        </div>
+        <div class="mb-3">
+          <input type="text" id="email-signup" class="form-control" placeholder="email" />
+        </div>
+        <div class="mb-3">
+          <input type="password" id="password-signup" class="form-control" placeholder="password" />
+        </div>
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary">sign up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="mx-auto my-1 text-center">
+    <small>Already have an account? <a id="sign-in-switch" href="#">Sign in!</a></small>
+  </div>
+</div>
+<script src="/javascript/login.js"></script>

@@ -1,1 +1,16 @@
-<h1>Hello World</h1>
+{{#each posts}}
+<article>
+  <p>Post ID: {{id}}</p>
+  <p>Title: {{title}}</p>
+  <p>Author: {{user.post_author}}</p>
+  <p>Description: {{description}}</p>
+  <p>Tags:
+    {{#each tags}}
+    [{{tag_name}}]
+    {{/each}}
+  </p>
+  <p>Create at: {{created_at}}</p>
+  <p>Likes: {{likes}} - Dislikes: {{dislikes}}</p>
+</article>
+<br><br>
+{{/each}}

@@ -54,6 +54,7 @@ Post.init(
     image_url: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: ''
     },
     latitude: {
       type: DataTypes.DECIMAL,

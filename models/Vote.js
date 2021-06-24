@@ -13,7 +13,7 @@ Vote.init(
     like: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: true
+      defaultValue: true
     },
     user_id: {
       type: DataTypes.INTEGER,
