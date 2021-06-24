@@ -1,1 +1,18 @@
-<h1>Hello World</h1>
+<ol class="post-list">
+  {{#each posts as |post|}}
+    <li>
+      <article class="post">
+        <div class="title">
+          <a href="/post/{{post.id}}" id="title">/ {{title}} \</a>
+          <span>{{description}}</span>
+        </div>
+        <div class="meta">
+          Created at
+          {{format_date created_at}}
+          <a href="/post/{{id}}">{{comments.length}}
+            {{format_plural "comment" comments.length}}</a>
+        </div>
+      </article>
+    </li>
+  {{/each}}
+</ol>
