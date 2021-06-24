@@ -23,7 +23,7 @@ User.belongsToMany(Tag, {
   foreignKey: 'user_id'
 });
 
-Tag.belongsToMany(Post, {
+Tag.belongsToMany(User, {
   through: UserTag,
   foreignKey: 'tag_id'
 });
