@@ -51,8 +51,8 @@ Post.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    image: {
-      type: DataTypes.BLOB,
+    image_url: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     latitude: {
