@@ -18,13 +18,13 @@ class Post extends Model {
           "created_at",
           [
             sequelize.literal(
-              "(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND type = true)"
+              "(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND like = true)"
             ),
             "likes",
           ],
           [
             sequelize.literal(
-              "(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND type = false)"
+              "(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND like = false)"
             ),
             "dislikes",
           ],

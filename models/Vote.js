@@ -10,9 +10,9 @@ Vote.init(
       primaryKey: true,
       autoIncrement: true
     },
-    type: {
+    like: {
       type: DataTypes.BOOLEAN,
-      allowNull: true
+      allowNull: false
     },
     user_id: {
       type: DataTypes.INTEGER,
