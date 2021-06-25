@@ -1,1 +1,7 @@
-/* RESET? css framework? */
+* {
+  box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
+}

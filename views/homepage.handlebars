@@ -1,1 +1,25 @@
-<h1>Hello World</h1>
+{{#if nickname}}
+<h2>{{nickname}}'s Posts</h2>
+{{else}}
+{{#if tag}}
+<h2>{{tag}} Posts</h2>
+{{/if}}
+{{/if}}
+{{#each posts}}
+<article>
+  <p>Post ID: {{id}}</p>
+  <p>Title: <a href="/post/{{id}}">{{title}}</a></p>
+  <p>Author: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
+  <p>Description: {{description}}</p>
+  <p>Image URL: [{{image_url}}]</p>
+  <p>Tags:
+    {{#each tags}}
+    [<a href="/tag/{{tag_id}}">{{tag_name}}</a>]
+    {{/each}}
+  </p>
+  <p>Created at: {{created_at}}</p>
+  <p><button>Like ({{likes}})</button> <button>Dislike ({{dislikes}})</button></p>
+  <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
+</article>
+<br><br>
+{{/each}}
