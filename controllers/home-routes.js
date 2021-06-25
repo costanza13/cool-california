@@ -51,6 +51,7 @@ router.get('/user/:id', (req, res) => {
       'id',
       'title',
       'description',
+      'image_url',
       'created_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -109,12 +110,14 @@ router.get('/tag/:id', (req, res) => {
       {
         model: Post,
         attributes: [
+          'id',
           'title',
           'description',
+          'image_url',
           'created_at',
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post_id = vote.post_id AND `like`)'), 'likes'],
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post_id = vote.post_id AND NOT `like`)'), 'dislikes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
+          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post_id = comment.post_id)'), 'comment_count']
         ],
         order: [['created_at', 'DESC'], ['id', 'DESC']],
         through: {
@@ -169,6 +172,7 @@ router.get('/post/:id', (req, res) => {
       'id',
       'title',
       'description',
+      'image_url',
       'created_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -176,21 +180,30 @@ router.get('/post/:id', (req, res) => {
     ],
     include: [
       {
+        model: Tag,
+        attributes: [['id', 'tag_id'], 'tag_name'],
+        through: {
+          model: PostTag,
+          attributes: []
+        },
+      },
+      {
+        model: User,
+        attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
+      },
+      {
         model: Comment,
         attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
         include: {
           model: User,
           attributes: ['username']
         }
-      },
-      {
-        model: User,
-        attributes: [['username', 'post_author']]
       }
     ]
   })
     .then(dbPostData => {
       const post = dbPostData.get({ plain: true });
+      console.log('MCC - post:', post);
       res.render('single-post', { post, loggedIn: req.session.loggedIn });
     })
     .catch(err => {
