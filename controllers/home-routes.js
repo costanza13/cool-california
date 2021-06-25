@@ -34,6 +34,7 @@ router.get('/', (req, res) => {
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
       // console.log('post tags', posts[0].tags);
+      console.log(req.session.loggedIn);
       res.render('homepage', { posts, loggedIn: req.session.loggedIn });
     })
     .catch(err => {
@@ -203,7 +204,6 @@ router.get('/post/:id', (req, res) => {
   })
     .then(dbPostData => {
       const post = dbPostData.get({ plain: true });
-      console.log('MCC - post:', post);
       res.render('single-post', { post, loggedIn: req.session.loggedIn });
     })
     .catch(err => {

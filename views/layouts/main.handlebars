@@ -22,7 +22,7 @@
             </li>
             <li>
               {{#if loggedIn}}
-              <button id="logout">Sign Out</button>
+              <a href="#" id="logout">Sign Out</a>
               {{else}}
               <a href="/login{{#if nextUrl}}?_next={{nextUrl}}{{/if}}">Sign In</a>
               {{/if}}

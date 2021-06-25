@@ -1,50 +1,53 @@
 <div id="sign-in-wrapper">
-  <div class="card sign-in mx-auto">
-    <div class="card-header">
+  <div class="sign-in">
+    <div>
       <h3>Sign In</h3>
     </div>
-    <div class="card-body">
-      <form class="login-form">
-        <div class="mb-3">
-          <input type="text" id="username-login" class="form-control" placeholder="username" />
+    <div>
+      <form class="signin-form">
+        <div>
+          <input type="text" id="username-login" placeholder="username" />
+        </div>
+        <div>
+          <input type="password" id="password-login" placeholder="password" />
         </div>
         <div class="mb-3">
-          <input type="password" id="password-login" class="form-control" placeholder="password" />
-        </div>
-        <div class="mb-3">
-          <button type="submit" class="btn btn-primary">sign in</button>
+          <button type="submit">sign in</button>
         </div>
       </form>
     </div>
   </div>
-  <div class="mx-auto my-1 text-center">
+  <div>
     <small>Don't have an account? <a id="sign-up-switch" href="#">Sign up!</a></small>
   </div>
 </div>
 
 <div id="sign-up-wrapper" class="hidden">
-  <div class="card sign-up mx-auto">
-    <div class="card-header">
+  <div class="sign-up">
+    <div>
       <h3>Sign Up</h3>
     </div>
-    <div class="card-body">
+    <div>
       <form class="signup-form">
-        <div class="mb-3">
-          <input type="text" id="username-signup" class="form-control" placeholder="username" />
+        <div>
+          <input type="text" id="username-signup" placeholder="username" />
         </div>
         <div class="mb-3">
-          <input type="text" id="email-signup" class="form-control" placeholder="email" />
+          <input type="text" id="email-signup" placeholder="email" />
         </div>
         <div class="mb-3">
-          <input type="password" id="password-signup" class="form-control" placeholder="password" />
+          <input type="text" id="nickname-signup" placeholder="nickname" />
         </div>
         <div class="mb-3">
-          <button type="submit" class="btn btn-primary">sign up</button>
+          <input type="password" id="password-signup" placeholder="password" />
+        </div>
+        <div class="mb-3">
+          <button type="submit">sign up</button>
         </div>
       </form>
     </div>
   </div>
-  <div class="mx-auto my-1 text-center">
+  <div>
     <small>Already have an account? <a id="sign-in-switch" href="#">Sign in!</a></small>
   </div>
 </div>
