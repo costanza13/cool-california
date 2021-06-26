@@ -105,6 +105,45 @@ router.post('/', withAuthApi, (req, res) => {
     });
 });
 
+// these must come before the /:id route to avoid being considered a post id
+router.put('/like', withAuthApi, (req, res) => {
+  Post.like({ ...req.body, user_id: req.session.user_id }, { Vote })
+    .then(dbPostData => res.json(dbPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
+
+router.put('/unlike', withAuthApi, (req, res) => {
+  Post.unlike({ ...req.body, user_id: req.session.user_id }, { Vote })
+    .then(dbPostData => res.json(dbPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
+
+router.post('/tag', withAuthApi, (req, res) => {
+  // TODO: need to check if user tagging the post owns the post
+  Post.tag(req.body, { PostTag, Tag })
+    .then(dbPostData => res.json(dbPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
+
+router.delete('/tag', withAuthApi, (req, res) => {
+  // TODO: need to check if user untagging the post owns the post
+  Post.untag(req.body, { PostTag, Tag })
+    .then(dbPostData => res.json(dbPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
+
 router.put('/:id', withAuthApi, (req, res) => {
   Post.update(
     {

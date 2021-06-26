@@ -12,9 +12,10 @@ var imageUploadWidget = cloudinary.createUploadWidget(
   }
 )
 
-async function newFormHandler(event) {
+async function editFormHandler(event) {
   event.preventDefault();
 
+  const post_id = document.querySelector('input[name="id"]').value;
   const title = document.querySelector('input[name="title"]').value;
   const description = document.querySelector('textarea[name="description"]').value;
   const image_url = document.querySelector('input[name="image_url"]').value;
@@ -22,8 +23,9 @@ async function newFormHandler(event) {
   const longitude = document.querySelector('input[name="longitude"]').value;
 
   const response = await fetch(`/api/posts`, {
-    method: 'POST',
+    method: (post_id ? 'PUT' : 'POST'),
     body: JSON.stringify({
+      id: post_id,
       title,
       description,
       image_url,
@@ -42,7 +44,31 @@ async function newFormHandler(event) {
   }
 }
 
+async function tagHandler(event) {
+  const tag_id = event.target.value;
+  const tag_state = event.target.checked;
+  const post_id = document.querySelector('input[name="id"]').value;
+
+  const response = await fetch(`/api/posts/tag`, {
+    method: (tag_state ? 'POST' : 'DELETE'),
+    body: JSON.stringify({
+      post_id,
+      tag_id
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (response.ok) {
+    console.log('success');
+  } else {
+    alert(response.statusText);
+  }
+}
+
+document.querySelector('.tag-inputs').addEventListener('change', tagHandler);
 document.querySelector('input[name="image_url"]').addEventListener('click', function() {
   imageUploadWidget.open();
 }, false);
-document.querySelector('#edit-form').addEventListener('submit', newFormHandler);
+document.querySelector('#edit-form').addEventListener('submit', editFormHandler);

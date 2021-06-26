@@ -3,6 +3,7 @@
   <h2>{{#if post.id}}Edit{{else}}New{{/if}} Post</h2>
 
   <form id="edit-form">
+    <input type="hidden" name="id" value="{{#if post.id}}{{post.id}}{{/if}}" />
     <div>
       <input type="text" name="title" {{#if post.id}} value="{{post.title}}" {{/if}} placeholder="Post Title" />
     </div>
@@ -28,10 +29,19 @@
     </div>
     <div>
       <button type="submit">Save post</button>
-      {{#if post.id}}<button type="button">Delete post</button>{{/if}}
+      {{#if post.id}}<button type="button" class="delete-post-btn">Delete post</button>{{/if}}
     </div>
   </form>
 </article>
+
+<section>
+  <p class="tag-inputs">
+    {{#each tags}}
+    <input class="tag-input" type="checkbox" value="{{id}}" {{#if checked}} checked="checked" {{/if}} />
+    {{tag_name}}<br>
+    {{/each}}
+  </p>
+</section>
 
 {{#if post.id}}
 {{> comments comments=post.comments loggedIn=loggedIn}}
