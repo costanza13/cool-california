@@ -1,0 +1,17 @@
+<section>
+  <h2>Your Dashboard</h2>
+  <p>You've {{tab}} {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
+</section>
+
+{{#if posts.length}}
+<section>
+  <h3>Your {{tab}} Places</h3>
+  <ul>
+    {{#each posts as |post|}}
+    <li>
+      {{> post-info post}}
+    </li>
+    {{/each}}
+  </ul>
+</section>
+{{/if}}
