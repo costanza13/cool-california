@@ -2,6 +2,8 @@ const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { Post, User, Comment, PostTag, Tag } = require('../models');
 
+const POST_IMAGE_WIDTH = 400;
+
 router.get('/', (req, res) => {
   console.log(req.session);
   Post.findAll({
@@ -34,7 +36,7 @@ router.get('/', (req, res) => {
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
       for (let i = 0; i < posts.length; i++) {
-        posts[i].image_url_thumbnail = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + 'c_scale,w_200/') : '';
+        posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
       }
       // console.log('post tags', posts[0].tags);
       console.log(req.session.loggedIn);
@@ -87,6 +89,9 @@ router.get('/user/:id', (req, res) => {
         .then(dbUserData => {
           if (dbUserData) {
             const posts = dbPostData.map(post => post.get({ plain: true }));
+            for (let i = 0; i < posts.length; i++) {
+              posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+            }
             const nickname = dbUserData.dataValues.nickname;
             res.render('homepage', { posts, loggedIn: req.session.loggedIn, nickname, nextUrl: '/user/' + req.params.id });
           } else {

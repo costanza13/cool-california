@@ -1,18 +1,21 @@
 <article class="post">
   <div class="title">
-    <p id="title">{{title}}</p>
-    <p id="username"> by {{user.username}}</p>
+    <p id="title">{{title}} by <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
+    {{#if image_url_sized}}
+    <p><img src="{{image_url_sized}}" /></p>
+    {{/if}}
+    <p>Image URL: [{{image_url}}]</p>
     <div>
-        <p id="votes"> Likes: {{vote.likes.length}} /\ Dislikes: {{vote.dislikes.length}}</p>
-        <p>{{description}}</p>
-        <p>Coordinates: ({{latitude}}, {{longitude}})</p>
+      <p id="votes"> Likes: {{likes}} / Dislikes: {{dislikes}}</p>
+      <p>{{description}}</p>
+      <p>Coordinates: ({{latitude}}, {{longitude}})</p>
     </div>
     <div>
-        <img src={{image}}>
+      <img src={{image}}>
     </div>
   </div>
   <div class="meta">
-      Created at {{format_date created_at}}
-    <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>
+    <p>Posted {{format_date created_at}}</p>
+    <p><a href="/post/{{id}}">{{comment_count}} {{format_plural "comment" comment_count}}</a></p>
   </div>
 </article>
