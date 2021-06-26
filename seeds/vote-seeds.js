@@ -12,7 +12,7 @@ const voteData = [
     post_id: 4
   },
   {
-    like: true,
+    like: false,
     user_id: 2,
     post_id: 2
   }
