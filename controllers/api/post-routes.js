@@ -125,22 +125,48 @@ router.put('/unlike', withAuthApi, (req, res) => {
 });
 
 router.post('/tag', withAuthApi, (req, res) => {
-  // TODO: need to check if user tagging the post owns the post
-  Post.tag(req.body, { PostTag, Tag })
-    .then(dbPostData => res.json(dbPostData))
-    .catch(err => {
-      console.log(err);
-      res.status(400).json(err);
+  Post.findOne({
+    where: {
+      id: req.body.post_id,
+      user_id: req.session.user_id
+    },
+    attributes: ['id']
+  })
+    .then(dbPostData => {
+      if (!dbPostData) {
+        res.status(403).json({ message: 'Forbidden' });
+        return;
+      }
+
+      Post.tag(req.body, { PostTag, Tag })
+        .then(dbPostData => res.json(dbPostData))
+        .catch(err => {
+          console.log(err);
+          res.status(400).json(err);
+        });
     });
 });
 
 router.delete('/tag', withAuthApi, (req, res) => {
-  // TODO: need to check if user untagging the post owns the post
-  Post.untag(req.body, { PostTag, Tag })
-    .then(dbPostData => res.json(dbPostData))
-    .catch(err => {
-      console.log(err);
-      res.status(400).json(err);
+  Post.findOne({
+    where: {
+      id: req.body.post_id,
+      user_id: req.session.user_id
+    },
+    attributes: ['id']
+  })
+    .then(dbPostData => {
+      if (!dbPostData) {
+        res.status(403).json({ message: 'Forbidden' });
+        return;
+      }
+
+      Post.untag(req.body, { PostTag, Tag })
+        .then(dbPostData => res.json(dbPostData))
+        .catch(err => {
+          console.log(err);
+          res.status(400).json(err);
+        });
     });
 });
 
