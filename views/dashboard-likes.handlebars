@@ -1,11 +1,16 @@
 <section>
   <h2>Your Dashboard</h2>
-  <p>You've {{tab}} {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
+  <p>
+    <a href="/dashboard">View Posts</a> |
+    <a href="/dashboard/likes">View Likes</a> |
+    <a href="/dashboard/dislikes">View Dislikes</a>
+  </p>
 </section>
 
 {{#if posts.length}}
 <section>
   <h3>Your {{tab}} Places</h3>
+  <p>You've {{tab}} {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
   <ul>
     {{#each posts as |post|}}
     <li>
