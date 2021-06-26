@@ -27,8 +27,8 @@ async function newFormHandler(event) {
       title,
       description,
       image_url,
-      latitude: 1000000,
-      longitude: 1000000,
+      latitude,
+      longitude
     }),
     headers: {
       'Content-Type': 'application/json'
