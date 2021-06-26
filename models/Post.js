@@ -57,11 +57,11 @@ Post.init(
       defaultValue: ''
     },
     latitude: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(8,5),
       allowNull: false,
     },
     longitude: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(8,5),
       allowNull: false,
     },
     user_id: {
