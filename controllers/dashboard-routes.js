@@ -185,7 +185,18 @@ router.get('/edit/:id', withAuth, (req, res) => {
   })
     .then(dbPostData => {
       const post = dbPostData.get({ plain: true });
-      res.render('edit-post', { post, loggedIn: req.session.loggedIn });
+      // get all available tags
+      Tag.findAll({
+        attributes: ['id', 'tag_name']
+      })
+      .then(dbTagData => {
+        const tags = dbTagData.map(tag => {
+          const currentTag = tag.get({ plain: true });
+          currentTag.checked = post.tags.filter(postTag => currentTag.id === postTag.tag_id).length > 0;
+          return currentTag;
+        });
+        res.render('edit-post', { post, tags, loggedIn: req.session.loggedIn });
+      });
     })
     .catch(err => {
       console.log(err);

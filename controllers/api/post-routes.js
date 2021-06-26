@@ -105,6 +105,71 @@ router.post('/', withAuthApi, (req, res) => {
     });
 });
 
+// these must come before the /:id route to avoid being considered a post id
+router.put('/like', withAuthApi, (req, res) => {
+  Post.like({ ...req.body, user_id: req.session.user_id }, { Vote })
+    .then(dbPostData => res.json(dbPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
+
+router.put('/unlike', withAuthApi, (req, res) => {
+  Post.unlike({ ...req.body, user_id: req.session.user_id }, { Vote })
+    .then(dbPostData => res.json(dbPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
+
+router.post('/tag', withAuthApi, (req, res) => {
+  Post.findOne({
+    where: {
+      id: req.body.post_id,
+      user_id: req.session.user_id
+    },
+    attributes: ['id']
+  })
+    .then(dbPostData => {
+      if (!dbPostData) {
+        res.status(403).json({ message: 'Forbidden' });
+        return;
+      }
+
+      Post.tag(req.body, { PostTag, Tag })
+        .then(dbPostData => res.json(dbPostData))
+        .catch(err => {
+          console.log(err);
+          res.status(400).json(err);
+        });
+    });
+});
+
+router.delete('/tag', withAuthApi, (req, res) => {
+  Post.findOne({
+    where: {
+      id: req.body.post_id,
+      user_id: req.session.user_id
+    },
+    attributes: ['id']
+  })
+    .then(dbPostData => {
+      if (!dbPostData) {
+        res.status(403).json({ message: 'Forbidden' });
+        return;
+      }
+
+      Post.untag(req.body, { PostTag, Tag })
+        .then(dbPostData => res.json(dbPostData))
+        .catch(err => {
+          console.log(err);
+          res.status(400).json(err);
+        });
+    });
+});
+
 router.put('/:id', withAuthApi, (req, res) => {
   Post.update(
     {
