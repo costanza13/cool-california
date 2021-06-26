@@ -1,4 +1,4 @@
-const SESSION_INACTIVITY_TIMEOUT_MINUTES = 30;
+const SESSION_INACTIVITY_TIMEOUT_MINUTES = 180;
 
 async function logout(event) {
   if (event) {

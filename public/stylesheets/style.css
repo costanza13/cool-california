@@ -5,3 +5,10 @@
 .hidden {
   display: none;
 }
+
+.vote-input:checked + label {
+  background-color: green;
+  border-radius: 5px;
+  color: white;
+  padding: 3px;
+}
