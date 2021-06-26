@@ -1,13 +1,19 @@
 <section>
   <h2>Your Dashboard</h2>
-  <p>Hi {{username}}. Welcome to your account dashboard! Here you can manage your existing posts or add a new one.</p>
-  <p>You've written {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
-  <a href="/dashboard/create">Add a new post</a>
+  <p>Hi {{username}}. Welcome to your account dashboard! Here you can manage your existing posts, add a new one, or view
+    posts you've liked or disliked.</p>
+  <p>
+    <a href="/dashboard">View Posts</a> |
+    <a href="/dashboard/likes">View Likes</a> |
+    <a href="/dashboard/dislikes">View Dislikes</a>
+  </p>
 </section>
 
 {{#if posts.length}}
 <section>
   <h3>Your Posts</h3>
+  <a href="/dashboard/create">Add a new post</a>
+  <p>You've written {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
   <ul>
     {{#each posts as |post|}}
     <li>
