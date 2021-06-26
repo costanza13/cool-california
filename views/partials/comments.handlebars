@@ -1,0 +1,42 @@
+<section class="card mb-3 comments">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-12">
+        <h4 class="card-title">Comments</h4>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    {{#if comments}}
+    <ul class="list-group mb-4 comments">
+    {{#each comments}}
+    <li class="list-group-item border-0 border-bottom mb-2 comment">
+      <div class="meta text-muted comment-byline">
+        {{user.username}} on {{format_date created_at}} at {{format_time created_at}}
+      </div>
+      <div class="text ms-2 p-2">
+        {{comment_text}}
+      </div>
+    </li>
+    {{/each}}
+    </ul>
+    {{/if}}
+    {{#if loggedIn}}
+    <form class="comment-form">
+      <div class="mb-3">
+        <textarea name="comment-body" class="form-control" placeholder="Leave a comment..."></textarea>
+      </div>
+      <div class="mb-3">
+        <button type="submit" class="btn btn-primary">add comment</button>
+      </div>
+    </form>
+    {{else}}
+    {{#unless comments}}
+    <p class="p-1 text-muted"><em>No comments.</em></p>
+    {{/unless}}
+    {{/if}}
+  </div>
+</section>
+{{#if loggedIn}}
+<script src="/javascript/comment.js"></script>
+{{/if}}

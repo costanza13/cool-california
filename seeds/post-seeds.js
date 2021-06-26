@@ -24,6 +24,14 @@ const postData = [
     latitude: '39.31862',
     longitude: '-119.92171',
     user_id: 2
+  },
+  {
+    title: 'The Moon',
+    description: 'A bit out of the way, the moon is a great destination for anyone wanting to "get away from it all" for a day or two. Parking is never a problem, but getting there can be a bit challenging, and you can\'t really use GPS. Definitely worth the effort, though. Once there, the hiking is pretty much the easy part. With 1/6 Earth\'s gravity, even the steepest ascents are a walk in the park -- and falls don\'t hurt nearly as much. Be warned, you may need to book your visit years in advance.',
+    image: 'https://res.cloudinary.com/cool-california/image/upload/v1624669719/vpjik6wtqcnmh37ldlo0.jpg',
+    latitude: 1000000,
+    longitude: 1000000,
+    user_id: 2
   }
 ];
 

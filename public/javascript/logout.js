@@ -1,7 +1,9 @@
 const SESSION_INACTIVITY_TIMEOUT_MINUTES = 30;
 
 async function logout(event) {
-  event.preventDefault();
+  if (event) {
+    event.preventDefault();
+  }
 
   const response = await fetch('/api/users/logout', {
     method: 'post',
