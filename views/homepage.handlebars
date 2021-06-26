@@ -11,6 +11,9 @@
   <p>Title: <a href="/post/{{id}}">{{title}}</a></p>
   <p>Author: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
   <p>Description: {{description}}</p>
+  {{#if image_url_thumbnail}}
+  <p><img src="{{image_url_thumbnail}}"</p>
+  {{/if}}
   <p>Image URL: [{{image_url}}]</p>
   <p>Tags:
     {{#each tags}}

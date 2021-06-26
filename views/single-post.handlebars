@@ -1,7 +1,8 @@
 <article>
   <p>Post ID: {{post.id}}</p>
-  <p>Title: <a href="/post/{{post.id}}">{{post.title}}</a></p>
   <p>Author: <a href="/user/{{post.user.post_author_id}}">{{post.user.post_author}}</a></p>
+  <p><img src="{{post.image_url}}" /></p>
+  <p>Title: <a href="/post/{{post.id}}">{{post.title}}</a></p>
   <p>Description: {{post.description}}</p>
   <p>Image URL: [{{post.image_url}}]</p>
   <p>Tags:

@@ -1,18 +1,20 @@
 <section>
-    <h2>Create New Post</h2>
-
-    <form class="new-post-form">
-        <div>
-            <label for="post-title">Title</label>
-            <input type="text" id="post-title" name="post-title" />
-        </div>
-        <div>
-            <label for="post-description">Description</label>
-            <input id="post-description" name="post-description" />
-        </div>
-        <button type="submit" class="btn">Create</button>
-    </form>
+  <h2>Your Dashboard</h2>
+  <p>Hi {{username}}. Welcome to your account dashboard! Here you can manage your existing posts or add a new one.</p>
+  <p>You've written {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
+  <a href="/dashboard/create">Add a new post</a>
 </section>
 
-<script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-<script src="/javascript/add-post.js"></script>
+{{#if posts.length}}
+<section>
+  <h3>Your Posts</h3>
+  <ul>
+    {{#each posts as |post|}}
+    <li>
+      {{> post-info post}}
+      <a href="/dashboard/edit/{{post.id}}">Edit post</a>
+    </li>
+    {{/each}}
+  </ul>
+</section>
+{{/if}}

@@ -33,6 +33,9 @@ router.get('/', (req, res) => {
   })
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
+      for (let i = 0; i < posts.length; i++) {
+        posts[i].image_url_thumbnail = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + 'c_scale,w_200/') : '';
+      }
       // console.log('post tags', posts[0].tags);
       console.log(req.session.loggedIn);
       res.render('homepage', { posts, loggedIn: req.session.loggedIn });
