@@ -15,20 +15,7 @@
       [<a href="/tag/{{tag_id}}">{{tag_name}}</a>]
       {{/each}}
     </p>
-    <p id="post-{{id}}-vote">
-      <span class="vote-like">
-        <input type="radio" class="vote-input" name="vote-{{id}}" id="like-button-{{id}}" value="like" {{#if
-          liked}} checked="checked" {{/if}} data-post-id="{{id}}">
-        <label for="like-button-{{id}}">Like (<span class="like-count">{{likes}}</span>)</label>
-      </span>
-      <span class="vote-dislike">
-        <input type="radio" class="vote-input" name="vote-{{id}}" id="dislike-button-{{id}}" value="dislike"
-          {{#if unliked}} checked="checked" {{/if}} data-post-id="{{id}}">
-        <label for="dislike-button-{{id}}">Dislike (<span class="dislike-count">{{dislikes}}</span>)</label>
-      </span>
-      <input type="radio" class="vote-input" name="vote-{{id}}" id="novote-button-{{id}}" value="novote" {{#if
-        novote}} checked="checked" {{/if}} data-post-id="{{id}}"> no vote
-    </p>
+    {{> like-controls this}}
   </div>
   <div class="meta">
     <p>Posted {{format_date created_at}}</p>

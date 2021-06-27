@@ -11,17 +11,7 @@
     {{/each}}
   </p>
   <p>Created at: {{post.created_at}}</p>
-  <p id="post-{{post.id}}-vote">
-    <span class="vote-like"><input type="radio" class="vote-input" name="vote-{{post.id}}" id="like-button-{{post.id}}"
-        value="like" {{#if post.liked}} checked="checked" {{/if}} data-post-id="{{post.id}}"> <label
-        for="like-button-{{post.id}}">Like (<span class="like-count">{{post.likes}}</span>)</label></span>
-    <span class="vote-dislike"><input type="radio" class="vote-input" name="vote-{{post.id}}"
-        id="dislike-button-{{post.id}}" value="dislike" {{#if post.unliked}} checked="checked" {{/if}}
-        data-post-id="{{post.id}}"> <label for="dislike-button-{{post.id}}">Dislike (<span
-          class="dislike-count">{{post.dislikes}}</span>)</label></span>
-    <input type="radio" class="vote-input" name="vote-{{post.id}}" id="novote-button-{{post.id}}" value="novote" {{#if
-      post.novote}} checked="checked" {{/if}} data-post-id="{{post.id}}"> no vote
-  </p>
+  {{> like-controls post}}
   <p><a href="/post/{{post.id}}">{{post.comment_count}} comments</a></p>
 </article>
 <script src="/javascript/vote.js"></script>

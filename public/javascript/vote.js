@@ -1,20 +1,29 @@
 async function voteHandler(event) {
-  const vote_value = event.target.value;
   const post_id = event.target.getAttribute('data-post-id');
+  const likeControlsEl = document.querySelector('#post-' + post_id + '-vote');
+  const likeButton = likeControlsEl.querySelector('.vote-input.like');
+  const dislikeButton = likeControlsEl.querySelector('.vote-input.dislike');
+
+  const vote_value = event.target.value;
+  const vote_checked = event.target.checked;
 
   const vote_body = {
     post_id
   }
   let vote_method = 'POST';
-  switch (vote_value) {
-    case 'like':
-      vote_body.like = true;
-      break;
-    case 'dislike':
-      vote_body.like = false;
-      break;
-    default:
-      vote_method = 'DELETE';
+  if (vote_checked) {
+    switch (vote_value) {
+      case 'like':
+        vote_body.like = true;
+        break;
+      case 'dislike':
+        vote_body.like = false;
+        break;
+      default:
+        vote_method = 'DELETE';
+    }
+  } else {
+    vote_method = 'DELETE';
   }
 
   const fetchOptions = {
@@ -31,8 +40,19 @@ async function voteHandler(event) {
   if (response.ok) {
     response.json().then(voteData => {
       console.log('success: ', voteData);
-      document.querySelector('#post-' + post_id + '-vote').querySelector('.like-count').textContent = voteData.likes;
-      document.querySelector('#post-' + post_id + '-vote').querySelector('.dislike-count').textContent = voteData.dislikes;
+      likeControlsEl.querySelector('.like-count').textContent = voteData.likes;
+      likeControlsEl.querySelector('.dislike-count').textContent = voteData.dislikes;
+      switch (voteData.vote) {
+        case 'like':
+          dislikeButton.checked = false;
+          break;
+        case 'dislike':
+          likeButton.checked = false;
+          break;
+        default:
+          dislikeButton.checked = false;
+          likeButton.checked = false;
+      }
     });
   } else {
     event.target.checked = !event.target.checked;

@@ -6,9 +6,19 @@
   display: none;
 }
 
-.vote-input:checked + label {
-  background-color: green;
+.vote-input + label {
+  border: 1px solid rgb(76, 204, 76);
   border-radius: 5px;
-  color: white;
+  box-shadow: 2px 2px 3px gray;
+  display: inline-block;
+  font-size: 80%;
   padding: 3px;
+  text-align: center;
+  width: 5em;
+}
+
+.vote-input:checked + label {
+  background-color: rgb(76, 204, 76);;
+  box-shadow: none;
+  color: white;
 }
