@@ -55,7 +55,7 @@ router.get('/', withAuth, (req, res) => {
           post.novote = true;
         }
       });
-      res.render('dashboard-posts', { posts, loggedIn: req.session.loggedIn });
+      res.render('dashboard-posts', { posts, nickname: req.session.nickname });
     })
     .catch(err => {
       console.log(err);
