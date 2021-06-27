@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .hidden {
@@ -17,8 +18,16 @@
   width: 5em;
 }
 
+.vote-input.dislike + label {
+  border: 1px solid rgb(243, 97, 97);
+}
+
 .vote-input:checked + label {
   background-color: rgb(76, 204, 76);;
   box-shadow: none;
   color: white;
+}
+
+.vote-input.dislike:checked + label {
+  background-color: rgb(243, 97, 97);;
 }
