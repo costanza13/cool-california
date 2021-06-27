@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
-const { Post, User, Comment, Tag, PostTag } = require('../../models');
+const { Post, User, Comment, Tag, PostTag, Vote } = require('../../models');
 const { withAuthApi } = require('../../utils/auth');
 
 router.get('/', (req, res) => {
@@ -106,8 +106,8 @@ router.post('/', withAuthApi, (req, res) => {
 });
 
 // these must come before the /:id route to avoid being considered a post id
-router.put('/like', withAuthApi, (req, res) => {
-  Post.like({ ...req.body, user_id: req.session.user_id }, { Vote })
+router.post('/vote', withAuthApi, (req, res) => {
+  Post.vote({ ...req.body, user_id: req.session.user_id }, { Vote })
     .then(dbPostData => res.json(dbPostData))
     .catch(err => {
       console.log(err);
@@ -115,8 +115,8 @@ router.put('/like', withAuthApi, (req, res) => {
     });
 });
 
-router.put('/unlike', withAuthApi, (req, res) => {
-  Post.unlike({ ...req.body, user_id: req.session.user_id }, { Vote })
+router.delete('/vote', withAuthApi, (req, res) => {
+  Post.unvote({ ...req.body, user_id: req.session.user_id }, { Vote })
     .then(dbPostData => res.json(dbPostData))
     .catch(err => {
       console.log(err);
@@ -133,6 +133,7 @@ router.post('/tag', withAuthApi, (req, res) => {
     attributes: ['id']
   })
     .then(dbPostData => {
+      console.log('find a post', dbPostData);
       if (!dbPostData) {
         res.status(403).json({ message: 'Forbidden' });
         return;

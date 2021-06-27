@@ -4,13 +4,11 @@
   <p><img src="{{post.image_url}}" /></p>
   <p>Title: <a href="/post/{{post.id}}">{{post.title}}</a></p>
   <p>Description: {{post.description}}</p>
+  <p>Coordinates: ({{post.latitude}}, {{post.longitude}})</p>
   <p>Image URL: [{{post.image_url}}]</p>
-  <p>Tags:
-    {{#each post.tags}}
-    [<a href="/tag/{{tag_id}}">{{tag_name}}</a>]
-    {{/each}}
-  </p>
+  {{> tags post}}
   <p>Created at: {{post.created_at}}</p>
-  <p><button>Like ({{post.likes}})</button> <button>Dislike ({{post.dislikes}})</button></p>
+  {{> like-controls post}}
   <p><a href="/post/{{post.id}}">{{post.comment_count}} comments</a></p>
 </article>
+<script src="/javascript/vote.js"></script>

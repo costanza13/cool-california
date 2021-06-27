@@ -1,6 +1,6 @@
 <section>
   <h2>Your Dashboard</h2>
-  <p>Hi {{username}}. Welcome to your account dashboard! Here you can manage your existing posts, add a new one, or view
+  <p>Hi {{nickname}}. Welcome to your account dashboard! Here you can manage your existing posts, add a new one, or view
     posts you've liked or disliked.</p>
   <p>
     <a href="/dashboard">View Posts</a> |
@@ -17,6 +17,7 @@
   <ul>
     {{#each posts as |post|}}
     <li>
+      <hr>
       {{> post-info post}}
       <a href="/dashboard/edit/{{post.id}}">Edit post</a>
     </li>
@@ -24,3 +25,4 @@
   </ul>
 </section>
 {{/if}}
+<script src="/javascript/vote.js"></script>

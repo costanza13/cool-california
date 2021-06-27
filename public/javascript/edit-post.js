@@ -49,7 +49,7 @@ async function tagHandler(event) {
   const tag_state = event.target.checked;
   const post_id = document.querySelector('input[name="id"]').value;
 
-  const response = await fetch(`/api/posts/tag`, {
+  const fetchOptions = {
     method: (tag_state ? 'POST' : 'DELETE'),
     body: JSON.stringify({
       post_id,
@@ -58,11 +58,15 @@ async function tagHandler(event) {
     headers: {
       'Content-Type': 'application/json'
     }
-  });
+  };
+
+  console.log(fetchOptions);
+  const response = await fetch(`/api/posts/tag`, fetchOptions);
 
   if (response.ok) {
     console.log('success');
   } else {
+    event.target.checked = !tag_state;
     alert(response.statusText);
   }
 }

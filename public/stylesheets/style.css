@@ -1,7 +1,82 @@
 * {
   box-sizing: border-box;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .hidden {
   display: none;
+}
+
+header h1 {
+  color: #E1103B;
+  font-family: 'Mr Dafoe', cursive;
+  font-size: 100px;
+}
+
+.tag-list {
+  display: inline-block;
+  list-style: none;
+  padding-left: 5px;
+}
+
+.tag-list-item {
+  display: inline-block;
+  font-size: 100%;
+}
+
+.tag-list-item-btn, .tag-input + label {
+  border: 2px solid rgb(226, 147, 29);
+  border-radius: 1rem;
+  color: rgb(226, 147, 29);
+  cursor: pointer;
+  padding: .2rem .7rem;
+}
+
+.tag-list-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tag-list-item-btn.selected, .tag-input:checked + label {
+  background-color: rgb(226, 147, 29);
+  color: white;
+}
+
+.tag-input + label::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f067";
+  margin-right: 0.5em;
+}
+
+.tag-input:checked + label::before {
+  content: "\f00c";
+}
+
+.vote-input + label {
+  border: 1px solid rgb(76, 204, 76);
+  border-radius: 5px;
+  box-shadow: 2px 2px 3px gray;
+  color: rgb(76, 204, 76);
+  display: inline-block;
+  font-size: 80%;
+  font-weight: bold;
+  padding: 3px;
+  text-align: center;
+  width: 6em;
+}
+
+.vote-input.dislike + label {
+  border: 1px solid rgb(243, 97, 97);
+  color: rgb(243, 97, 97);
+}
+
+.vote-input:checked + label {
+  background-color: rgb(76, 204, 76);;
+  box-shadow: none;
+  color: white;
+}
+
+.vote-input.dislike:checked + label {
+  background-color: rgb(243, 97, 97);;
 }

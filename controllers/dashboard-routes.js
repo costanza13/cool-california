@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
+const { Op } = require('sequelize');
 const { Post, User, Comment, Tag, PostTag, Vote } = require('../models');
 const { withAuth } = require('../utils/auth');
 
@@ -44,10 +45,17 @@ router.get('/', withAuth, (req, res) => {
   })
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-      }
-      res.render('dashboard-posts', { posts, loggedIn: req.session.loggedIn });
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        if (post.votes[0] && post.votes[0].like) {
+          post.liked = true;
+        } else if (post.votes[0] && post.votes[0].like === false) {
+          post.unliked = true;
+        } else {
+          post.novote = true;
+        }
+      });
+      res.render('dashboard-posts', { posts, nickname: req.session.nickname });
     })
     .catch(err => {
       console.log(err);
@@ -61,12 +69,14 @@ const getVoted = function (req, type) {
       user_id: req.session.user_id,
       like: (type === 'likes')
     },
-    attributes: [
-      'id'
-    ],
-    include: [
-      {
-        model: Post,
+    attributes: ['post_id']
+  })
+    .then(votedPostIds => {
+      const postIds = votedPostIds.map(postVote => postVote.get({ plain: true }).post_id);
+      return Post.findAll({
+        where: {
+          id: { [Op.in]: postIds }
+        },
         attributes: [
           'id',
           'title',
@@ -79,7 +89,7 @@ const getVoted = function (req, type) {
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
           [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
         ],
-        order: [['post.created_at', 'DESC'], ['post.id', 'DESC']],
+        order: [['created_at', 'DESC'], ['id', 'DESC']],
         include: [
           {
             model: Tag,
@@ -98,18 +108,24 @@ const getVoted = function (req, type) {
             attributes: [['id', 'vote_id'], 'like']
           }
         ]
-      }
-    ]
-  })
-}
+      });
+    });
+};
 
 router.get('/likes', withAuth, (req, res) => {
   getVoted(req, 'likes')
     .then(dbPostData => {
-      const posts = dbPostData.map(like => like.get({ plain: true }).post);
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-      }
+      const posts = dbPostData.map(post => post.get({ plain: true }));
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        if (post.votes[0] && post.votes[0].like) {
+          post.liked = true;
+        } else if (post.votes[0] && post.votes[0].like === false) {
+          post.unliked = true;
+        } else {
+          post.novote = true;
+        }
+      });
       res.render('dashboard-likes', { posts, tab: 'Liked', loggedIn: req.session.loggedIn });
     })
     .catch(err => {
@@ -121,10 +137,17 @@ router.get('/likes', withAuth, (req, res) => {
 router.get('/dislikes', withAuth, (req, res) => {
   getVoted(req, 'dislikes')
     .then(dbPostData => {
-      const posts = dbPostData.map(like => like.get({ plain: true }).post);
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-      }
+      const posts = dbPostData.map(post => post.get({ plain: true }));
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        if (post.votes[0] && post.votes[0].like) {
+          post.liked = true;
+        } else if (post.votes[0] && post.votes[0].like === false) {
+          post.unliked = true;
+        } else {
+          post.novote = true;
+        }
+      });
       res.render('dashboard-likes', { posts, tab: 'Disliked', loggedIn: req.session.loggedIn });
     })
     .catch(err => {
@@ -189,14 +212,14 @@ router.get('/edit/:id', withAuth, (req, res) => {
       Tag.findAll({
         attributes: ['id', 'tag_name']
       })
-      .then(dbTagData => {
-        const tags = dbTagData.map(tag => {
-          const currentTag = tag.get({ plain: true });
-          currentTag.checked = post.tags.filter(postTag => currentTag.id === postTag.tag_id).length > 0;
-          return currentTag;
+        .then(dbTagData => {
+          const tags = dbTagData.map(tag => {
+            const currentTag = tag.get({ plain: true });
+            currentTag.checked = post.tags.filter(postTag => currentTag.id === postTag.tag_id).length > 0;
+            return currentTag;
+          });
+          res.render('edit-post', { post, tags, loggedIn: req.session.loggedIn });
         });
-        res.render('edit-post', { post, tags, loggedIn: req.session.loggedIn });
-      });
     })
     .catch(err => {
       console.log(err);

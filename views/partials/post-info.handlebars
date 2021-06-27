@@ -1,18 +1,17 @@
 <article class="post">
   <div class="title">
-    <p id="title">{{title}} by <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
+    <p id="title"><a href="/post/{{id}}">{{title}}</a> by <a
+        href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
     {{#if image_url_sized}}
     <p><img src="{{image_url_sized}}" /></p>
     {{/if}}
     <p>Image URL: [{{image_url}}]</p>
     <div>
-      <p id="votes"> Likes: {{likes}} / Dislikes: {{dislikes}}</p>
       <p>{{description}}</p>
       <p>Coordinates: ({{latitude}}, {{longitude}})</p>
     </div>
-    <div>
-      <img src={{image}}>
-    </div>
+    {{> tags this}}
+    {{> like-controls this}}
   </div>
   <div class="meta">
     <p>Posted {{format_date created_at}}</p>

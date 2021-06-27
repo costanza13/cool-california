@@ -3,7 +3,7 @@ const sequelize = require("../config/connection");
 
 class Post extends Model {
   // like or dislike a post
-  static like(body, models) {
+  static vote(body, models) {
     return models.Vote.upsert({
       user_id: body.user_id,
       post_id: body.post_id,
@@ -16,14 +16,15 @@ class Post extends Model {
         attributes: [
           "id",
           [sequelize.literal("(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)"), "likes"],
-          [sequelize.literal("(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)"), "dislikes"]
+          [sequelize.literal("(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)"), "dislikes"],
+          [sequelize.literal("(SELECT '" + (body.like ? 'like' : 'dislike') + "')"), "vote"]
         ],
       });
     });
   }
 
   // un-like or un-dislike a post
-  static unlike(body, models) {
+  static unvote(body, models) {
     return models.Vote.destroy({
       where: {
         user_id: body.user_id,
@@ -37,7 +38,8 @@ class Post extends Model {
         attributes: [
           "id",
           [sequelize.literal("(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)"), "likes"],
-          [sequelize.literal("(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)"), "dislikes"]
+          [sequelize.literal("(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)"), "dislikes"],
+          [sequelize.literal("(SELECT 'no-vote')"), "vote"]
         ],
       });
     });
