@@ -44,9 +44,16 @@ router.get('/', withAuth, (req, res) => {
   })
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-      }
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        if (post.votes[0] && post.votes[0].like) {
+          post.liked = true;
+        } else if (post.votes[0] && post.votes[0].like === false) {
+          post.unliked = true;
+        } else {
+          post.novote = true;
+        }
+      });
       res.render('dashboard-posts', { posts, loggedIn: req.session.loggedIn });
     })
     .catch(err => {
@@ -107,9 +114,16 @@ router.get('/likes', withAuth, (req, res) => {
   getVoted(req, 'likes')
     .then(dbPostData => {
       const posts = dbPostData.map(like => like.get({ plain: true }).post);
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-      }
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        if (post.votes[0] && post.votes[0].like) {
+          post.liked = true;
+        } else if (post.votes[0] && post.votes[0].like === false) {
+          post.unliked = true;
+        } else {
+          post.novote = true;
+        }
+      });
       res.render('dashboard-likes', { posts, tab: 'Liked', loggedIn: req.session.loggedIn });
     })
     .catch(err => {
@@ -122,9 +136,16 @@ router.get('/dislikes', withAuth, (req, res) => {
   getVoted(req, 'dislikes')
     .then(dbPostData => {
       const posts = dbPostData.map(like => like.get({ plain: true }).post);
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].image_url_sized = posts[i].image_url ? posts[i].image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-      }
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        if (post.votes[0] && post.votes[0].like) {
+          post.liked = true;
+        } else if (post.votes[0] && post.votes[0].like === false) {
+          post.unliked = true;
+        } else {
+          post.novote = true;
+        }
+      });
       res.render('dashboard-likes', { posts, tab: 'Disliked', loggedIn: req.session.loggedIn });
     })
     .catch(err => {

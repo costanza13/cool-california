@@ -11,7 +11,7 @@
     {{/each}}
   </p>
   <p>Created at: {{post.created_at}}</p>
-  <p id="post-{{id}}-vote">
+  <p id="post-{{post.id}}-vote">
     <span class="vote-like"><input type="radio" class="vote-input" name="vote-{{post.id}}" id="like-button-{{post.id}}"
         value="like" {{#if post.liked}} checked="checked" {{/if}} data-post-id="{{post.id}}"> <label
         for="like-button-{{post.id}}">Like (<span class="like-count">{{post.likes}}</span>)</label></span>
