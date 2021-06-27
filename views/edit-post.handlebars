@@ -35,12 +35,14 @@
 </article>
 
 <section>
-  <p class="tag-inputs">
+  <ul class="tag-list tag-inputs">
     {{#each tags}}
-    <input class="tag-input" type="checkbox" value="{{id}}" {{#if checked}} checked="checked" {{/if}} />
-    {{tag_name}}<br>
+    <li class="tag-list-item">
+      <input id="tag-{{id}}-btn" class="tag-input hidden" type="checkbox" value="{{id}}" {{#if checked}} checked="checked" {{/if}} />
+      <label for="tag-{{id}}-btn">{{tag_name}}</label>
+    </li>
     {{/each}}
-  </p>
+  </ul>
 </section>
 
 {{#if post.id}}

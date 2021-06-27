@@ -10,11 +10,7 @@
       <p>{{description}}</p>
       <p>Coordinates: ({{latitude}}, {{longitude}})</p>
     </div>
-    <p>Tags:
-      {{#each tags}}
-      [<a href="/tag/{{tag_id}}">{{tag_name}}</a>]
-      {{/each}}
-    </p>
+    {{> tags this}}
     {{> like-controls this}}
   </div>
   <div class="meta">

@@ -15,11 +15,7 @@
   <p><img src="{{image_url_sized}}" /></p>
   {{/if}}
   <p>Image URL: [{{image_url}}]</p>
-  <p>Tags:
-    {{#each tags}}
-    [<a href="/tag/{{tag_id}}">{{tag_name}}</a>]
-    {{/each}}
-  </p>
+    {{> tags this}}
   <p>Created at: {{created_at}}</p>
     {{> like-controls this}}
   <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
