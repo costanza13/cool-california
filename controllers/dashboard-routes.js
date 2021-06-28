@@ -11,7 +11,13 @@ router.get('/', withAuth, (req, res) => {
     where: {
       id: req.session.user_id
     },
-    attributes: ['id', 'nickname', 'email'],
+    attributes: [
+      'id',
+      'nickname',
+      'email',
+      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE user.id = vote.user_id AND `like`)'), 'likes_count'],
+      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE user.id = vote.user_id AND NOT`like`)'), 'dislikes_count']
+    ],
     include: [
       {
         model: Tag,
@@ -90,7 +96,7 @@ router.get('/', withAuth, (req, res) => {
           });
 
           const dashboard = { user, posts, other_tags: allTags };
-          console.log('dashboard data', dashboard);
+          // console.log('dashboard data', dashboard);
           res.render('dashboard-posts', dashboard);
         })
     })

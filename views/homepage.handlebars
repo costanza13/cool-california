@@ -1,12 +1,12 @@
 {{#if nickname}}
 <h2>{{nickname}}'s Posts</h2>
 {{else}}
-{{#if tag}}
-<h2>{{tag}} Posts</h2>
+{{#if tag_string}}
+<h2>Posts tagged with {{tag_string}}</h2>
 {{/if}}
 {{/if}}
 {{#each posts}}
-<article>
+<article id="post-{{id}}" class="post">
   <p>Post ID: {{id}}</p>
   <p>Title: <a id="titttle" href="/post/{{id}}">{{title}}</a></p>
   <p>Author: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
@@ -23,4 +23,6 @@
 </article>
 <br><br>
 {{/each}}
+{{#if loggedIn}}
 <script src="/javascript/vote.js"></script>
+{{/if}}
