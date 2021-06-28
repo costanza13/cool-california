@@ -6,13 +6,14 @@ const { Post, User, Comment, PostTag, Tag, Vote } = require('../models');
 const POST_IMAGE_WIDTH = 400;
 
 router.get('/', (req, res) => {
-  console.log(req.session);
   Post.findAll({
     attributes: [
       'id',
       'title',
       'description',
       'image_url',
+      'latitude',
+      'longitude',
       'created_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -50,8 +51,6 @@ router.get('/', (req, res) => {
           post.novote = true;
         }
       });
-      // console.log('post tags', posts[0].tags);
-      console.log(req.session.loggedIn);
       res.render('homepage', { posts, loggedIn: req.session.loggedIn });
     })
     .catch(err => {
@@ -70,6 +69,8 @@ router.get('/user/:id', (req, res) => {
       'title',
       'description',
       'image_url',
+      'latitude',
+      'longitude',
       'created_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -150,6 +151,8 @@ router.get('/tag/:id', (req, res) => {
           'title',
           'description',
           'image_url',
+          'latitude',
+          'longitude',
           'created_at',
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -217,6 +220,8 @@ router.get('/post/:id', (req, res) => {
       'title',
       'description',
       'image_url',
+      'latitude',
+      'longitude',
       'created_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -258,7 +263,11 @@ router.get('/post/:id', (req, res) => {
       } else {
         post.novote = true;
       }
-      res.render('single-post', { post, loggedIn: req.session.loggedIn });
+      post.loggedIn = req.session.loggedIn;
+      post.comments.loggedIn = req.session.loggedIn;
+      console.log(post);
+    
+      res.render('single-post', post);
     })
     .catch(err => {
       console.log(err);

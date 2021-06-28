@@ -114,11 +114,11 @@ Post.init(
     },
     latitude: {
       type: DataTypes.DECIMAL(8, 5),
-      allowNull: false,
+      allowNull: true,
     },
     longitude: {
       type: DataTypes.DECIMAL(8, 5),
-      allowNull: false,
+      allowNull: true,
     },
     user_id: {
       type: DataTypes.INTEGER,

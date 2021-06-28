@@ -1,61 +1,95 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { Op } = require('sequelize');
-const { Post, User, Comment, Tag, PostTag, Vote } = require('../models');
+const { Post, User, Comment, Tag, PostTag, Vote, UserTag } = require('../models');
 const { withAuth } = require('../utils/auth');
 
 const POST_IMAGE_WIDTH = 400;
 
 router.get('/', withAuth, (req, res) => {
-  Post.findAll({
+  User.findOne({
     where: {
-      user_id: req.session.user_id
+      id: req.session.user_id
     },
-    attributes: [
-      'id',
-      'title',
-      'description',
-      'image_url',
-      'latitude',
-      'longitude',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-    ],
-    order: [['created_at', 'DESC'], ['id', 'DESC']],
+    attributes: ['id', 'nickname', 'email'],
     include: [
       {
         model: Tag,
         attributes: [['id', 'tag_id'], 'tag_name'],
         through: {
-          model: PostTag,
+          model: UserTag,
           attributes: []
-        },
-      },
-      {
-        model: User,
-        attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-      },
-      {
-        model: Vote,
-        attributes: [['id', 'vote_id'], 'like']
+        }
       }
     ]
   })
-    .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
-      posts.forEach(post => {
-        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        if (post.votes[0] && post.votes[0].like) {
-          post.liked = true;
-        } else if (post.votes[0] && post.votes[0].like === false) {
-          post.unliked = true;
-        } else {
-          post.novote = true;
-        }
-      });
-      res.render('dashboard-posts', { posts, nickname: req.session.nickname });
+    .then(dbUserData => {
+      const user = dbUserData.get({ plain: true });
+      return Post.findAll({
+        where: {
+          user_id: req.session.user_id
+        },
+        attributes: [
+          'id',
+          'title',
+          'description',
+          'image_url',
+          'latitude',
+          'longitude',
+          'created_at',
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
+        ],
+        order: [['created_at', 'DESC'], ['id', 'DESC']],
+        include: [
+          {
+            model: Tag,
+            attributes: [['id', 'tag_id'], 'tag_name'],
+            through: {
+              model: PostTag,
+              attributes: []
+            },
+          },
+          {
+            model: User,
+            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
+          },
+          {
+            model: Vote,
+            attributes: [['id', 'vote_id'], 'like']
+          }
+        ]
+      })
+        .then(dbPostData => {
+          const posts = dbPostData.map(post => post.get({ plain: true }));
+          posts.forEach(post => {
+            post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+            if (post.votes[0] && post.votes[0].like) {
+              post.liked = true;
+            } else if (post.votes[0] && post.votes[0].like === false) {
+              post.unliked = true;
+            } else {
+              post.novote = true;
+            }
+          });
+          return { user, posts };
+        });
+    })
+    .then(({ user, posts }) => {
+      const selectedTagIds = user.tags.map(tag => tag.tag_id);
+      return Tag.findAll({
+        where: {
+          id: { [Op.notIn]: selectedTagIds }
+        },
+        attributes: [['id', 'tag_id'], 'tag_name']
+      })
+        .then(dbTagData => {
+          const otherTags = dbTagData.map(tag => tag.get({ plain: true }));
+          console.log('user', user);
+          console.log('other_tags', otherTags);
+          res.render('dashboard-posts', { user, posts, other_tags: otherTags });
+        })
     })
     .catch(err => {
       console.log(err);
@@ -162,7 +196,13 @@ router.get('/create', withAuth, (req, res) => {
     title: '',
     body: '',
   };
-  res.render('edit-post', { post, loggedIn: req.session.loggedIn });
+  Tag.findAll({
+    attributes: ['id', 'tag_name']
+  })
+    .then(dbTagData => {
+      const tags = dbTagData.map(tag => tag.get({ plain: true }));
+      res.render('edit-post', { post, tags, loggedIn: req.session.loggedIn });
+    });
 });
 
 router.get('/edit/:id', withAuth, (req, res) => {

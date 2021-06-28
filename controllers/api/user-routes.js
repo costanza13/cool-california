@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Post } = require('../../models');
+const { User, Post, UserTag } = require('../../models');
 const { withAuthApi } = require('../../utils/auth');
 
 // get all users
@@ -105,6 +105,36 @@ router.post('/logout', (req, res) => {
   }
 });
 
+router.post('/tag', withAuthApi, (req, res) => {
+  UserTag.create({
+    user_id: req.session.user_id,
+    tag_id: req.body.tag_id
+  })
+    .then(dbAddTagData => {
+      res.json(dbAddTagData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+router.delete('/tag/:id', withAuthApi, (req, res) => {
+  UserTag.destroy({
+    where: {
+      user_id: req.session.user_id,
+      tag_id: req.params.id
+    }
+  })
+    .then(dbAddTagData => {
+      res.json(dbAddTagData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
 router.put('/:id', withAuthApi, (req, res) => {
   if (parseInt(req.params.id) === req.session.user_id) {
     User.update(
@@ -114,12 +144,12 @@ router.put('/:id', withAuthApi, (req, res) => {
         nickname: req.body.nickname,
         password: req.body.password
       },
-       {
-      individualHooks: true,
-      where: {
-        id: req.params.id
-      }
-    })
+      {
+        individualHooks: true,
+        where: {
+          id: req.params.id
+        }
+      })
       .then(dbUserData => {
         if (!dbUserData[0]) {
           res.status(404).json({ message: 'No user found with this id' });
@@ -131,9 +161,9 @@ router.put('/:id', withAuthApi, (req, res) => {
         console.log(err);
         res.status(500).json(err);
       });
-    } else {
-      res.status(403).json('Permission denied.')
-    }
+  } else {
+    res.status(403).json('Permission denied.')
+  }
 });
 
 router.delete('/:id', withAuthApi, (req, res) => {

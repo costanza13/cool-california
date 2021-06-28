@@ -27,6 +27,7 @@ header h1 {
 .tag-list-item-btn, .tag-input + label {
   border: 2px solid rgb(226, 147, 29);
   border-radius: 1rem;
+  box-shadow: 2px 2px 3px gray;
   color: rgb(226, 147, 29);
   cursor: pointer;
   padding: .2rem .7rem;
@@ -39,6 +40,7 @@ header h1 {
 
 .tag-list-item-btn.selected, .tag-input:checked + label {
   background-color: rgb(226, 147, 29);
+  box-shadow: none;
   color: white;
 }
 
