@@ -27,7 +27,7 @@ body {
 }
 
 header {
-  background-color: white;
+  background-color: black;
   position: fixed;
   top: 0;
   left: 0;
@@ -44,17 +44,18 @@ header * {
 }
 
 header ul {
-  background: white;
+  background: black;
 }
 
 header li {
   margin: 20px;
-  background: white;
+  background: black;
 }
 
 header li a {
-  background: white;
-  color: black;
+  background: black;
+  color: white;
+  font-style: italic;
   padding: 5px;
   text-decoration: none;
 }
