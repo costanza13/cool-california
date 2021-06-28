@@ -79,16 +79,19 @@ router.get('/', withAuth, (req, res) => {
     .then(({ user, posts }) => {
       const selectedTagIds = user.tags.map(tag => tag.tag_id);
       return Tag.findAll({
-        where: {
-          id: { [Op.notIn]: selectedTagIds }
-        },
-        attributes: [['id', 'tag_id'], 'tag_name']
+        attributes: [['id', 'tag_id'], 'tag_name'],
+        order: [['tag_name', 'ASC']]
       })
         .then(dbTagData => {
-          const otherTags = dbTagData.map(tag => tag.get({ plain: true }));
-          console.log('user', user);
-          console.log('other_tags', otherTags);
-          res.render('dashboard-posts', { user, posts, other_tags: otherTags });
+          const allTags = dbTagData.map(tag => {
+            const merged = tag.get({ plain: true });
+            merged.selected = selectedTagIds.includes(merged.tag_id);
+            return merged;
+          });
+
+          const dashboard = { user, posts, other_tags: allTags };
+          console.log('dashboard data', dashboard);
+          res.render('dashboard-posts', dashboard);
         })
     })
     .catch(err => {

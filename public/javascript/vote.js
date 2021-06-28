@@ -63,7 +63,6 @@ async function voteHandler(event) {
 // wait until all posts are loaded, with their vote buttons
 window.onload = (event) => {
   const voteInputEls = document.querySelectorAll('.vote-input');
-  console.log(voteInputEls);
   voteInputEls.forEach(likeInput => {
     likeInput.addEventListener('click', voteHandler);
   });
