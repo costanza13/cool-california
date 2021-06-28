@@ -6,19 +6,37 @@ const { Post, User, Comment, PostTag, Tag, Vote } = require('../models');
 const POST_IMAGE_WIDTH = 400;
 
 router.get('/', (req, res) => {
+
+  // user filters
+  let voteFilter = null;
+
+  // post attributes we want to see
+  const attributes = [
+    'id',
+    'title',
+    'description',
+    'image_url',
+    'latitude',
+    'longitude',
+    'created_at',
+    [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
+    [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+    [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count'],
+  ];
+
+  // apply user-specific parameters
+  if (req.session.loggedIn) {
+    attributes.push(
+      [sequelize.literal('(SELECT `like` FROM vote WHERE vote.post_id = post.id AND vote.user_id = ' + req.session.user_id + ')'), 'vote']
+    )
+
+    if (typeof req.query.like !== 'undefined' && !isNaN(parseInt(req.query.like))) {
+      voteFilter = { like: req.query.like, user_id: req.session.user_id };
+    }
+  }
+
   Post.findAll({
-    attributes: [
-      'id',
-      'title',
-      'description',
-      'image_url',
-      'latitude',
-      'longitude',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-    ],
+    attributes,
     order: [['created_at', 'DESC'], ['id', 'DESC']],
     include: [
       {
@@ -35,6 +53,7 @@ router.get('/', (req, res) => {
       },
       {
         model: Vote,
+        where: voteFilter,
         attributes: ['like']
       }
     ]
@@ -43,14 +62,15 @@ router.get('/', (req, res) => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        if (post.votes[0] && post.votes[0].like) {
-          post.liked = true;
-        } else if (post.votes[0] && post.votes[0].like === false) {
-          post.unliked = true;
-        } else {
-          post.novote = true;
+        if (req.session.loggedIn) {
+          if (post.vote === 1) {
+            post.liked = true;
+          } else if (post.vote === 0) {
+            post.unliked = true;
+          }
         }
       });
+      console.log('home posts', posts);
       res.render('homepage', { posts, loggedIn: req.session.loggedIn });
     })
     .catch(err => {
@@ -134,11 +154,19 @@ router.get('/user/:id', (req, res) => {
 });
 
 router.get('/tag/:id', (req, res) => {
+  const where = {};
+  const multiTags = req.params.id.split(',').filter(tagId => !isNaN(parseInt(tagId)));
+  if (multiTags.length) {
+    where.id = { [Op.in]: multiTags };
+  } else {
+    res.status(400).send('Bad request');
+  }
+
   PostTag.findAll({
-    where: {
-      tag_id: req.params.id
-    },
-    attributes: ['post_id']
+    where,
+    attributes: [
+      'post_id'
+    ]
   })
     .then(taggedPostIds => {
       const postIds = taggedPostIds.map(postTag => postTag.get({ plain: true }).post_id);
@@ -191,10 +219,15 @@ router.get('/tag/:id', (req, res) => {
           post.novote = true;
         }
       });
-      // const tag = tagResults.tag_name;
-      const tag = 'shoe';
-      console.log('tag posts', posts);
-      res.render('homepage', { posts, loggedIn: req.session.loggedIn, tag, nextUrl: '/tag/' + req.params.id });
+      return Tag.findAll({
+        where: { id: { [Op.in]: multiTags } },
+        attributes: ['tag_name']
+      }).then(dbTagData => {
+        const tag_string = dbTagData.map(tag => tag.tag_name).join(' or ');
+        const homepageData = { posts, loggedIn: req.session.loggedIn, tag_string, nextUrl: '/tag/' + req.params.id };
+        console.log('homepage data', homepageData);
+        res.render('homepage', homepageData);  
+      });
     })
     .catch(err => {
       console.log(err);
@@ -266,7 +299,7 @@ router.get('/post/:id', (req, res) => {
       post.loggedIn = req.session.loggedIn;
       post.comments.loggedIn = req.session.loggedIn;
       console.log(post);
-    
+
       res.render('single-post', post);
     })
     .catch(err => {
