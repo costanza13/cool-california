@@ -136,7 +136,7 @@ router.get('/user/:id', (req, res) => {
 router.get('/tag/:id', (req, res) => {
   PostTag.findAll({
     where: {
-      // tag_id: req.params.id
+      tag_id: req.params.id
     },
     attributes: ['post_id']
   })

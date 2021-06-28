@@ -4,6 +4,7 @@
 
   <form id="edit-form">
     <input type="hidden" name="id" value="{{#if post.id}}{{post.id}}{{/if}}" />
+    <input type="hidden" name="tag-ids" value="" />
     <div>
       <input type="text" name="title" {{#if post.id}} value="{{post.title}}" {{/if}} placeholder="Post Title" />
     </div>

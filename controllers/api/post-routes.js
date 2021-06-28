@@ -90,19 +90,31 @@ router.get('/:id', (req, res) => {
 
 router.post('/', withAuthApi, (req, res) => {
   // console.log(req.body);
-  Post.create({
-    title: req.body.title,
-    description: req.body.description,
-    image_url: req.body.image_url,
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-    user_id: req.session.user_id
-  })
-    .then(dbPostData => res.json(dbPostData))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  if (req.body.title.trim() && req.body.description.trim()) {
+    Post.create({
+      title: req.body.title,
+      description: req.body.description,
+      image_url: req.body.image_url,
+      latitude: req.body.latitude ? req.body.latitude : null,
+      longitude: req.body.longitude ? req.body.longitude : null,
+      user_id: req.session.user_id
+    })
+      .then(dbPostData => {
+        const post = dbPostData.get({ plain: true });
+        const postTags = req.body.tags.split(',').map(tagId => { return { post_id: post.id, tag_id: tagId }; });
+        return PostTag.bulkCreate(postTags).then(dbPostTagData => {
+          const postTags = dbPostTagData.map(tag => tag.get({ plain: true }));
+          post.tags = postTags;
+          res.status(200).json(post);
+        })
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  } else {
+    res.status(400).json({ message: 'Title and Description required.' });
+  }
 });
 
 // these must come before the /:id route to avoid being considered a post id
@@ -189,7 +201,14 @@ router.put('/:id', withAuthApi, (req, res) => {
         res.status(404).json({ message: 'No post found with this id' });
         return;
       }
-      res.json(dbPostData);
+      const postTags = req.body.tags.split(',').map(tagId => { return { post_id: req.params.id, tag_id: tagId }; });
+      return PostTag.destroy({ where: { post_id: req.params.id } })
+        .then(dbPostDeleteData => {
+          return PostTag.bulkCreate(postTags).then(dbPostTagData => {
+            const postTags = dbPostTagData.map(tag => tag.get({ plain: true }));
+            res.status(200).json(dbPostData);
+          })
+        })
     })
     .catch(err => {
       console.log(err);

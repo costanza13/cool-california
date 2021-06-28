@@ -162,7 +162,13 @@ router.get('/create', withAuth, (req, res) => {
     title: '',
     body: '',
   };
-  res.render('edit-post', { post, loggedIn: req.session.loggedIn });
+  Tag.findAll({
+    attributes: ['id', 'tag_name']
+  })
+    .then(dbTagData => {
+      const tags = dbTagData.map(tag => tag.get({ plain: true }));
+      res.render('edit-post', { post, tags, loggedIn: req.session.loggedIn });
+    });
 });
 
 router.get('/edit/:id', withAuth, (req, res) => {
