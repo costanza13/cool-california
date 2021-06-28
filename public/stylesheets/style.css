@@ -1,16 +1,74 @@
 * {
   box-sizing: border-box;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
+  color: black;
 }
 
 .hidden {
   display: none;
 }
 
-header h1 {
-  color: #E1103B;
+header h3 {
+  background: -webkit-linear-gradient(#D4AF37, #C0C0C0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-family: 'Mr Dafoe', cursive;
-  font-size: 100px;
+  font-size: 40px;
+  margin-left: 30px
+}
+
+body {
+  height: 125vh;
+  margin-top: 80px;
+  padding: 30px;
+  background: -webkit-linear-gradient(#D4AF37, #C0C0C0);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+header {
+  background-color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 25px 0 black;
+  justify-content: space-between;
+}
+
+header * {
+  display: inline;
+}
+
+header ul {
+  background: black;
+}
+
+header li {
+  margin: 20px;
+  background: black;
+}
+
+header li a {
+  background: black;
+  color: white;
+  font-style: italic;
+  padding: 5px;
+  text-decoration: none;
+}
+
+header li a:hover {
+  font-weight: bold;
+  background: -webkit-linear-gradient(#D4AF37, #C0C0C0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #E1103B;
+  border-radius: 35px;
+  text-shadow: none;
+  text-decoration:none;
 }
 
 .tag-list {
@@ -25,23 +83,24 @@ header h1 {
 }
 
 .tag-list-item-btn, .tag-input + label {
-  border: 2px solid rgb(226, 147, 29);
+  border: 2px solid rgb(212, 175, 55);
   border-radius: 1rem;
-  box-shadow: 2px 2px 3px gray;
-  color: rgb(226, 147, 29);
+  box-shadow: none;
+  color:rgb(212, 175, 55);
+  background: black;
+  text-shadow: 0px 0px rgb(212, 175, 55);
   cursor: pointer;
   padding: .2rem .7rem;
 }
 
 .tag-list-item a {
   color: inherit;
+  background: inherit;
   text-decoration: none;
 }
 
 .tag-list-item-btn.selected, .tag-input:checked + label {
-  background-color: rgb(226, 147, 29);
-  box-shadow: none;
-  color: white;
+  background: #111111
 }
 
 .tag-input + label::before {
@@ -81,4 +140,89 @@ header h1 {
 
 .vote-input.dislike:checked + label {
   background-color: rgb(243, 97, 97);;
+}
+
+.spd1 {
+  height: 100px;
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 0
+}
+
+.spi {
+  max-width: 100%;
+  height: auto;
+}
+
+#cf {
+  padding-bottom: 20px;
+}
+
+#add-comment-btn {
+  padding-bottom: 40px;
+  background-color: #D4AF37;
+  border: none;
+  color: black;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+#text-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.save-post-btn {
+  background-color: white;
+  font-weight: bold;
+  border: none;
+  border-style: double;
+  color: green;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.delete-post-btn {
+  background-color: white;
+  font-weight: bold;
+  border: none;
+  border-style: double;
+  color: red;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+#post-input {
+  width: auto;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#titttle {
+  font-weight: bold;
+}
+
+#your-posts {
+  padding: 20px;
+}
+
+#your-post {
+  padding: 20px;
 }

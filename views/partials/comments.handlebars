@@ -22,12 +22,12 @@
     </ul>
     {{/if}}
     {{#if loggedIn}}
-    <form class="comment-form">
+    <form id="cf" class="comment-form">
       <div class="mb-3">
-        <textarea name="comment-body" class="form-control" placeholder="Leave a comment..."></textarea>
+        <textarea id="text-input" name="comment-body" class="form-control" placeholder="Leave a comment..."></textarea>
       </div>
       <div class="mb-3">
-        <button type="submit" class="btn btn-primary">add comment</button>
+        <button id="add-comment-btn" type="submit" class="btn btn-primary">add comment</button>
       </div>
     </form>
     {{else}}

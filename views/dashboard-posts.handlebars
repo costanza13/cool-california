@@ -1,35 +1,40 @@
 <section>
   <h2>Your Dashboard</h2>
-  <p>Hi {{user.nickname}}. Welcome to your account dashboard! Here you can manage your existing posts, add a new one, or view
+  <p>Hi {{user.nickname}}. Welcome to your account dashboard! Here you can manage your existing posts, add a new one, or
+    view
     posts you've liked or disliked.</p>
 
   <div class="user-tags">
-    <ul class="selected-tags">
-      {{#each user.tags}}
-      <li>{{this.tag_name}}</li>
-      {{/each}}
-    </ul>
+    <h3>Your Interests</h3>
     <ul class="unselected-tags">
-      {{#each other_tags}}
-      <li>{{tag_name}}</li>
+      {{#each other_tags as |tag|}}
+      <li class="tag-list-item">
+        <input id="tag-{{tag.tag_id}}-btn" class="tag-input hidden" type="checkbox" value="{{tag.tag_id}}" {{#if tag.selected}}
+          checked="checked" {{/if}} />
+        <label for="tag-{{tag.tag_id}}-btn">{{tag.tag_name}}</label>
+      </li>
       {{/each}}
     </ul>
   </div>
-  <p>
+</section>
+
+
+<section>
+  <nav>
     <a href="/dashboard">View Posts</a> |
     <a href="/dashboard/likes">View Likes</a> |
     <a href="/dashboard/dislikes">View Dislikes</a>
-  </p>
+  </nav>
 </section>
 
 {{#if posts.length}}
-<section>
+<section id="your-posts">
   <h3>Your Posts</h3>
   <a href="/dashboard/create">Add a new post</a>
   <p>You've written {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
   <ul>
     {{#each posts as |post|}}
-    <li>
+    <li id="your-post">
       <hr>
       {{> post-info post}}
       <a href="/dashboard/edit/{{post.id}}">Edit post</a>
@@ -38,4 +43,5 @@
   </ul>
 </section>
 {{/if}}
+<script src="/javascript/user-tags.js"></script>
 <script src="/javascript/vote.js"></script>
