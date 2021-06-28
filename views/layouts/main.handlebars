@@ -14,31 +14,31 @@
 
 <body>
   <div class="wrapper">
-    <main>
       <header>
-        <h3>Cool California</h3>
-        <nav>
-          <ul>
-            <li>
-              <a href="/">Home</a>
-            </li>
-            <li>
-              <a href="/dashboard">Dashboard</a>
-            </li>
-            <li>
-              {{#if loggedIn}}
-              <a href="#" id="logout">Sign Out</a>
-              {{else}}
-              <a href="/login{{#if nextUrl}}?_next={{nextUrl}}{{/if}}">Sign In</a>
-              {{/if}}
-            </li>
-          </ul>
-        </nav>
+        <secion class="header-content">
+          <h3>Cool California</h3>
+          <nav>
+            <ul>
+              <li>
+                <a href="/">Home</a>
+              </li>
+              <li>
+                <a href="/dashboard">Dashboard</a>
+              </li>
+              <li>
+                {{#if loggedIn}}
+                <a href="#" id="logout">Sign Out</a>
+                {{else}}
+                <a href="/login{{#if nextUrl}}?_next={{nextUrl}}{{/if}}">Sign In</a>
+                {{/if}}
+              </li>
+            </ul>
+          </nav>
+        </secion>
       </header>
       <content>
         {{{ body }}}
       </content>
-    </main>
   </div>
   {{#if loggedIn}}
   <script src="/javascript/logout.js"></script>
