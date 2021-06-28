@@ -7,10 +7,31 @@
   display: none;
 }
 
-header h1 {
+header h3 {
   color: #E1103B;
   font-family: 'Mr Dafoe', cursive;
-  font-size: 100px;
+  font-size: 40px;
+}
+
+body {
+  height: 125vh;
+  margin-top: 80px;
+  padding: 30px;
+}
+
+header {
+  background-color: grey;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+header * {
+  display: inline;
 }
 
 .tag-list {
