@@ -153,62 +153,75 @@ router.get('/user/:id', (req, res) => {
     });
 });
 
-router.get('/tag/:id', (req, res) => {
+router.get('/tag/:tag_name', (req, res) => {
   const where = {};
-  const multiTags = req.params.id.split(',').filter(tagId => !isNaN(parseInt(tagId)));
+  const multiTags = req.params.tag_name.split(',');
   if (multiTags.length) {
-    where.id = { [Op.in]: multiTags };
+    where.tag_name = { [Op.in]: multiTags };
   } else {
     res.status(400).send('Bad request');
   }
 
-  PostTag.findAll({
+  Tag.findAll({
     where,
-    attributes: [
-      'post_id'
-    ]
-  })
-    .then(taggedPostIds => {
-      const postIds = taggedPostIds.map(postTag => postTag.get({ plain: true }).post_id);
-      return Post.findAll({
-        where: {
-          id: { [Op.in]: postIds }
-        },
-        attributes: [
-          'id',
-          'title',
-          'description',
-          'image_url',
-          'latitude',
-          'longitude',
-          'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post_id = comment.post_id)'), 'comment_count']
-        ],
-        order: [['created_at', 'DESC'], ['id', 'DESC']],
-        include: [
-          {
-            model: Tag,
-            attributes: [['id', 'tag_id'], 'tag_name'],
-            through: {
-              model: PostTag,
-              attributes: []
-            }
-          },
-          {
-            model: User,
-            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-          },
-          {
-            model: Vote,
-            attributes: ['like']
+    attributes: ['id', 'tag_name'],
+    include: {
+      model: Post,
+      distinct: true,
+      through: {
+        model: PostTag,
+        attributes: []
+      },
+      attributes: [
+        'id',
+        'title',
+        'description',
+        'image_url',
+        'latitude',
+        'longitude',
+        'created_at',
+        [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post_id = vote.post_id AND `like`)'), 'likes'],
+        [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post_id = vote.post_id AND NOT `like`)'), 'dislikes'],
+        [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post_id = comment.post_id)'), 'comment_count']
+      ],
+      order: [['created_at', 'DESC'], ['id', 'DESC']],
+      include: [
+        {
+          model: Tag,
+          attributes: [['id', 'tag_id'], 'tag_name'],
+          through: {
+            model: PostTag,
+            attributes: []
           }
-        ]
-      })
-    })
-    .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
+        },
+        {
+          model: User,
+          attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
+        },
+        {
+          model: Vote,
+          attributes: ['like']
+        }
+      ]
+    }
+  })
+    .then(dbTagPostData => {
+      // console.log('MCCMCCMCC multi tag', dbTagPostData);
+      let posts = [];
+      const tagPosts = dbTagPostData.map(tag => tag.get({ plain: true }).posts);
+      // console.log('MCCMCCMCC multi tag', tagPosts);
+      const havePostIds = [];
+      for (let i = 0; i < tagPosts.length; i++) {
+        for (let j = 0; j < tagPosts[i].length; j++) {
+          if (havePostIds.indexOf(tagPosts[i][j]) === -1) {
+            posts.push(tagPosts[i][j]);
+            havePostIds.push(tagPosts[i][j].id);
+          }
+        }
+
+        posts = posts.sort((a, b) => a.created_at > b.created_at ? 1 : -1);
+      }
+      // console.log('MCCMCCMCC multi tag posts', posts);
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
         if (post.votes[0] && post.votes[0].like) {
@@ -219,15 +232,10 @@ router.get('/tag/:id', (req, res) => {
           post.novote = true;
         }
       });
-      return Tag.findAll({
-        where: { id: { [Op.in]: multiTags } },
-        attributes: ['tag_name']
-      }).then(dbTagData => {
-        const tag_string = dbTagData.map(tag => tag.tag_name).join(' or ');
-        const homepageData = { posts, loggedIn: req.session.loggedIn, tag_string, nextUrl: '/tag/' + req.params.id };
-        console.log('homepage data', homepageData);
-        res.render('homepage', homepageData);  
-      });
+      const tag_string = 'butts';//dbTagData.map(tag => tag.tag_name).join(' or ');
+      const homepageData = { posts, loggedIn: req.session.loggedIn, tag_string, nextUrl: '/tag/' + req.params.id };
+      console.log('homepage data', homepageData);
+      res.render('homepage', homepageData);
     })
     .catch(err => {
       console.log(err);
