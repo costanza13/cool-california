@@ -226,3 +226,8 @@ header li a:hover {
 #your-post {
   padding: 20px;
 }
+
+#sign-up-error, #login-error {
+  display: none;
+  color:rgb(243, 97, 97);
+}

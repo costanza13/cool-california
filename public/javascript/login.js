@@ -19,7 +19,10 @@ async function signupFormHandler(event) {
     if (response.ok) {
       document.location.replace(nextUrl);
     } else {
-      alert(response.statusText);
+      const error = await response.json();
+      const errorText = document.querySelector('#sign-up-error');
+      errorText.innerText = error.message;
+      errorText.setAttribute("style", "display: block !important");
     }
   }
 }
@@ -44,7 +47,10 @@ async function loginFormHandler(event) {
       // added 1-second delay, because immediate redirect creates race condition with cookie storage
       setTimeout(() => { document.location.replace(nextUrl); }, 1);
     } else {
-      alert(response.statusText);
+      const error = await response.json();
+      const errorText = document.querySelector('#login-error');
+      errorText.innerText = error.message;
+      errorText.setAttribute("style", "display: block !important");
     }
   }
 }
