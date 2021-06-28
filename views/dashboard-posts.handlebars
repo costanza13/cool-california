@@ -1,7 +1,20 @@
 <section>
   <h2>Your Dashboard</h2>
-  <p>Hi {{nickname}}. Welcome to your account dashboard! Here you can manage your existing posts, add a new one, or view
+  <p>Hi {{user.nickname}}. Welcome to your account dashboard! Here you can manage your existing posts, add a new one, or view
     posts you've liked or disliked.</p>
+
+  <div class="user-tags">
+    <ul class="selected-tags">
+      {{#each user.tags}}
+      <li>{{this.tag_name}}</li>
+      {{/each}}
+    </ul>
+    <ul class="unselected-tags">
+      {{#each other_tags}}
+      <li>{{tag_name}}</li>
+      {{/each}}
+    </ul>
+  </div>
   <p>
     <a href="/dashboard">View Posts</a> |
     <a href="/dashboard/likes">View Likes</a> |
