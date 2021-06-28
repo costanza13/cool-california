@@ -1,8 +1,11 @@
-<article>
+<article id="art">
   <p>Post ID: {{id}}</p>
   <p>Author: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
-  <p><img src="{{image_url}}" /></p>
-  <p>Title: <a href="/post/{{id}}">{{title}}</a></p>
+  <div class="spd1">
+    <p><img class="spi" src="{{image_url}}" /></p>
+  </div>
+  <div class="spd2">
+  <p>Title: <a id="titttle" href="/post/{{id}}">{{title}}</a></p>
   <p>Description: {{description}}</p>
   <p>Coordinates: ({{latitude}}, {{longitude}})</p>
   <p>Image URL: [{{image_url}}]</p>
@@ -11,5 +14,6 @@
   {{> like-controls this}}
   <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
   {{> comments comments}}
+  </div>
 </article>
 <script src="/javascript/vote.js"></script>

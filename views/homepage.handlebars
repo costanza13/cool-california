@@ -8,9 +8,10 @@
 {{#each posts}}
 <article>
   <p>Post ID: {{id}}</p>
-  <p>Title: <a href="/post/{{id}}">{{title}}</a></p>
+  <p>Title: <a id="titttle" href="/post/{{id}}">{{title}}</a></p>
   <p>Author: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
   <p>Description: {{description}}</p>
+  <p>Coordinates: ({{latitude}}, {{longitude}})</p>
   {{#if image_url_sized}}
   <p><img src="{{image_url_sized}}" /></p>
   {{/if}}

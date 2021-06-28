@@ -20,6 +20,10 @@ const postTagData = [
   {
     post_id: 3,
     tag_id: 2,
+  },
+  {
+    post_id: 4,
+    tag_id: 6
   }
 ];
 

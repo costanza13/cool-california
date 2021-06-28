@@ -6,19 +6,19 @@
     <input type="hidden" name="id" value="{{#if post.id}}{{post.id}}{{/if}}" />
     <input type="hidden" name="tag-ids" value="" />
     <div>
-      <input type="text" name="title" {{#if post.id}} value="{{post.title}}" {{/if}} placeholder="Post Title" />
+      <input id="post-input" type="text" name="title" {{#if post.id}} value="{{post.title}}" {{/if}} placeholder="Post Title" />
     </div>
     <div>
-      <textarea name="description" rows="5"
+      <textarea id="text-input" name="description" rows="5"
         placeholder="Post content...">{{#if post.description}}{{post.description}}{{/if}}</textarea>
     </div>
     <div>
-      <input type="text" name="image_url" {{#if post.id}} value="{{post.image_url}}" {{/if}}
+      <input id="post-input" type="text" name="image_url" {{#if post.id}} value="{{post.image_url}}" {{/if}}
         placeholder="Upload a photo" readonly="readonly" />
     </div>
     Location:
-    <input type="text" name="latitude" {{#if post.id}} value="{{post.latitude}}" {{/if}} placeholder="latitude" />
-    <input type="text" name="longitude" {{#if post.id}} value="{{post.longitude}}" {{/if}} placeholder="longitude" />
+    <input id="post-input" type="text" name="latitude" {{#if post.id}} value="{{post.latitude}}" {{/if}} placeholder="latitude" />
+    <input id="post-input" type="text" name="longitude" {{#if post.id}} value="{{post.longitude}}" {{/if}} placeholder="longitude" />
     <div>
       {{#if post.id}}
       <p>
@@ -29,7 +29,7 @@
       {{/if}}
     </div>
     <div>
-      <button type="submit">Save post</button>
+      <button class="save-post-btn" type="submit">Save post</button>
       {{#if post.id}}<button type="button" class="delete-post-btn">Delete post</button>{{/if}}
     </div>
   </form>

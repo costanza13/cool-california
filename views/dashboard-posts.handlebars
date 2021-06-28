@@ -28,13 +28,13 @@
 </section>
 
 {{#if posts.length}}
-<section>
+<section id="your-posts">
   <h3>Your Posts</h3>
   <a href="/dashboard/create">Add a new post</a>
   <p>You've written {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
   <ul>
     {{#each posts as |post|}}
-    <li>
+    <li id="your-post">
       <hr>
       {{> post-info post}}
       <a href="/dashboard/edit/{{post.id}}">Edit post</a>
