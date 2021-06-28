@@ -59,7 +59,13 @@ router.post('/', (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      var message;
+      if (err.errors) {
+        message = err.errors[0].message;
+      } else {
+        message = err.message;
+      }
+      res.status(500).json({ message });
     });
 });
 
