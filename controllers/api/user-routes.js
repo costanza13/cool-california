@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Post } = require('../../models');
+const { User, Post, UserTag } = require('../../models');
 const { withAuthApi } = require('../../utils/auth');
 
 // get all users
@@ -134,6 +134,13 @@ router.put('/:id', withAuthApi, (req, res) => {
     } else {
       res.status(403).json('Permission denied.')
     }
+});
+
+router.put('/tags/:id', withAuthApi, (req, res) => {
+  // UserTag.upsert(
+
+  // )
+  res.end('Tag! Your it!');
 });
 
 router.delete('/:id', withAuthApi, (req, res) => {

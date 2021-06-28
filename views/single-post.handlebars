@@ -1,14 +1,15 @@
 <article>
-  <p>Post ID: {{post.id}}</p>
-  <p>Author: <a href="/user/{{post.user.post_author_id}}">{{post.user.post_author}}</a></p>
-  <p><img src="{{post.image_url}}" /></p>
-  <p>Title: <a href="/post/{{post.id}}">{{post.title}}</a></p>
-  <p>Description: {{post.description}}</p>
-  <p>Coordinates: ({{post.latitude}}, {{post.longitude}})</p>
-  <p>Image URL: [{{post.image_url}}]</p>
-  {{> tags post}}
-  <p>Created at: {{post.created_at}}</p>
-  {{> like-controls post}}
-  <p><a href="/post/{{post.id}}">{{post.comment_count}} comments</a></p>
+  <p>Post ID: {{id}}</p>
+  <p>Author: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
+  <p><img src="{{image_url}}" /></p>
+  <p>Title: <a href="/post/{{id}}">{{title}}</a></p>
+  <p>Description: {{description}}</p>
+  <p>Coordinates: ({{latitude}}, {{longitude}})</p>
+  <p>Image URL: [{{image_url}}]</p>
+  {{> tags this}}
+  <p>Created at: {{created_at}}</p>
+  {{> like-controls this}}
+  <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
+  {{> comments comments}}
 </article>
 <script src="/javascript/vote.js"></script>
