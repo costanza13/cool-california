@@ -8,6 +8,9 @@
 .hidden {
   display: none;
 }
+a:link {
+  text-decoration: none;
+}
 
 p {
   margin: 0.5rem 0;
@@ -111,8 +114,12 @@ nav li a:hover {
 
 .title-bar {
   align-items: center;
+  border: 1px solid #666;
+  border-radius: 1rem;
   display: flex;
   justify-content: space-between;
+  padding: 1rem;
+  margin: 1rem 0;
   width: 100%;
 }
 
@@ -124,10 +131,27 @@ nav li a:hover {
   text-align: right;
 }
 
+article {
+  border: 1px solid #666;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  width: 100%;
+}
+
 .place-image {
-  margin: 10px auto;
+  border-radius: 1rem;
+  height: auto;
+  margin: 1rem auto;
   max-width: 100%;
+}
+
+.place-image.small {
   max-height: 400px;
+}
+
+.map-container {
+  float: right;
 }
 
 .tag-list {
@@ -211,16 +235,39 @@ nav li a:hover {
   height: 100px;
   display: inline-block;
   margin-bottom: 20px;
-  padding: 0
+  padding: 0;
+  text-align: center;
+  width: 100%;
 }
 
-.spi {
-  max-width: 100%;
-  height: auto;
+.spd2 {
+  border-radius: 1rem;
+  background-color: #fbf7e6;
+  padding: 1rem;
 }
 
 #cf {
   padding-bottom: 20px;
+}
+
+.tags-wrap {
+  margin: 1rem 0;
+}
+
+.spacer {
+  clear: both;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.comments {
+  border: 1px solid #666;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  width: 100%;
 }
 
 #add-comment-btn {
