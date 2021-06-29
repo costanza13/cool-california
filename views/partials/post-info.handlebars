@@ -8,7 +8,9 @@
     <p>Image URL: [{{image_url}}]</p>
     <div>
       <p>{{description}}</p>
-      <p>Coordinates: ({{latitude}}, {{longitude}})</p>
+      {{#if latitude}}
+      <p>See it on a <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank">map</a></p>
+      {{/if}}
     </div>
     {{> tags this}}
     {{> like-controls this}}

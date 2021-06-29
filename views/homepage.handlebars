@@ -13,13 +13,12 @@
   <h2><a id="titttle" href="/post/{{id}}">{{title}}</a></h2>
   <p>Posted by: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
   <p>{{description}}</p>
-  <p>Coordinates: ({{latitude}}, {{longitude}})</p>
-  {{#if image_url_sized}}
+  {{#if latitude}}
+  <p>See it on a <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank">map</a></p>
   {{/if}}
-  <p>Image URL: [{{image_url}}]</p>
-    {{> tags this}}
+  {{> tags this}}
   <p>Created at: {{created_at}}</p>
-    {{> like-controls this}}
+  {{> like-controls this}}
   <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
 </article>
 <br><br>
