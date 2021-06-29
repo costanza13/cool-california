@@ -2,23 +2,42 @@ const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { Op } = require('sequelize');
 const { Post, User, Comment, PostTag, Tag, Vote } = require('../models');
+const { withAuth } = require('../utils/auth');
 
 const POST_IMAGE_WIDTH = 400;
 
 router.get('/', (req, res) => {
+
+  // user filters
+  let voteFilter = null;
+
+  // post attributes we want to see
+  const attributes = [
+    'id',
+    'title',
+    'description',
+    'image_url',
+    'latitude',
+    'longitude',
+    'created_at',
+    [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
+    [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+    [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count'],
+  ];
+
+  // apply user-specific parameters
+  if (req.session.loggedIn) {
+    attributes.push(
+      [sequelize.literal('(SELECT `like` FROM vote WHERE vote.post_id = post.id AND vote.user_id = ' + req.session.user_id + ')'), 'vote']
+    )
+
+    if (typeof req.query.like !== 'undefined' && !isNaN(parseInt(req.query.like))) {
+      voteFilter = { like: req.query.like, user_id: req.session.user_id };
+    }
+  }
+
   Post.findAll({
-    attributes: [
-      'id',
-      'title',
-      'description',
-      'image_url',
-      'latitude',
-      'longitude',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-    ],
+    attributes,
     order: [['created_at', 'DESC'], ['id', 'DESC']],
     include: [
       {
@@ -35,6 +54,7 @@ router.get('/', (req, res) => {
       },
       {
         model: Vote,
+        where: voteFilter,
         attributes: ['like']
       }
     ]
@@ -43,15 +63,16 @@ router.get('/', (req, res) => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        if (post.votes[0] && post.votes[0].like) {
-          post.liked = true;
-        } else if (post.votes[0] && post.votes[0].like === false) {
-          post.unliked = true;
-        } else {
-          post.novote = true;
+        if (req.session.loggedIn) {
+          if (post.vote === 1) {
+            post.liked = true;
+          } else if (post.vote === 0) {
+            post.unliked = true;
+          }
         }
       });
-      res.render('homepage', { posts, loggedIn: req.session.loggedIn });
+      // console.log('home posts', posts);
+      res.render('homepage', { posts, title: "Awesome Places", loggedIn: req.session.loggedIn });
     })
     .catch(err => {
       console.log(err);
@@ -112,12 +133,10 @@ router.get('/user/:id', (req, res) => {
                 post.liked = true;
               } else if (post.votes[0] && post.votes[0].like === false) {
                 post.unliked = true;
-              } else {
-                post.novote = true;
               }
             });
             const nickname = dbUserData.dataValues.nickname;
-            res.render('homepage', { posts, loggedIn: req.session.loggedIn, nickname, nextUrl: '/user/' + req.params.id });
+            res.render('homepage', { posts, loggedIn: req.session.loggedIn, title: nickname + "'s Places", nextUrl: '/user/' + req.params.id });
           } else {
             res.render('error', { status: 404, message: 'User not found' });
           }
@@ -133,19 +152,40 @@ router.get('/user/:id', (req, res) => {
     });
 });
 
-router.get('/tag/:id', (req, res) => {
-  PostTag.findAll({
-    where: {
-      tag_id: req.params.id
-    },
-    attributes: ['post_id']
+router.get('/tag/:tag_name', (req, res) => {
+  const where = {};
+  const multiTags = req.params.tag_name.split(',');
+  if (multiTags.length) {
+    where.tag_name = { [Op.in]: multiTags };
+  } else {
+    res.status(400).send('Bad request');
+  }
+
+  Tag.findAll({
+    where,
+    attributes: ['id', 'tag_name'],
+    include: {
+      model: Post,
+      through: {
+        model: PostTag,
+        attributes: []
+      },
+      attributes: ['id']
+    }
   })
-    .then(taggedPostIds => {
-      const postIds = taggedPostIds.map(postTag => postTag.get({ plain: true }).post_id);
+    .then(dbTagData => {
+      const postIdArrays = dbTagData.map(tagData => tagData.get({ plain: true }).posts);
+      let postIds = [];
+      postIdArrays.forEach(postIdArr => {
+        postIdArr.forEach(postId => {
+          if (postIds.indexOf(postId.id) === -1) {
+            postIds.push(postId.id);
+          }
+        })
+      })
+      console.log('PULL IT OUT OF HERE', postIds);
       return Post.findAll({
-        where: {
-          id: { [Op.in]: postIds }
-        },
+        where: { id: { [Op.in]: postIds } },
         attributes: [
           'id',
           'title',
@@ -177,24 +217,100 @@ router.get('/tag/:id', (req, res) => {
             attributes: ['like']
           }
         ]
-      })
+      });
     })
-    .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
+    .then(dbTagPostData => {
+      // console.log('MCCMCCMCC multi tag', dbTagPostData);
+      let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
+      // console.log('MCCMCCMCC multi tag', posts);
+
+      
+      /***************************************************/
+      // JEFF -- Insert the sorting logic down here  vvv
+      /***************************************************/
+      // posts = posts.sort((a, b) => a.created_at > b.created_at ? 1 : -1); // << JEFF - this created_at sort is no longer needed, but you can use it as an example
+
+
+      // console.log('MCCMCCMCC multi tag posts', posts);
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
         if (post.votes[0] && post.votes[0].like) {
           post.liked = true;
         } else if (post.votes[0] && post.votes[0].like === false) {
           post.unliked = true;
-        } else {
-          post.novote = true;
         }
       });
-      // const tag = tagResults.tag_name;
-      const tag = 'shoe';
-      console.log('tag posts', posts);
-      res.render('homepage', { posts, loggedIn: req.session.loggedIn, tag, nextUrl: '/tag/' + req.params.id });
+      const tag_string = req.params.tag_name.split(',').join(', ');
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/tag/' + req.params.id };
+      // console.log('homepage data', homepageData);
+      res.render('homepage', homepageData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+const getVoted = function (req, type) {
+  return Vote.findAll({
+    where: {
+      user_id: req.session.user_id,
+      like: { [Op.is]: (type === 'likes') }
+    },
+    attributes: ['post_id']
+  })
+    .then(votedPostIds => {
+      const postIds = votedPostIds.map(postVote => postVote.get({ plain: true }).post_id);
+      return Post.findAll({
+        where: {
+          id: { [Op.in]: postIds }
+        },
+        attributes: [
+          'id',
+          'title',
+          'description',
+          'image_url',
+          'latitude',
+          'longitude',
+          'created_at',
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
+        ],
+        order: [['created_at', 'DESC'], ['id', 'DESC']],
+        include: [
+          {
+            model: Tag,
+            attributes: [['id', 'tag_id'], 'tag_name'],
+            through: {
+              model: PostTag,
+              attributes: []
+            },
+          },
+          {
+            model: User,
+            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
+          },
+          {
+            model: Vote,
+            attributes: [['id', 'vote_id'], 'like']
+          }
+        ]
+      });
+    });
+};
+
+router.get('/likes', withAuth, (req, res) => {
+  getVoted(req, 'likes')
+    .then(dbPostData => {
+      const posts = dbPostData.map(post => post.get({ plain: true }));
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        post.liked = true;
+      });
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: 'Places you like', nextUrl: '/likes' + req.params.id };
+      // console.log('homepage data', homepageData);
+      res.render('homepage', homepageData);
     })
     .catch(err => {
       console.log(err);
@@ -260,13 +376,11 @@ router.get('/post/:id', (req, res) => {
         post.liked = true;
       } else if (post.votes[0] && post.votes[0].like === false) {
         post.unliked = true;
-      } else {
-        post.novote = true;
       }
       post.loggedIn = req.session.loggedIn;
       post.comments.loggedIn = req.session.loggedIn;
       console.log(post);
-    
+
       res.render('single-post', post);
     })
     .catch(err => {

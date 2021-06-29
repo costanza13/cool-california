@@ -1,26 +1,38 @@
-{{#if nickname}}
-<h2>{{nickname}}'s Posts</h2>
-{{else}}
-{{#if tag}}
-<h2>{{tag}} Posts</h2>
-{{/if}}
-{{/if}}
-{{#each posts}}
-<article>
-  <p>Post ID: {{id}}</p>
-  <p>Title: <a id="titttle" href="/post/{{id}}">{{title}}</a></p>
-  <p>Author: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
-  <p>Description: {{description}}</p>
-  <p>Coordinates: ({{latitude}}, {{longitude}})</p>
-  {{#if image_url_sized}}
-  <p><img src="{{image_url_sized}}" /></p>
+<div class="title-bar">
+  {{#if title}}
+  <h1>{{title}}</h1>
   {{/if}}
-  <p>Image URL: [{{image_url}}]</p>
-    {{> tags this}}
+  {{#if loggedIn}}
+  <div class="filter-control">
+    <select name="filter" class="filter-select">
+      <option value="">Posts Matching...</option>
+      <option value="all-posts">Anything</option>
+      <option value="user-tags">Your Interests</option>
+      <option value="user-likes">Your Likes</option>
+    </select>
+  </div>
+  {{/if}}
+</div>
+{{#each posts}}
+<article id="post-{{id}}" class="post">
+  {{#if image_url}}
+  <img class="place-image" src="{{image_url}}" />
+  {{/if}}
+  <h2><a id="titttle" href="/post/{{id}}">{{title}}</a></h2>
+  <p>Posted by: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
+  <p>{{description}}</p>
+  {{#if latitude}}
+  <p>See it on a <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
+      target="_blank">map</a></p>
+  {{/if}}
+  {{> tags this}}
   <p>Created at: {{created_at}}</p>
-    {{> like-controls this}}
+  {{> like-controls this}}
   <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
 </article>
 <br><br>
 {{/each}}
+{{#if loggedIn}}
+<script src="/javascript/filter.js"></script>
 <script src="/javascript/vote.js"></script>
+{{/if}}

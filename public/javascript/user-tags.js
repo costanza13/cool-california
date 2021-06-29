@@ -20,7 +20,7 @@ async function userTagHandler(event) {
     }
   }
 
-  console.log({ tag_id, tag_state, apiUrl, apiPayload });
+  // console.log({ tag_id, tag_state, apiUrl, apiPayload });
   const response = await fetch(apiUrl, apiPayload);
   if (response.ok) {
     console.log('success');

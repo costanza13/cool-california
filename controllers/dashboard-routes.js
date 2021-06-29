@@ -11,7 +11,13 @@ router.get('/', withAuth, (req, res) => {
     where: {
       id: req.session.user_id
     },
-    attributes: ['id', 'nickname', 'email'],
+    attributes: [
+      'id',
+      'nickname',
+      'email',
+      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE user.id = vote.user_id AND `like`)'), 'likes_count'],
+      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE user.id = vote.user_id AND NOT`like`)'), 'dislikes_count']
+    ],
     include: [
       {
         model: Tag,
@@ -69,8 +75,6 @@ router.get('/', withAuth, (req, res) => {
               post.liked = true;
             } else if (post.votes[0] && post.votes[0].like === false) {
               post.unliked = true;
-            } else {
-              post.novote = true;
             }
           });
           return { user, posts };
@@ -90,7 +94,7 @@ router.get('/', withAuth, (req, res) => {
           });
 
           const dashboard = { user, posts, other_tags: allTags };
-          console.log('dashboard data', dashboard);
+          // console.log('dashboard data', dashboard);
           res.render('dashboard-posts', dashboard);
         })
     })
@@ -104,7 +108,7 @@ const getVoted = function (req, type) {
   return Vote.findAll({
     where: {
       user_id: req.session.user_id,
-      like: (type === 'likes')
+      like: { [Op.is]: (type === 'likes') }
     },
     attributes: ['post_id']
   })
@@ -155,13 +159,7 @@ router.get('/likes', withAuth, (req, res) => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        if (post.votes[0] && post.votes[0].like) {
-          post.liked = true;
-        } else if (post.votes[0] && post.votes[0].like === false) {
-          post.unliked = true;
-        } else {
-          post.novote = true;
-        }
+        post.liked = true;
       });
       res.render('dashboard-likes', { posts, tab: 'Liked', loggedIn: req.session.loggedIn });
     })
@@ -175,15 +173,10 @@ router.get('/dislikes', withAuth, (req, res) => {
   getVoted(req, 'dislikes')
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
+      console.log('disliked posts', posts);
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        if (post.votes[0] && post.votes[0].like) {
-          post.liked = true;
-        } else if (post.votes[0] && post.votes[0].like === false) {
-          post.unliked = true;
-        } else {
-          post.novote = true;
-        }
+        post.unliked = true;
       });
       res.render('dashboard-likes', { posts, tab: 'Disliked', loggedIn: req.session.loggedIn });
     })

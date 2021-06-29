@@ -5,15 +5,19 @@
     <p><img class="spi" src="{{image_url}}" /></p>
   </div>
   <div class="spd2">
-  <p>Title: <a id="titttle" href="/post/{{id}}">{{title}}</a></p>
-  <p>Description: {{description}}</p>
-  <p>Coordinates: ({{latitude}}, {{longitude}})</p>
-  <p>Image URL: [{{image_url}}]</p>
-  {{> tags this}}
-  <p>Created at: {{created_at}}</p>
-  {{> like-controls this}}
-  <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
-  {{> comments comments}}
+    <p>Title: <a id="titttle" href="/post/{{id}}">{{title}}</a></p>
+    <p>Description: {{description}}</p>
+    {{#if latitude}}
+    <p>See it on a <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank">map</a></p>
+    {{/if}}
+    {{> tags this}}
+    <p>Created at: {{created_at}}</p>
+    {{> like-controls this}}
+    <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
+    {{> comments comments}}
   </div>
 </article>
 <script src="/javascript/vote.js"></script>
+
+
+<img src="https://maps.google.com/maps/api/staticmap?center={{latitude}}%2C{{longitude}}&zoom=8&size=400x300&sensor=false" style="width: 400px; height: 400px;" />
