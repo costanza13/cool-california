@@ -92,7 +92,8 @@ router.get('/', withAuth, (req, res) => {
             merged.selected = selectedTagIds.includes(merged.tag_id);
             return merged;
           });
-          const dashboard = { user, posts, other_tags: allTags };
+
+          const dashboard = { user, posts, other_tags: allTags, loggedIn: req.session.loggedIn };
           // console.log('dashboard data', dashboard);
           res.render('dashboard-posts', dashboard);
         })
