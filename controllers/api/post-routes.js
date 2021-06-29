@@ -101,7 +101,7 @@ router.post('/', withAuthApi, (req, res) => {
     })
       .then(dbPostData => {
         const post = dbPostData.get({ plain: true });
-        const tagsArr = req.body.tags.split(',');
+        const tagsArr = (req.body.tags.trim()) ? req.body.tags.split(',') : [];
         const postTags = tagsArr.map(tagId => { return { post_id: post.id, tag_id: tagId }; });
         if (tagsArr.length) {
           return PostTag.bulkCreate(postTags).then(dbPostTagData => {
@@ -193,7 +193,11 @@ router.put('/:id', withAuthApi, (req, res) => {
   Post.update(
     {
       title: req.body.title,
-      body: req.body.description
+      description: req.body.description,
+      image_url: req.body.image_url,
+      latitude: req.body.latitude ? req.body.latitude : null,
+      longitude: req.body.longitude ? req.body.longitude : null,
+      user_id: req.session.user_id
     },
     {
       where: {
@@ -207,13 +211,17 @@ router.put('/:id', withAuthApi, (req, res) => {
         res.status(404).json({ message: 'No post found with this id' });
         return;
       }
-      const postTags = req.body.tags.split(',').map(tagId => { return { post_id: req.params.id, tag_id: tagId }; });
       return PostTag.destroy({ where: { post_id: req.params.id } })
         .then(dbPostDeleteData => {
-          return PostTag.bulkCreate(postTags).then(dbPostTagData => {
-            const postTags = dbPostTagData.map(tag => tag.get({ plain: true }));
+          const tagsArr = (req.body.tags.trim()) ? req.body.tags.split(',') : [];
+          const postTags = tagsArr.map(tagId => { return { post_id: req.params.id, tag_id: tagId }; });
+          if (tagsArr.length) {
+            return PostTag.bulkCreate(postTags).then(dbPostTagData => {
+              res.status(200).json(dbPostData);
+            })
+          } else {
             res.status(200).json(dbPostData);
-          })
+          }
         })
     })
     .catch(err => {
