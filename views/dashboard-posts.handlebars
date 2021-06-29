@@ -6,7 +6,7 @@
 
   <div class="user-tags">
     <h3>Your Interests</h3>
-    <ul id="tag-section" class="unselected-tags">
+    <ul id="tag-section" class="unselected-tags tag-list">
       {{#each other_tags as |tag|}}
       <li class="tag-list-item">
         <input id="tag-{{tag.tag_id}}-btn" class="tag-input hidden" type="checkbox" value="{{tag.tag_id}}" {{#if tag.selected}}
