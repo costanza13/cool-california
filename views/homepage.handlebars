@@ -1,6 +1,6 @@
 <div class="title-bar">
   {{#if title}}
-  <h1>{{title}}</h1>
+  <h1 id="homepage-header">{{title}}</h1>
   {{/if}}
   {{#if loggedIn}}
   <div class="filter-control">
@@ -22,15 +22,15 @@
     {{/if}}
   </div>
   <div class="spd2">
-    <p>Posted by <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a> on {{format_date created_at}}</p>
+    <p>Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a> on {{format_date created_at}}</p>
     <p>{{description}}</p>
     {{#if latitude}}
-    <p>See it on a <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
+    <p>See it on a <a class="italic-h" href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
         target="_blank">map</a></p>
     {{/if}}
     {{> tags this}}
     {{> like-controls this}}
-    <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
+    <p><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></p>
   </div>
 </article>
 {{/each}}

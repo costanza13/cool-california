@@ -10,9 +10,9 @@
         <img class="embedded-map" src="{{map_url}}" /></a></div>
     {{/if}}
     <p>{{description}}</p>
-    <p>Posted by <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a> on {{format_date created_at}}</p>
+    <p>Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a> on {{format_date created_at}}</p>
     {{> tags this}}
-    <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
+    <p><a id="comment-count" class="italic-h" href="/post/{{id}}">{{comment_count}} comments</a></p>
     {{> like-controls this}}
     <div class="spacer">&nbsp;</div>
   </div>
