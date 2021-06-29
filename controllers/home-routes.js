@@ -72,7 +72,7 @@ router.get('/', (req, res) => {
         }
       });
       // console.log('home posts', posts);
-      res.render('homepage', { posts, title: "Recent Posts", loggedIn: req.session.loggedIn });
+      res.render('homepage', { posts, title: "Awesome Places", loggedIn: req.session.loggedIn });
     })
     .catch(err => {
       console.log(err);
@@ -136,7 +136,7 @@ router.get('/user/:id', (req, res) => {
               }
             });
             const nickname = dbUserData.dataValues.nickname;
-            res.render('homepage', { posts, loggedIn: req.session.loggedIn, title: nickname + "'s Posts", nextUrl: '/user/' + req.params.id });
+            res.render('homepage', { posts, loggedIn: req.session.loggedIn, title: nickname + "'s Places", nextUrl: '/user/' + req.params.id });
           } else {
             res.render('error', { status: 404, message: 'User not found' });
           }
@@ -241,7 +241,7 @@ router.get('/tag/:tag_name', (req, res) => {
         }
       });
       const tag_string = req.params.tag_name.replace(',', ', ');
-      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Posts tagged with " + tag_string, nextUrl: '/tag/' + req.params.id };
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/tag/' + req.params.id };
       // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
     })
