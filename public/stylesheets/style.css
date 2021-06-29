@@ -1,20 +1,12 @@
 * {
   box-sizing: border-box;
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
   color: black;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
 }
 
 .hidden {
   display: none;
-}
-
-header h3 {
-  background: -webkit-linear-gradient(#D4AF37, #C0C0C0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: 'Mr Dafoe', cursive;
-  font-size: 40px;
-  margin-left: 30px
 }
 
 body {
@@ -26,49 +18,85 @@ body {
   background-attachment: fixed;
 }
 
+.wrapper {
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
 header {
   background-color: black;
-  position: fixed;
-  top: 0;
   left: 0;
   right: 0;
-  height: 80px;
-  display: flex;
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+}
+
+.header-content {
   align-items: center;
+  justify-content: space-around;
   box-shadow: 0 0 25px 0 black;
-  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 1000px;
 }
 
-header * {
-  display: inline;
+.header-content h3 {
+  background: linear-gradient(#D4AF37, #C0C0C0);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  font-family: 'Mr Dafoe', cursive;
+  font-size: 40px;
 }
 
-header ul {
+nav {
+  display: flex;
+  flex-basis: auto;
+}
+
+nav ul {
   background: black;
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  margin: auto;
+  padding: 0;
 }
 
-header li {
-  margin: 20px;
+nav li {
   background: black;
+  flex-grow: 0;
+  line-height: 1.5;
+  margin: 0.5rem;
+  padding: 0;
+  text-align: center;
+  width: 6rem;
 }
 
-header li a {
+nav li a {
   background: black;
   color: white;
   font-style: italic;
-  padding: 5px;
   text-decoration: none;
 }
 
-header li a:hover {
-  font-weight: bold;
+nav li a:hover {
+  font-weight: 600;
   background: -webkit-linear-gradient(#D4AF37, #C0C0C0);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #E1103B;
-  border-radius: 35px;
+  color: transparent;
   text-shadow: none;
   text-decoration:none;
+}
+
+.place-image {
+  margin: 10px auto;
+  max-width: 100%;
+  max-height: 400px;
 }
 
 .tag-list {
@@ -230,4 +258,19 @@ header li a:hover {
 #sign-up-error, #login-error {
   display: none;
   color:rgb(243, 97, 97);
+}
+
+@media screen and (min-width: 616px) {
+  .header-content {
+    justify-content: space-between;
+  }
+
+  nav {
+    justify-content: end;
+    text-align: right;
+  }
+
+  nav ul {
+    margin: 0;
+  }
 }
