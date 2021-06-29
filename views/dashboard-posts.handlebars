@@ -6,7 +6,7 @@
 
   <div class="user-tags">
     <h3>Your Interests</h3>
-    <ul class="unselected-tags">
+    <ul id="tag-section" class="unselected-tags">
       {{#each other_tags as |tag|}}
       <li class="tag-list-item">
         <input id="tag-{{tag.tag_id}}-btn" class="tag-input hidden" type="checkbox" value="{{tag.tag_id}}" {{#if tag.selected}}
@@ -21,23 +21,23 @@
 
 <section>
   <nav>
-    <a href="/dashboard">View Posts</a> |
-    <a href="/dashboard/likes">View Likes</a> |
-    <a href="/dashboard/dislikes">View Dislikes</a>
+    <a class="dash-link italic-h" href="/dashboard">View Posts</a> |
+    <a class="dash-link italic-h" href="/dashboard/likes">View Likes</a> |
+    <a class="dash-link italic-h" href="/dashboard/dislikes">View Dislikes</a>
   </nav>
 </section>
 
 {{#if posts.length}}
 <section id="your-posts">
-  <h3>Your Posts</h3>
-  <a href="/dashboard/create">Add a new post</a>
+  <h3 id="your-posts-title">Your Posts</h3>
+  <a id="add-post-btn" class="italic-h" href="/dashboard/create">Add a new post</a>
   <p>You've written {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
   <ul>
     {{#each posts as |post|}}
     <li id="your-post">
       <hr>
       {{> post-info post}}
-      <a href="/dashboard/edit/{{post.id}}">Edit post</a>
+      <a class="italic-h" href="/dashboard/edit/{{post.id}}">Edit post</a>
     </li>
     {{/each}}
   </ul>

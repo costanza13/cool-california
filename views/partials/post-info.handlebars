@@ -13,10 +13,10 @@
       {{/if}}
     </div>
     {{> tags this}}
-    {{> like-controls this}}
+    <p>Posted {{format_date created_at}}</p>
   </div>
   <div class="meta">
-    <p>Posted {{format_date created_at}}</p>
+    {{> like-controls this}}
     <p><a href="/post/{{id}}">{{comment_count}} {{format_plural "comment" comment_count}}</a></p>
   </div>
 </article>
