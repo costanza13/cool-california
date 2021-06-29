@@ -29,13 +29,13 @@
       {{/if}}
     </div>
     <div>
-      <button class="save-post-btn" type="submit">Save post</button>
-      {{#if post.id}}<button type="button" class="delete-post-btn">Delete post</button>{{/if}}
+      <button class="save-post-btn italic-h" type="submit">Save post</button>
+      {{#if post.id}}<button type="button" class="delete-post-btn italic-h">Delete post</button>{{/if}}
     </div>
   </form>
 </article>
 
-<section>
+<section id="tag-section">
   <ul class="tag-list tag-inputs">
     {{#each tags}}
     <li class="tag-list-item">
