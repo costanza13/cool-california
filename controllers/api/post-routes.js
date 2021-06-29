@@ -10,10 +10,15 @@ router.get('/', (req, res) => {
       'id',
       'title',
       'description',
+      'image_url',
+      'latitude',
+      'longitude',
+      'map_url',
       'created_at',
       'updated_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes']
+      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
     ],
     order: [['created_at', 'DESC'], ['id', 'DESC']],
     include: [
@@ -47,10 +52,15 @@ router.get('/:id', (req, res) => {
       'id',
       'title',
       'description',
+      'image_url',
+      'latitude',
+      'longitude',
+      'map_url',
       'created_at',
       'updated_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes']
+      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
     ],
     include: [
       {
@@ -90,6 +100,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', withAuthApi, (req, res) => {
   // console.log(req.body);
+
   if (req.body.title.trim() && req.body.description.trim()) {
     Post.create({
       title: req.body.title,

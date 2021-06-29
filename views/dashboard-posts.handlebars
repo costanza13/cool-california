@@ -6,7 +6,7 @@
 
   <div class="user-tags">
     <h3>Your Interests</h3>
-    <ul id="tag-section" class="unselected-tags">
+    <ul id="tag-section" class="unselected-tags tag-list">
       {{#each other_tags as |tag|}}
       <li class="tag-list-item">
         <input id="tag-{{tag.tag_id}}-btn" class="tag-input hidden" type="checkbox" value="{{tag.tag_id}}" {{#if tag.selected}}
@@ -37,7 +37,7 @@
     <li id="your-post">
       <hr>
       {{> post-info post}}
-      <a class="italic-h" href="/dashboard/edit/{{post.id}}">Edit post</a>
+      <a id="edit-post-btn" class="italic-h" href="/dashboard/edit/{{post.id}}">Edit post</a>
     </li>
     {{/each}}
   </ul>

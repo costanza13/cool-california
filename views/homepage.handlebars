@@ -1,6 +1,6 @@
 <div class="title-bar">
   {{#if title}}
-  <h1>{{title}}</h1>
+  <h1 id="homepage-header">{{title}}</h1>
   {{/if}}
   {{#if loggedIn}}
   <div class="filter-control">
@@ -15,22 +15,24 @@
 </div>
 {{#each posts}}
 <article id="post-{{id}}" class="post">
-  {{#if image_url}}
-  <img class="place-image" src="{{image_url}}" />
-  {{/if}}
-  <h2><a id="titttle" href="/post/{{id}}">{{title}}</a></h2>
-  <p>Posted by: <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
-  <p>{{description}}</p>
-  {{#if latitude}}
-  <p>See it on a <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
-      target="_blank">map</a></p>
-  {{/if}}
-  {{> tags this}}
-  <p>Created at: {{created_at}}</p>
-  {{> like-controls this}}
-  <p><a href="/post/{{id}}">{{comment_count}} comments</a></p>
+  <div class="spd1">
+    <h2><a id="titttle" href="/post/{{id}}">{{title}}</a></h2>
+    {{#if image_url}}
+    <img class="place-image small" src="{{image_url}}" />
+    {{/if}}
+  </div>
+  <div class="spd2">
+    <p>Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a> on {{format_date created_at}}</p>
+    <p>{{description}}</p>
+    {{#if latitude}}
+    <p>See it on a <a class="italic-h" href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
+        target="_blank">map</a></p>
+    {{/if}}
+    {{> tags this}}
+    {{> like-controls this}}
+    <p><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></p>
+  </div>
 </article>
-<br><br>
 {{/each}}
 {{#if loggedIn}}
 <script src="/javascript/filter.js"></script>

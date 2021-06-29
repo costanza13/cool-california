@@ -32,6 +32,22 @@ const postData = [
     latitude: 0,
     longitude: 0,
     user_id: 2
+  },
+  {
+    title: 'Donner Lake - Truckee, CA',
+    description: 'Cool lake. Very cool. Might even call it cold.',
+    image_url: 'https://res.cloudinary.com/cool-california/image/upload/v1624933464/fjlqontc8zv0oaulribo.jpg',
+    latitude: 39.3227113,
+    longitude: -120.2972872,
+    user_id: 2
+  },
+  {
+    title: 'Glenshire Lake - Truckee, CA',
+    description: 'A nice little lake a short distance from historic downtown Truckee, with a few trails and nice places to sit and take in the peacefulness.  Absolutely beautiful in the winter snow.',
+    image_url: 'https://res.cloudinary.com/cool-california/image/upload/v1624934184/u5ti5gaohm3vdjsi8chr.jpg',
+    latitude: 39.35419,
+    longitude: -120.10478,
+    user_id: 2
   }
 ];
 
