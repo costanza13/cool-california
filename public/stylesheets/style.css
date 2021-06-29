@@ -131,13 +131,18 @@ nav li a:hover {
 }
 
 .tag-list {
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
   list-style: none;
   padding-left: 5px;
 }
 
+#tag-section {
+  margin: 20px 0px;
+}
+
 .tag-list-item {
-  display: inline-block;
+  padding: 10px;
   font-size: 100%;
 }
 
@@ -179,6 +184,26 @@ nav li a:hover {
   content: "\f00c";
 }
 
+.vote-input + label > .like-count {
+  color: black
+}
+
+.vote-input:checked + label > .like-count {
+  color: #D4AF37
+}
+
+.vote-input.dislike + label > .dislike-count {
+  color: black
+}
+
+.vote-input.dislike:checked + label > .dislike-count {
+  color: #c0c0c0
+}
+
+.vote-input:checked + span {
+  color: #D4AF37
+}
+
 .vote-input + label {
   border: 1px solid #24344D;
   border-radius: 5px;
@@ -204,7 +229,7 @@ nav li a:hover {
 }
 
 .vote-input.dislike:checked + label {
-  background-color: #905923;;
+  background-color: #905923;
 }
 
 .spd1 {
@@ -268,10 +293,6 @@ nav li a:hover {
   border-radius: 4px;
   margin: 4px 2px;
   cursor: pointer;
-}
-
-#tag-section {
-  margin: 20px 0px
 }
 
 #post-input {
