@@ -132,8 +132,6 @@ router.get('/user/:id', (req, res) => {
                 post.liked = true;
               } else if (post.votes[0] && post.votes[0].like === false) {
                 post.unliked = true;
-              } else {
-                post.novote = true;
               }
             });
             const nickname = dbUserData.dataValues.nickname;
@@ -239,13 +237,11 @@ router.get('/tag/:tag_name', (req, res) => {
           post.liked = true;
         } else if (post.votes[0] && post.votes[0].like === false) {
           post.unliked = true;
-        } else {
-          post.novote = true;
         }
       });
       const tag_string = req.params.tag_name;
       const homepageData = { posts, loggedIn: req.session.loggedIn, tag_string, nextUrl: '/tag/' + req.params.id };
-      console.log('homepage data', homepageData);
+      // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
     })
     .catch(err => {
@@ -312,8 +308,6 @@ router.get('/post/:id', (req, res) => {
         post.liked = true;
       } else if (post.votes[0] && post.votes[0].like === false) {
         post.unliked = true;
-      } else {
-        post.novote = true;
       }
       post.loggedIn = req.session.loggedIn;
       post.comments.loggedIn = req.session.loggedIn;
