@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Post, UserTag } = require('../../models');
+const { User, Post, Tag, UserTag } = require('../../models');
 const { withAuthApi } = require('../../utils/auth');
 
 // get all users
@@ -8,6 +8,31 @@ router.get('/', withAuthApi, (req, res) => {
     attributes: { exclude: ['password'] }
   })
     .then(dbUserData => res.json(dbUserData))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+router.get('/tags', withAuthApi, (req, res) => {
+  Tag.findAll({
+    attributes: ['tag_name'],
+    include: [
+      {
+        model: User,
+        where: {
+          id: req.session.user_id
+        },
+        through: {
+          module: UserTag,
+        }
+      }
+    ],
+  })
+    .then(dbUserTags => {
+      const tags = dbUserTags.map(tag => tag.get({ plain: true }).tag_name);
+      res.json(tags);
+    })
     .catch(err => {
       console.log(err);
       res.status(500).json(err);

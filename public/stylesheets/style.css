@@ -106,6 +106,21 @@ nav li a:hover {
   text-decoration:none;
 }
 
+.title-bar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.title-bar h1 {
+  color: #333;
+}
+
+.filter-controls {
+  text-align: right;
+}
+
 .place-image {
   margin: 10px auto;
   max-width: 100%;

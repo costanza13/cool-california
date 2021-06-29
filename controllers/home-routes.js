@@ -2,6 +2,7 @@ const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { Op } = require('sequelize');
 const { Post, User, Comment, PostTag, Tag, Vote } = require('../models');
+const { withAuth } = require('../utils/auth');
 
 const POST_IMAGE_WIDTH = 400;
 
@@ -70,8 +71,8 @@ router.get('/', (req, res) => {
           }
         }
       });
-      console.log('home posts', posts);
-      res.render('homepage', { posts, loggedIn: req.session.loggedIn });
+      // console.log('home posts', posts);
+      res.render('homepage', { posts, title: "Recent Posts", loggedIn: req.session.loggedIn });
     })
     .catch(err => {
       console.log(err);
@@ -135,7 +136,7 @@ router.get('/user/:id', (req, res) => {
               }
             });
             const nickname = dbUserData.dataValues.nickname;
-            res.render('homepage', { posts, loggedIn: req.session.loggedIn, nickname, nextUrl: '/user/' + req.params.id });
+            res.render('homepage', { posts, loggedIn: req.session.loggedIn, title: nickname + "'s Posts", nextUrl: '/user/' + req.params.id });
           } else {
             res.render('error', { status: 404, message: 'User not found' });
           }
@@ -221,7 +222,7 @@ router.get('/tag/:tag_name', (req, res) => {
     .then(dbTagPostData => {
       // console.log('MCCMCCMCC multi tag', dbTagPostData);
       let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
-      console.log('MCCMCCMCC multi tag', posts);
+      // console.log('MCCMCCMCC multi tag', posts);
 
       
       /***************************************************/
@@ -239,8 +240,75 @@ router.get('/tag/:tag_name', (req, res) => {
           post.unliked = true;
         }
       });
-      const tag_string = req.params.tag_name;
-      const homepageData = { posts, loggedIn: req.session.loggedIn, tag_string, nextUrl: '/tag/' + req.params.id };
+      const tag_string = req.params.tag_name.replace(',', ', ');
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Posts tagged with " + tag_string, nextUrl: '/tag/' + req.params.id };
+      // console.log('homepage data', homepageData);
+      res.render('homepage', homepageData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+const getVoted = function (req, type) {
+  return Vote.findAll({
+    where: {
+      user_id: req.session.user_id,
+      like: { [Op.is]: (type === 'likes') }
+    },
+    attributes: ['post_id']
+  })
+    .then(votedPostIds => {
+      const postIds = votedPostIds.map(postVote => postVote.get({ plain: true }).post_id);
+      return Post.findAll({
+        where: {
+          id: { [Op.in]: postIds }
+        },
+        attributes: [
+          'id',
+          'title',
+          'description',
+          'image_url',
+          'latitude',
+          'longitude',
+          'created_at',
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
+        ],
+        order: [['created_at', 'DESC'], ['id', 'DESC']],
+        include: [
+          {
+            model: Tag,
+            attributes: [['id', 'tag_id'], 'tag_name'],
+            through: {
+              model: PostTag,
+              attributes: []
+            },
+          },
+          {
+            model: User,
+            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
+          },
+          {
+            model: Vote,
+            attributes: [['id', 'vote_id'], 'like']
+          }
+        ]
+      });
+    });
+};
+
+router.get('/likes', withAuth, (req, res) => {
+  getVoted(req, 'likes')
+    .then(dbPostData => {
+      const posts = dbPostData.map(post => post.get({ plain: true }));
+      posts.forEach(post => {
+        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+        post.liked = true;
+      });
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: 'Places you like', nextUrl: '/likes' + req.params.id };
       // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
     })
