@@ -19,6 +19,7 @@ router.get('/', (req, res) => {
     'image_url',
     'latitude',
     'longitude',
+    'map_url',
     'created_at',
     [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
     [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -92,6 +93,7 @@ router.get('/user/:id', (req, res) => {
       'image_url',
       'latitude',
       'longitude',
+      'map_url',
       'created_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -193,6 +195,7 @@ router.get('/tag/:tag_name', (req, res) => {
           'image_url',
           'latitude',
           'longitude',
+          'map_url',
           'created_at',
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -224,7 +227,7 @@ router.get('/tag/:tag_name', (req, res) => {
       let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
       // console.log('MCCMCCMCC multi tag', posts);
 
-      
+
       /***************************************************/
       // JEFF -- Insert the sorting logic down here  vvv
       /***************************************************/
@@ -272,6 +275,7 @@ const getVoted = function (req, type) {
           'image_url',
           'latitude',
           'longitude',
+          'map_url',
           'created_at',
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
           [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -338,6 +342,7 @@ router.get('/post/:id', (req, res) => {
       'image_url',
       'latitude',
       'longitude',
+      'map_url',
       'created_at',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
@@ -380,7 +385,6 @@ router.get('/post/:id', (req, res) => {
       post.loggedIn = req.session.loggedIn;
       post.comments.loggedIn = req.session.loggedIn;
       console.log(post);
-
       res.render('single-post', post);
     })
     .catch(err => {
