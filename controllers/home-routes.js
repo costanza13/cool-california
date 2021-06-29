@@ -240,7 +240,7 @@ router.get('/tag/:tag_name', (req, res) => {
           post.unliked = true;
         }
       });
-      const tag_string = req.params.tag_name.replaceAll(',', ', ');
+      const tag_string = req.params.tag_name.split(',').join(', ');
       const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/tag/' + req.params.id };
       // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
