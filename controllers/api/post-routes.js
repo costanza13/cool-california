@@ -101,12 +101,18 @@ router.post('/', withAuthApi, (req, res) => {
     })
       .then(dbPostData => {
         const post = dbPostData.get({ plain: true });
-        const postTags = req.body.tags.split(',').map(tagId => { return { post_id: post.id, tag_id: tagId }; });
-        return PostTag.bulkCreate(postTags).then(dbPostTagData => {
-          const postTags = dbPostTagData.map(tag => tag.get({ plain: true }));
-          post.tags = postTags;
+        const tagsArr = req.body.tags.split(',');
+        const postTags = tagsArr.map(tagId => { return { post_id: post.id, tag_id: tagId }; });
+        if (tagsArr.length) {
+          return PostTag.bulkCreate(postTags).then(dbPostTagData => {
+            const postTags = dbPostTagData.map(tag => tag.get({ plain: true }));
+            post.tags = postTags;
+            res.status(200).json(post);
+          })
+        } else {
+          post.tags = [];
           res.status(200).json(post);
-        })
+        }
       })
       .catch(err => {
         console.log(err);

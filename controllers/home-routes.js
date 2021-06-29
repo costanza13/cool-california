@@ -167,60 +167,71 @@ router.get('/tag/:tag_name', (req, res) => {
     attributes: ['id', 'tag_name'],
     include: {
       model: Post,
-      distinct: true,
       through: {
         model: PostTag,
         attributes: []
       },
-      attributes: [
-        'id',
-        'title',
-        'description',
-        'image_url',
-        'latitude',
-        'longitude',
-        'created_at',
-        [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post_id = vote.post_id AND `like`)'), 'likes'],
-        [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post_id = vote.post_id AND NOT `like`)'), 'dislikes'],
-        [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post_id = comment.post_id)'), 'comment_count']
-      ],
-      order: [['created_at', 'DESC'], ['id', 'DESC']],
-      include: [
-        {
-          model: Tag,
-          attributes: [['id', 'tag_id'], 'tag_name'],
-          through: {
-            model: PostTag,
-            attributes: []
-          }
-        },
-        {
-          model: User,
-          attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-        },
-        {
-          model: Vote,
-          attributes: ['like']
-        }
-      ]
+      attributes: ['id']
     }
   })
+    .then(dbTagData => {
+      const postIdArrays = dbTagData.map(tagData => tagData.get({ plain: true }).posts);
+      let postIds = [];
+      postIdArrays.forEach(postIdArr => {
+        postIdArr.forEach(postId => {
+          if (postIds.indexOf(postId.id) === -1) {
+            postIds.push(postId.id);
+          }
+        })
+      })
+      console.log('PULL IT OUT OF HERE', postIds);
+      return Post.findAll({
+        where: { id: { [Op.in]: postIds } },
+        attributes: [
+          'id',
+          'title',
+          'description',
+          'image_url',
+          'latitude',
+          'longitude',
+          'created_at',
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
+          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post_id = comment.post_id)'), 'comment_count']
+        ],
+        order: [['created_at', 'DESC'], ['id', 'DESC']],
+        include: [
+          {
+            model: Tag,
+            attributes: [['id', 'tag_id'], 'tag_name'],
+            through: {
+              model: PostTag,
+              attributes: []
+            }
+          },
+          {
+            model: User,
+            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
+          },
+          {
+            model: Vote,
+            attributes: ['like']
+          }
+        ]
+      });
+    })
     .then(dbTagPostData => {
       // console.log('MCCMCCMCC multi tag', dbTagPostData);
-      let posts = [];
-      const tagPosts = dbTagPostData.map(tag => tag.get({ plain: true }).posts);
-      // console.log('MCCMCCMCC multi tag', tagPosts);
-      const havePostIds = [];
-      for (let i = 0; i < tagPosts.length; i++) {
-        for (let j = 0; j < tagPosts[i].length; j++) {
-          if (havePostIds.indexOf(tagPosts[i][j]) === -1) {
-            posts.push(tagPosts[i][j]);
-            havePostIds.push(tagPosts[i][j].id);
-          }
-        }
+      let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
+      console.log('MCCMCCMCC multi tag', posts);
 
-        posts = posts.sort((a, b) => a.created_at > b.created_at ? 1 : -1);
-      }
+      
+      /***************************************************/
+      // JEFF -- Insert the sorting logic down here  vvv
+      /***************************************************/
+      // posts = posts.sort((a, b) => a.created_at > b.created_at ? 1 : -1); // << JEFF - this created_at sort is no longer needed, but you can use it as an example
+
+
       // console.log('MCCMCCMCC multi tag posts', posts);
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
@@ -232,7 +243,7 @@ router.get('/tag/:tag_name', (req, res) => {
           post.novote = true;
         }
       });
-      const tag_string = 'butts';//dbTagData.map(tag => tag.tag_name).join(' or ');
+      const tag_string = req.params.tag_name;
       const homepageData = { posts, loggedIn: req.session.loggedIn, tag_string, nextUrl: '/tag/' + req.params.id };
       console.log('homepage data', homepageData);
       res.render('homepage', homepageData);

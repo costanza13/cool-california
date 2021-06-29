@@ -7,38 +7,40 @@
   <title>Cool California</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
 <body>
   <div class="wrapper">
-      <header>
-        <secion class="header-content">
-          <h3>Cool California</h3>
-          <nav>
-            <ul>
-              <li>
-                <a href="/">Home</a>
-              </li>
-              <li>
-                <a href="/dashboard">Dashboard</a>
-              </li>
-              <li>
-                {{#if loggedIn}}
-                <a href="#" id="logout">Sign Out</a>
-                {{else}}
-                <a href="/login{{#if nextUrl}}?_next={{nextUrl}}{{/if}}">Sign In</a>
-                {{/if}}
-              </li>
-            </ul>
-          </nav>
-        </secion>
-      </header>
-      <content>
-        {{{ body }}}
-      </content>
+    <header>
+      <section class="header-content">
+        <h3>Cool California</h3>
+        <nav>
+          <ul>
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/dashboard">Dashboard</a>
+            </li>
+            <li>
+              {{#if loggedIn}}
+              <a href="#" id="logout">Sign Out</a>
+              {{else}}
+              <a href="/login{{#if nextUrl}}?_next={{nextUrl}}{{/if}}">Sign In</a>
+              {{/if}}
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </header>
+    <content>
+      {{{ body }}}
+    </content>
   </div>
   {{#if loggedIn}}
   <script src="/javascript/logout.js"></script>

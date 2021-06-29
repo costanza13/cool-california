@@ -9,6 +9,11 @@
   display: none;
 }
 
+p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
 body {
   height: 125vh;
   margin-top: 80px;
@@ -50,6 +55,14 @@ header {
   -moz-text-fill-color: transparent;
   font-family: 'Mr Dafoe', cursive;
   font-size: 40px;
+}
+
+.filter-controls {
+  background: transparent;
+  position: relative;
+  right: 30px;
+  text-align: right;
+  top: 6rem;
 }
 
 nav {
