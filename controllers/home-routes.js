@@ -383,8 +383,7 @@ router.get('/post/:id', (req, res) => {
         post.unliked = true;
       }
       post.loggedIn = req.session.loggedIn;
-      post.comments.loggedIn = req.session.loggedIn;
-      console.log(post);
+      // console.log(post);
       res.render('single-post', post);
     })
     .catch(err => {
