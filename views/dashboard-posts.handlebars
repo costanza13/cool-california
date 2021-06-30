@@ -38,6 +38,7 @@
     {{#each posts as |post|}}
     <li class="your-post">
       {{> post-info post}}
+      <a id="edit-post-btn" class="italic-h" href="/dashboard/edit/{{post.id}}">Edit post</a>
     </li>
     {{/each}}
   </ul>
