@@ -20,18 +20,22 @@
     {{#if image_url}}
     <img class="place-image small" src="{{image_url}}" />
     {{/if}}
+    <p class="post-byline">
+      Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a>
+      on {{format_date created_at}}
+    </p>
   </div>
   <div class="spd2">
-    <p>Posted by <a id="black" class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a> on {{format_date created_at}}</p>
     <p>{{description}}</p>
     {{#if latitude}}
-    <p>See it on a <a class="italic-h" id="black" href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
-        target="_blank">map</a></p>
+    <p>See it on a <a class="italic-h"
+        href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank">map</a></p>
     {{/if}}
     {{> tags this}}
-    {{> like-controls this}}
-    <p><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></p>
-  </div>
+    <div class="social-bar">
+      <p><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></p>
+      {{> like-controls this}}
+    </div>
 </article>
 {{/each}}
 {{#if loggedIn}}
