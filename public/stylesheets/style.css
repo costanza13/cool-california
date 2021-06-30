@@ -649,8 +649,8 @@ footer p {
     flex-direction: column;
   }
 
-  .title-bar h2 {
-    margin-bottom: 5px;
+  .title-bar h1 {
+    margin-bottom: 1rem;
   }
 
   .map-container {
