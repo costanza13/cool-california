@@ -95,8 +95,13 @@ router.get('/', withAuth, (req, res) => {
             return merged;
           });
 
-          const dashboard = { user, posts, other_tags: allTags, loggedIn: req.session.loggedIn };
-          // console.log('dashboard data', dashboard);
+          const dashboard = { 
+            user, 
+            posts, 
+            other_tags: allTags, 
+            loggedIn: req.session.loggedIn
+            };
+          console.log('dashboard data', dashboard);
           res.render('dashboard-posts', dashboard);
         })
     })
