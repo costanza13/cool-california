@@ -1,23 +1,24 @@
 <section>
-  <h2>Your Dashboard</h2>
-  <p>
-    <a href="/dashboard">View Posts</a> |
-    <a href="/dashboard/likes">View Likes</a> |
-    <a href="/dashboard/dislikes">View Dislikes</a>
-  </p>
+  <div class="title-bar">
+    <h2>Your Dashboard</h2>
+    <nav class="subnav">
+      <a class="dash-link italic-h" href="/dashboard">View Posts</a> |
+      <a class="dash-link italic-h" href="/dashboard/likes">View Likes</a> |
+      <a class="dash-link italic-h" href="/dashboard/dislikes">View Dislikes</a>
+    </nav>
+  </div>
 </section>
 
 {{#if posts.length}}
-<section>
-  <h3>Your {{tab}} Places</h3>
-  <p>You've {{tab}} {{posts.length}} {{format_plural 'post' posts.length}}, so far.</p>
-  <ul>
+<section id="your-voted-posts">
+  <h3 id="your-posts-title">Your {{tab}} Places</h3>
+  <p>You've {{tab}} {{posts.length}} {{format_plural 'place' posts.length}}.</p>
+  <ul class="post-list">
     {{#each posts as |post|}}
-    <li>
-      {{> post-info post}}
-    </li>
+    {{> post-card post}}
     {{/each}}
   </ul>
 </section>
 {{/if}}
+
 <script src="/javascript/vote.js"></script>
