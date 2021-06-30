@@ -1,7 +1,11 @@
-<article id="art">
+<article id="art" class="post">
   <div class="spd1">
     <h2><a id="titttle" href="/post/{{id}}">{{title}}</a></h2>
-    <p><img class="place-image" src="{{image_url}}" /></p>
+    <img class="place-image" src="{{image_url}}" />
+    <p class="post-byline">
+      Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a>
+      on {{format_date created_at}}
+    </p>
   </div>
   <div class="spd2">
     {{#if map_url}}
@@ -10,11 +14,11 @@
         <img class="embedded-map" src="{{map_url}}" /></a></div>
     {{/if}}
     <p>{{description}}</p>
-    <p>Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a> on {{format_date created_at}}</p>
     {{> tags this}}
-    <p><a id="comment-count" class="italic-h" href="/post/{{id}}">{{comment_count}} comments</a></p>
-    {{> like-controls this}}
-    <div class="spacer">&nbsp;</div>
+    <div class="social-bar">
+      <div><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></div>
+      {{> like-controls this}}
+    </div>
   </div>
 </article>
 {{> comments comments}}
