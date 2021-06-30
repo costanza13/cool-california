@@ -1,18 +1,27 @@
-<p>Posted {{format_date created_at}}</p>
+<div class="post-toolbar">
+  <span>Posted {{format_date created_at}} by you</span>
+  {{#if allowEdit}}
+  <span><a id="edit-post-btn" class="italic-h" href="/dashboard/edit/{{id}}"><i class="far fa-edit"></i> Edit post</a></span>
+  {{/if}}
+</div>
 <article class="post">
-  <div class="title">
-    <p id="title"><a id="titttle" href="/post/{{id}}">{{title}}</a> by <a
-        href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
-    {{#if image_url}}
+  <div class="spd1">
+    <h2><a id="titttle" href="/post/{{id}}">{{title}}</a></h2>
     <div class="dashboard-image-wrap">
-      <img src="{{image_url}}" title="{{image_url}}" />
+      {{#if image_url}}
+      <img class="place-image" src="{{image_url}}" title="{{image_url}}" />
+        {{else}}
+        <img class="embedded-map" src="/images/no-post-image.png" /></a>
+      {{/if}}
       {{#if map_url}}
-      <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
-          target="_blank">
-          <img class="embedded-map" src="{{map_url}}" /></a>
+      <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank">
+        <img class="embedded-map" src="{{map_url}}" /></a>
+        {{else}}
+        <img class="embedded-map" src="/images/no-map-image.png" /></a>
       {{/if}}
     </div>
-    {{/if}}
+  </div>
+  <div class="spd2">
     <div>
       <p>{{description}}</p>
     </div>

@@ -16,18 +16,20 @@
 .hidden {
   display: none;
 }
+
 a:link {
   text-decoration: none;
 }
 
 p {
-  margin: 0.5rem 0;
   line-height: 1.5;
+  margin: 0.5rem 0;
+  padding: 1rem;
 }
 
 body {
   height: 125vh;
-  margin-top: 80px;
+  margin-top: 120px;
   padding: 30px;
   background: -webkit-linear-gradient(var(--main-bg-color-start), var(--main-bg-color-end));
   background-repeat: no-repeat;
@@ -37,6 +39,10 @@ body {
 .wrapper {
   margin: 0 auto;
   max-width: 1000px;
+}
+
+section>div {
+  margin-bottom: 1rem;
 }
 
 header {
@@ -156,7 +162,7 @@ article, .comments {
   background: -webkit-linear-gradient(var(--post-bg-color-start), var(--post-bg-color-end));
   border: 1px solid #666;
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1rem;
   margin: 0 0 2rem;
   width: 100%;
 }
@@ -173,6 +179,9 @@ article a {
   text-align: center;
   width: 100%;
 }
+.spd1 h2 {
+  margin: 1rem 0 2rem;
+}
 
 .spd2 {
   border-radius: 1rem;
@@ -185,6 +194,10 @@ article a {
 .post div,
 .comments {
   color: whitesmoke;
+}
+
+.post div {
+  padding: 0 1rem;
 }
 
 .spd2 a,
@@ -200,7 +213,6 @@ article a {
   border-radius: 1rem;
   box-shadow: 2px 2px 3px #465e83;
   height: auto;
-  margin: 2rem auto 0;
   max-height: 600px;
   max-width: 100%;
 }
@@ -209,11 +221,22 @@ article a {
   max-height: 400px;
 }
 
+.post-byline {
+  padding: 0.4rem!important;
+}
+
 .map-container {
   border-style: inset;
   border: 2px inset #6a809c;
   float: right;
   margin-left: 0.4rem;
+  margin-top: 1rem;
+  padding: 0!important;
+}
+
+.embedded-map {
+  max-width: 100%;
+  flex-shrink: 1;
 }
 
 .tag-list {
@@ -223,14 +246,19 @@ article a {
   padding-left: 5px;
 }
 
+.user-tags .tag-list {
+  margin-top: 0;
+}
+
 .tags-wrap {
   align-items: center;
   display: flex;
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 .tag-list-item {
   padding: 0.2rem;
+  margin: 5px 0px;
   font-size: 100%;
 }
 
@@ -320,7 +348,8 @@ article a {
   background-color: #905923;
 }
 
-.social-bar {
+div.social-bar {
+  align-items: center;
   clear: both;
   display: flex;
   flex-direction: row;
@@ -342,15 +371,19 @@ article a {
   padding-bottom: 20px;
 }
 
-#add-comment-btn {
-  padding-bottom: 40px;
+.save-btn, .delete-btn {
   background-color: var(--main-link-color);
   border: none;
-  color: black;
+  color: whitesmoke;
+  cursor: pointer;
+  font-size: 100%;
+  margin: 4px 2px;
   padding: 16px 32px;
   text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;
+}
+
+.delete-btn {
+  background-color: rgb(218, 36, 12);
 }
 
 #text-input {
@@ -361,32 +394,6 @@ article a {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-}
-
-.save-post-btn {
-  background-color: black;
-  font-weight: bold;
-  border: none;
-  border-style: double;
-  color: var(--main-link-color);
-  padding: 8px 16px;
-  text-decoration: none;
-  border-radius: 4px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
-
-.delete-post-btn {
-  background-color: black;
-  font-weight: bold;
-  border: none;
-  border-style: double;
-  color: #c0c0c0;
-  padding: 8px 16px;
-  text-decoration: none;
-  border-radius: 4px;
-  margin: 4px 2px;
-  cursor: pointer;
 }
 
 #post-input {
@@ -442,21 +449,6 @@ article a {
   font-style: italic;
 }
 
-.dash-link {
-  color: #24344D;
-  font-weight:bolder;
-  padding: 0px 5px;
-}
-
-.dashboard-image-wrap {
-  display: flex;
-  justify-content: space-between;
-}
-
-.dashboard-image-wrap img {
-  max-height: 300px;
-}
-
 .italic-h:hover {
   font-style: italic;
 }
@@ -465,12 +457,13 @@ article a {
   border-bottom: 1px solid #666;
   list-style-type: none;
   margin: 0 0 1rem;
-  padding: 0 0 1rem;
+  padding: 0;
 }
 
 .comment {
   border-radius: 1rem;
   background-color: #a7bbcb;
+  margin-bottom: 1rem;
   padding: 1.5rem;
 }
 
@@ -494,11 +487,17 @@ article a {
   margin-top: 0.5rem;
 }
 
+#edit-form label {
+  color: whitesmoke;
+}
+
 #add-post-btn,
 #edit-post-btn {
   background: -webkit-linear-gradient(#24344D, #8CA0B1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-size: 120%;
+  font-weight: bold;
 }
 
 #add-post-btn:hover,
@@ -507,13 +506,23 @@ article a {
 }
 
 footer {
-  padding: 2rem;
+  padding: 0 2rem 2rem;
   text-align: center;
 }
 
+footer p {
+  color: #444;
+  font-size: 90%;
+  line-height: 2;
+  margin: 0;
+  padding: 0rem;
+}
+
 /* dashboard-specific styles */
-.welcome {
-  padding: 1rem;
+.welcome-msg {
+  width: 40rem;
+  max-width: 80%;
+  padding-left: 1rem;
 }
 
 .user-tags {
@@ -535,6 +544,37 @@ footer {
   list-style: none;
 }
 
+.dash-link {
+  color: #24344D;
+  font-weight:bolder;
+  padding: 0px 5px;
+}
+
+.dashboard-image-wrap {
+  clear: both;
+  display: flex;
+  flex-basis: 200px;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.dashboard-image-wrap img {
+  max-height: 300px;
+}
+
+.dashboard-image-wrap .embedded-map {
+  flex-shrink: 1;
+  margin-left: 1rem;
+  max-width: 100%;
+}
+
+.post-toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 1rem;
+}
+
 #your-posts-title {
   padding-bottom: 5px;
 }
@@ -545,7 +585,7 @@ footer {
 }
 
 /* responsive breakpoints */
-@media screen and (min-width: 616px) {
+@media screen and (min-width: 618px) {
   .header-content {
     justify-content: space-between;
   }
@@ -557,5 +597,67 @@ footer {
 
   nav ul {
     margin: 0;
+  }
+  body {
+    margin-top: 75px;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .map-container {
+    display:inline-block;
+    float: none;
+    margin: 1rem auto 0;
+    align-items: center;
+    max-width: 100%;
+    height: auto
+  }
+
+  .spd2 {
+    clear: both;
+    display: flex;
+    flex-direction: column;
+  }
+  body {
+    padding: 30px 10px;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .dashboard-image-wrap {
+    display: block;
+  }
+
+  .dashboard-image-wrap img {
+    margin: 10px auto;
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .dashboard-image-wrap img {
+    max-width: 100%;
+  }
+
+  .dashboard-image-wrap .embedded-map {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .title-bar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title-bar h2 {
+    margin-bottom: 5px;
+  }
+
+  .map-container {
+    width: auto;
+  }
+
+  .map-container .embedded-map {
+    max-width: 200px;
   }
 }
