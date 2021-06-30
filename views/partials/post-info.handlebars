@@ -1,4 +1,7 @@
 <p>Posted {{format_date created_at}}</p>
+{{#if edit}}
+<a id="edit-post-btn" class="italic-h" href="/dashboard/edit/{{post.id}}">Edit post</a>
+{{/if}}
 <article class="post">
   <div class="title">
     <p id="title"><a id="titttle" href="/post/{{id}}">{{title}}</a> by <a
