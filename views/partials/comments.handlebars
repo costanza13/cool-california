@@ -1,25 +1,19 @@
 <section class="comments">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-12">
-        <h4>Comments</h4>
-      </div>
-    </div>
-  </div>
+  <h3>Comments</h3>
   <div>
     {{#if comments}}
     <ul>
-    {{#each comments}}
-    <li class="comment">
-      <div id="pre-comment">
-        <p id="comment-user">{{user.username}} </p>
-        <p id="comment-date"> on {{format_date created_at}} at {{format_time created_at}}</p>
-      </div>
-      <div id="comment-text">
-        {{comment_text}}
-      </div>
-    </li>
-    {{/each}}
+      {{#each comments}}
+      <li class="comment">
+        <div id="pre-comment">
+          <p id="comment-user">{{user.username}} </p>
+          <p id="comment-date"> on {{format_date created_at}} at {{format_time created_at}}</p>
+        </div>
+        <div id="comment-text">
+          {{comment_text}}
+        </div>
+      </li>
+      {{/each}}
     </ul>
     {{/if}}
     {{#if loggedIn}}
