@@ -1,13 +1,13 @@
-<section class="comments">
+<section id="comments" class="comments">
   <h3>Comments</h3>
   <div>
-    {{#if comments}}
+    {{#if this}}
     <ul>
-      {{#each comments}}
+      {{#each this}}
       <li class="comment">
         <div id="pre-comment">
-          <p id="comment-user">{{user.username}} </p>
-          <p id="comment-date"> on {{format_date created_at}} at {{format_time created_at}}</p>
+          <div id="comment-user">{{user.nickname}} </div>
+          <div id="comment-date"> {{format_date created_at}} - {{format_time created_at}}</div>
         </div>
         <div id="comment-text">
           {{comment_text}}
@@ -26,7 +26,7 @@
       </div>
     </form>
     {{else}}
-    {{#unless comments}}
+    {{#unless this}}
     <p><em>No comments.</em></p>
     {{/unless}}
     {{/if}}

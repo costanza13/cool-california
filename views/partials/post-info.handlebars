@@ -1,22 +1,26 @@
+<p>Posted {{format_date created_at}}</p>
 <article class="post">
   <div class="title">
     <p id="title"><a id="titttle" href="/post/{{id}}">{{title}}</a> by <a
         href="/user/{{user.post_author_id}}">{{user.post_author}}</a></p>
-    {{#if image_url_sized}}
-    <p><img src="{{image_url_sized}}" /></p>
-    {{/if}}
-    <p>Image URL: [{{image_url}}]</p>
-    <div>
-      <p>{{description}}</p>
-      {{#if latitude}}
-      <p>See it on a <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank">map</a></p>
+    {{#if image_url}}
+    <div class="dashboard-image-wrap">
+      <img src="{{image_url}}" title="{{image_url}}" />
+      {{#if map_url}}
+      <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}"
+          target="_blank">
+          <img class="embedded-map" src="{{map_url}}" /></a>
       {{/if}}
     </div>
+    {{/if}}
+    <div>
+      <p>{{description}}</p>
+    </div>
     {{> tags this}}
-    <p>Posted {{format_date created_at}}</p>
   </div>
-  <div class="meta">
+  <div class="social-bar">
+    <p><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural "comment"
+        comment_count}}</a></p>
     {{> like-controls this}}
-    <p><a id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural "comment" comment_count}}</a></p>
   </div>
 </article>

@@ -148,7 +148,7 @@ Post.init(
           const gmAPI = new GoogleMapsAPI(publicConfig);
           const params = {
             center: newPostData.latitude + ',' + newPostData.longitude,
-            zoom: 15,
+            zoom: 13,
             size: '300x300',
             maptype: 'roadmap',
             markers: [{ location: newPostData.latitude + ',' + newPostData.longitude }],
@@ -173,7 +173,7 @@ Post.init(
           const gmAPI = new GoogleMapsAPI(publicConfig);
           const params = {
             center: editPostData.latitude + ',' + editPostData.longitude,
-            zoom: 15,
+            zoom: 13,
             size: '300x300',
             maptype: 'roadmap',
             markers: [{ location: editPostData.latitude + ',' + editPostData.longitude }],

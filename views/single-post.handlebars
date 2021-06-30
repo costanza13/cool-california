@@ -16,7 +16,7 @@
     <p>{{description}}</p>
     {{> tags this}}
     <div class="social-bar">
-      <div><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></div>
+      <div><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural 'comment' comment_count}}</a></div>
       {{> like-controls this}}
     </div>
   </div>
