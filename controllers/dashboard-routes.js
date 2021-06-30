@@ -77,6 +77,7 @@ router.get('/', withAuth, (req, res) => {
             } else if (post.votes[0] && post.votes[0].like === false) {
               post.unliked = true;
             }
+            post.allowEdit = true;
           });
           return { user, posts };
         });
@@ -233,7 +234,7 @@ router.get('/edit/:id', withAuth, (req, res) => {
         attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
         include: {
           model: User,
-          attributes: ['username']
+          attributes: ['nickname']
         }
       },
       {
@@ -246,7 +247,7 @@ router.get('/edit/:id', withAuth, (req, res) => {
       },
       {
         model: User,
-        attributes: ['username']
+        attributes: ['nickname']
       }
     ]
   })
@@ -262,6 +263,8 @@ router.get('/edit/:id', withAuth, (req, res) => {
             currentTag.checked = post.tags.filter(postTag => currentTag.id === postTag.tag_id).length > 0;
             return currentTag;
           });
+          post.loggedIn = req.session.loggedIn;
+          // console.log("edit post", post);
           res.render('edit-post', { post, tags, loggedIn: req.session.loggedIn });
         });
     })
