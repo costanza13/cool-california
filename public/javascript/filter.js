@@ -9,6 +9,9 @@ async function filterHandler(event) {
       const response = await fetch('/api/users/tags');
       const userTags = await response.json();
       console.log(userTags);
+      if (userTags.length === 0) {
+        userTags = ['all'];
+      }
       nextUrl = '/tag/' + userTags.join(',');
       break;
     case 'user-likes':
