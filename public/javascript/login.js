@@ -2,6 +2,7 @@ async function signupFormHandler(event) {
   event.preventDefault();
 
   const username = document.querySelector('#username-signup').value.trim();
+  const nickname = document.querySelector('#nickname-signup').value.trim();
   const email = document.querySelector('#email-signup').value.trim();
   const password = document.querySelector('#password-signup').value.trim();
 
@@ -11,6 +12,7 @@ async function signupFormHandler(event) {
       body: JSON.stringify({
         username,
         email,
+        nickname,
         password
       }),
       headers: { 'Content-Type': 'application/json' }
@@ -70,11 +72,11 @@ document.querySelector('.signup-form').addEventListener('submit', signupFormHand
 document.querySelector('.signin-form').addEventListener('submit', loginFormHandler);
 document.querySelector('#sign-up-switch').addEventListener('click', function (event) {
   event.preventDefault();
-  document.querySelector('#sign-in-wrapper').classList.add('hidden');
-  document.querySelector('#sign-up-wrapper').classList.remove('hidden');
+  document.querySelector('.sign-in').classList.add('hidden');
+  document.querySelector('.sign-up').classList.remove('hidden');
 });
 document.querySelector('#sign-in-switch').addEventListener('click', function (event) {
   event.preventDefault();
-  document.querySelector('#sign-up-wrapper').classList.add('hidden');
-  document.querySelector('#sign-in-wrapper').classList.remove('hidden');
+  document.querySelector('.sign-up').classList.add('hidden');
+  document.querySelector('.sign-in').classList.remove('hidden');
 });

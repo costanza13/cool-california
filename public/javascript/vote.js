@@ -56,7 +56,7 @@ async function voteHandler(event) {
     });
   } else {
     event.target.checked = !event.target.checked;
-    alert(response.statusText);
+    document.location.replace('/login');
   }
 }
 

@@ -1,57 +1,43 @@
-<div id="sign-in-wrapper">
+<div class="sign-in-card">
   <div class="sign-in">
-    <div>
-      <h3>Sign In</h3>
-    </div>
-    <div>
-      <form class="signin-form">
-        <div>
-          <input type="text" id="username-login" placeholder="username" />
-        </div>
-        <div>
-          <input type="password" id="password-login" placeholder="password" />
-        </div>
-        <div class="mb-3">
-          <button id="sign-in-btn" type="submit">sign in</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div>
-    <small>Don't have an account? <a id="sign-up-switch" href="#">Sign up!</a></small>
+    <h2>Sign In</h2>
+    <form class="signin-form">
+      <div>
+        <input type="text" id="username-login" autocomplete="username" placeholder="username" />
+      </div>
+      <div>
+        <input type="password" id="password-login" autocomplete="current-password" placeholder="password" />
+      </div>
+      <div>
+        <button id="sign-in-btn" type="submit">sign in</button>
+      </div>
+    </form>
+    <p class="center small">Don't have an account? <a id="sign-up-switch" href="#">Sign up!</a></p>
   </div>
   <div>
     <small id="login-error"></small>
   </div>
-</div>
 
-<div id="sign-up-wrapper" class="hidden">
-  <div class="sign-up">
-    <div>
-      <h3>Sign Up</h3>
-    </div>
-    <div>
-      <form class="signup-form">
-        <div>
-          <input type="text" id="username-signup" placeholder="username" />
-        </div>
-        <div class="mb-3">
-          <input type="text" id="email-signup" placeholder="email" />
-        </div>
-        <div class="mb-3">
-          <input type="text" id="nickname-signup" placeholder="nickname" />
-        </div>
-        <div class="mb-3">
-          <input type="password" id="password-signup" placeholder="password" />
-        </div>
-        <div class="mb-3">
-          <button id="sign-up-btn" type="submit">sign up</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div>
-    <small>Already have an account? <a id="sign-in-switch" href="#">Sign in!</a></small>
+  <div class="sign-up hidden">
+    <h2>Sign Up</h2>
+    <form class="signup-form">
+      <div>
+        <input type="text" id="username-signup" autocomplete="off" placeholder="username" />
+      </div>
+      <div>
+        <input type="text" id="email-signup" autocomplete="email" placeholder="email" />
+      </div>
+      <div>
+        <input type="text" id="nickname-signup" autocomplete="name" placeholder="nickname" />
+      </div>
+      <div>
+        <input type="password" id="password-signup" autocomplete="new-password" placeholder="password" />
+      </div>
+      <div>
+        <button id="sign-up-btn" type="submit">sign up</button>
+      </div>
+    </form>
+    <p class="center small">Already have an account? <a id="sign-in-switch" href="#">Sign in!</a></p>
   </div>
   <div>
     <small id="sign-up-error"></small>
