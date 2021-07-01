@@ -507,16 +507,21 @@ div.social-bar {
 }
 
 footer {
+  background-color: black;
   padding: 0 2rem 2rem;
   text-align: center;
 }
 
 footer p {
-  color: #444;
+  color: whitesmoke;
   font-size: 90%;
   line-height: 2;
   margin: 0;
   padding: 0rem;
+}
+
+footer p span {
+  color: var(--post-bg-color-end);
 }
 
 /* dashboard-specific styles */

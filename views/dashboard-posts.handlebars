@@ -33,13 +33,12 @@
   </div>
 </section>
 
-
-{{#if posts.length}}
 <section id="your-posts">
   <div class="post-toolbar">
     <h3 id="your-posts-title">Your Posts ({{posts.length}})</h3>
     <a id="add-post-btn" class="italic-h" href="/dashboard/create"><i class="far fa-plus-square"></i> Add a new post</a>
   </div>
+  {{#if posts.length}}
   <ul class="post-list">
     {{#each posts as |post|}}
     <li class="your-post">
@@ -47,7 +46,9 @@
     </li>
     {{/each}}
   </ul>
+  {{else}}
+  <p style="text-align:center">You haven't shared any amazing destinations yet.</p>
+  {{/if}}
 </section>
-{{/if}}
 <script src="/javascript/user-tags.js"></script>
 <script src="/javascript/vote.js"></script>
