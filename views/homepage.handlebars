@@ -5,8 +5,7 @@
   {{#if loggedIn}}
   <div class="filter-control">
     <select name="filter" class="filter-select">
-      <option value="">Posts Matching...</option>
-      <option value="all-posts">Anything</option>
+      <option value="all-posts">Show Everything</option>
       <option value="user-tags">Your Interests</option>
       <option value="user-likes">Your Likes</option>
     </select>
@@ -16,7 +15,7 @@
 {{#each posts as |post|}}
 {{> post-card post}}
 {{/each}}
+<script src="/javascript/vote.js"></script>
 {{#if loggedIn}}
 <script src="/javascript/filter.js"></script>
-<script src="/javascript/vote.js"></script>
 {{/if}}

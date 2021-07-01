@@ -6,13 +6,7 @@ async function filterHandler(event) {
   let nextUrl = '/';
   switch (filterValue) {
     case 'user-tags':
-      const response = await fetch('/api/users/tags');
-      const userTags = await response.json();
-      console.log(userTags);
-      if (userTags.length === 0) {
-        userTags = ['all'];
-      }
-      nextUrl = '/tag/' + userTags.join(',');
+      nextUrl = '/interests';
       break;
     case 'user-likes':
       nextUrl = '/likes';
@@ -21,5 +15,11 @@ async function filterHandler(event) {
 
   document.location.replace(nextUrl);
 };
+
+if (document.location.href.indexOf('/interests') > -1) {
+  filterSelectEl.value = 'user-tags';
+} else if (document.location.href.indexOf('/likes') > -1) {
+  filterSelectEl.value = 'user-likes';
+}
 
 filterSelectEl.addEventListener('change', filterHandler);

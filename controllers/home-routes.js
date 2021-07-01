@@ -1,16 +1,12 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { Op } = require('sequelize');
-const { Post, User, Comment, PostTag, Tag, Vote } = require('../models');
+const { Post, User, Comment, PostTag, UserTag, Tag, Vote } = require('../models');
 const { withAuth } = require('../utils/auth');
 
 const POST_IMAGE_WIDTH = 400;
 
-router.get('/', (req, res) => {
-
-  // user filters
-  let voteFilter = null;
-
+const getPostQueryAttributes = function (session) {
   // post attributes we want to see
   const attributes = [
     'id',
@@ -27,15 +23,22 @@ router.get('/', (req, res) => {
   ];
 
   // apply user-specific parameters
-  if (req.session.loggedIn) {
+  if (session.loggedIn) {
     attributes.push(
-      [sequelize.literal('(SELECT `like` FROM vote WHERE vote.post_id = post.id AND vote.user_id = ' + req.session.user_id + ')'), 'vote']
+      [sequelize.literal('(SELECT `like` FROM vote WHERE vote.post_id = post.id AND vote.user_id = ' + session.user_id + ')'), 'vote']
     )
-
-    if (typeof req.query.like !== 'undefined' && !isNaN(parseInt(req.query.like))) {
-      voteFilter = { like: req.query.like, user_id: req.session.user_id };
-    }
   }
+
+  return attributes;
+}
+
+const sortPosts = function (posts, orderBy) {
+  return posts;
+}
+
+router.get('/', (req, res) => {
+
+  const attributes = getPostQueryAttributes(req.session);
 
   Post.findAll({
     attributes,
@@ -55,7 +58,6 @@ router.get('/', (req, res) => {
       },
       {
         model: Vote,
-        where: voteFilter,
         attributes: ['like']
       }
     ]
@@ -70,6 +72,7 @@ router.get('/', (req, res) => {
           } else if (post.vote === 0) {
             post.unliked = true;
           }
+          post.can_vote = true;
         }
       });
       // console.log('home posts', posts);
@@ -82,23 +85,14 @@ router.get('/', (req, res) => {
 });
 
 router.get('/user/:id', (req, res) => {
+
+  const attributes = getPostQueryAttributes(req.session);
+
   Post.findAll({
     where: {
       user_id: req.params.id
     },
-    attributes: [
-      'id',
-      'title',
-      'description',
-      'image_url',
-      'latitude',
-      'longitude',
-      'map_url',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-    ],
+    attributes,
     order: [['created_at', 'DESC'], ['id', 'DESC']],
     include: [
       {
@@ -154,17 +148,8 @@ router.get('/user/:id', (req, res) => {
     });
 });
 
-router.get('/tag/:tag_name', (req, res) => {
-  const where = {};
-  const multiTags = req.params.tag_name.split(',');
-  if (multiTags.length) {
-    where.tag_name = { [Op.in]: multiTags };
-  } else {
-    res.status(400).send('Bad request');
-  }
-
-  Tag.findAll({
-    where,
+const findByTag = function (tagString, session) {
+  const tagsQuery = {
     attributes: ['id', 'tag_name'],
     include: {
       model: Post,
@@ -174,7 +159,14 @@ router.get('/tag/:tag_name', (req, res) => {
       },
       attributes: ['id']
     }
-  })
+  };
+
+  const multiTags = tagString ? tagString.split(',') : [];
+  if (multiTags.length) {
+    tagsQuery.where = { tag_name: { [Op.in]: multiTags } };
+  }
+
+  return Tag.findAll(tagsQuery)
     .then(dbTagData => {
       const postIdArrays = dbTagData.map(tagData => tagData.get({ plain: true }).posts);
       let postIds = [];
@@ -185,22 +177,11 @@ router.get('/tag/:tag_name', (req, res) => {
           }
         })
       })
-      console.log('PULL IT OUT OF HERE', postIds);
-      return Post.findAll({
-        where: { id: { [Op.in]: postIds } },
-        attributes: [
-          'id',
-          'title',
-          'description',
-          'image_url',
-          'latitude',
-          'longitude',
-          'map_url',
-          'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post_id = comment.post_id)'), 'comment_count']
-        ],
+
+      const attributes = getPostQueryAttributes(session);
+
+      const postsQuery = {
+        attributes,
         order: [['created_at', 'DESC'], ['id', 'DESC']],
         include: [
           {
@@ -220,21 +201,24 @@ router.get('/tag/:tag_name', (req, res) => {
             attributes: ['like']
           }
         ]
-      });
+      };
+
+      if (postIds.length) {
+        postsQuery.where = { id: { [Op.in]: postIds } };
+      }
+
+      return Post.findAll(postsQuery);
     })
+}
+
+router.get('/tag/:tag_name', (req, res) => {
+  findByTag(req.params.tag_name, req.session)
     .then(dbTagPostData => {
-      // console.log('MCCMCCMCC multi tag', dbTagPostData);
       let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
-      // console.log('MCCMCCMCC multi tag', posts);
 
+      const orderBy = 'whatever';
+      posts = sortPosts(posts, req.query);
 
-      /***************************************************/
-      // JEFF -- Insert the sorting logic down here  vvv
-      /***************************************************/
-      // posts = posts.sort((a, b) => a.created_at > b.created_at ? 1 : -1); // << JEFF - this created_at sort is no longer needed, but you can use it as an example
-
-
-      // console.log('MCCMCCMCC multi tag posts', posts);
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
         if (post.votes[0] && post.votes[0].like) {
@@ -254,33 +238,70 @@ router.get('/tag/:tag_name', (req, res) => {
     });
 });
 
-const getVoted = function (req, type) {
+router.get('/interests', (req, res) => {
+
+  User.findOne({
+    where: {
+      id: req.session.user_id
+    },
+    include: {
+      model: Tag,
+      attributes: ['id', 'tag_name'],
+      through: {
+        model: UserTag,
+        attributes: []
+      }
+    }
+  })
+    .then(dbUserTagData => {
+      const byTags = dbUserTagData.tags.map(tag => tag.get({ plain: true }).tag_name).join(',');
+      // const byTags = req.query.tags ? req.query.tags : '';
+      findByTag(byTags, req.session)
+        .then(dbTagPostData => {
+          // console.log('MCCMCCMCC multi tag', dbTagPostData);
+          let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
+
+          const orderBy = 'whatever';
+          posts = sortPosts(posts, req.query);
+
+          posts.forEach(post => {
+            post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
+            if (post.votes[0] && post.votes[0].like) {
+              post.liked = true;
+            } else if (post.votes[0] && post.votes[0].like === false) {
+              post.unliked = true;
+            }
+          });
+          const tag_string = byTags ? byTags.split(',').join(', ') : 'any interest';
+          const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/tag/' + req.params.id };
+          // console.log('homepage data', homepageData);
+          res.render('homepage', homepageData);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json(err);
+        });
+    });
+});
+
+const getVoted = function (type, session) {
   return Vote.findAll({
     where: {
-      user_id: req.session.user_id,
+      user_id: session.user_id,
       like: { [Op.is]: (type === 'likes') }
     },
     attributes: ['post_id']
   })
     .then(votedPostIds => {
       const postIds = votedPostIds.map(postVote => postVote.get({ plain: true }).post_id);
+
+      const attributes = getPostQueryAttributes(session);
+
       return Post.findAll({
         where: {
           id: { [Op.in]: postIds }
         },
-        attributes: [
-          'id',
-          'title',
-          'description',
-          'image_url',
-          'latitude',
-          'longitude',
-          'map_url',
-          'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-        ],
+        attributes,
         order: [['created_at', 'DESC'], ['id', 'DESC']],
         include: [
           {
@@ -305,7 +326,7 @@ const getVoted = function (req, type) {
 };
 
 router.get('/likes', withAuth, (req, res) => {
-  getVoted(req, 'likes')
+  getVoted('likes', req.session)
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
       posts.forEach(post => {
@@ -331,23 +352,14 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/post/:id', (req, res) => {
+
+  const attributes = getPostQueryAttributes(req.session);
+
   Post.findOne({
     where: {
       id: req.params.id
     },
-    attributes: [
-      'id',
-      'title',
-      'description',
-      'image_url',
-      'latitude',
-      'longitude',
-      'map_url',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-    ],
+    attributes,
     include: [
       {
         model: Tag,

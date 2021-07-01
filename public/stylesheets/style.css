@@ -13,6 +13,12 @@
   margin: 0;
 }
 
+body {
+  background: -webkit-linear-gradient(var(--main-bg-color-start), var(--main-bg-color-end));
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .hidden {
   display: none;
 }
@@ -27,18 +33,34 @@ p {
   padding: 1rem;
 }
 
-body {
-  height: 125vh;
-  margin-top: 120px;
-  padding: 30px;
-  background: -webkit-linear-gradient(var(--main-bg-color-start), var(--main-bg-color-end));
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+p.center {
+  text-align: center;
+}
+
+p.small {
+  font-size: 80%;
+  margin: 0;
+  padding: 0.2rem;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  display: block;
+  font-size: 100%;
+  padding: 1rem 2rem;
+  text-decoration: none;
 }
 
 .wrapper {
-  margin: 0 auto;
+  margin: 130px auto;
+  padding: 1rem;
   max-width: 1000px;
+}
+
+content {
+  display: block;
+  width: 100%;
 }
 
 section>div {
@@ -84,8 +106,8 @@ header {
 .filter-select {
   color:rgb(212, 175, 55);
   background: black;
-  padding: 0.4rem;
-  border: #c0c0c0;
+  border: 2px solid black;
+  padding: 0.2rem;
   border-radius: 5px;
 }
 
@@ -355,7 +377,7 @@ div.social-bar {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 1rem 0.4rem 0;
 }
 
@@ -374,13 +396,9 @@ div.social-bar {
 
 .save-btn, .delete-btn {
   background-color: var(--main-link-color);
-  border: none;
   color: whitesmoke;
-  cursor: pointer;
   font-size: 100%;
   margin: 4px 2px;
-  padding: 16px 32px;
-  text-decoration: none;
 }
 
 .delete-btn {
@@ -411,36 +429,36 @@ div.social-bar {
   font-weight: bold;
 }
 
+.sign-in-card {
+  background-color: whitesmoke;
+  border-radius: 0.5rem;
+  display: block;
+  margin: 1.5rem auto;
+  padding: 1rem;
+  width: fit-content;
+}
+
 #sign-up-error, #login-error {
   display: none;
   color:rgb(243, 97, 97);
 }
 
-#username-login,
-#password-login,
-#username-signup,
-#email-signup,
-#nickname-signup,
-#password-signup {
-  width: auto;
-  padding: 8px 20px;
-  margin: 4px 0;
-  display: inline-block;
+.signup-form input, .signin-form input {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  display: inline-block;
+  font-size: 110%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  width: 15rem;
 }
 
 #sign-in-btn,
 #sign-up-btn {
-  padding-bottom: 40px;
   background-color: black;
-  border: none;
-  color:rgb(212, 175, 55);
-  padding: 16px 32px;
-  text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;
+  color: rgb(212, 175, 55);
+  margin: 0.5rem auto;
 }
 
 #sign-in-btn:hover,
@@ -507,21 +525,31 @@ div.social-bar {
 }
 
 footer {
+  align-items: center;
   background-color: black;
-  padding: 0 2rem 2rem;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  left: 0;
+  padding: 0.5rem;
+  position: fixed;
   text-align: center;
+  width: 100%;
 }
 
 footer p {
   color: whitesmoke;
   font-size: 90%;
   line-height: 2;
-  margin: 0;
-  padding: 0rem;
+  margin: 0 2rem;
+  padding: 0;
 }
 
-footer p span {
-  color: var(--post-bg-color-end);
+footer p .logo {
+  color: whitesmoke;
+  font-family: 'Mr Dafoe', cursive;
+  font-size: 140%;
 }
 
 /* dashboard-specific styles */
@@ -605,8 +633,19 @@ footer p span {
   nav ul {
     margin: 0;
   }
-  body {
-    margin-top: 75px;
+
+  .wrapper {
+    margin: 88px auto;
+    padding: 3rem;
+    max-width: 1000px;
+  }
+
+  .sign-in-card {
+    margin: 4rem auto;
+  }
+
+  div.social-bar {
+    justify-content: space-between;
   }
 }
 
@@ -624,9 +663,6 @@ footer p span {
     clear: both;
     display: flex;
     flex-direction: column;
-  }
-  body {
-    padding: 30px 10px;
   }
 }
 
