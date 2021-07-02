@@ -12,9 +12,13 @@
   </div>
   {{/if}}
 </div>
+{{#if posts.length}}
 {{#each posts as |post|}}
 {{> post-card post}}
 {{/each}}
+{{else}}
+<p class="no-results">{{no_results}}</p>
+{{/if}}
 <script src="/javascript/vote.js"></script>
 {{#if loggedIn}}
 <script src="/javascript/filter.js"></script>
