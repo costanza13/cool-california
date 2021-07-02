@@ -76,6 +76,11 @@ section>div {
   margin-bottom: 1rem;
 }
 
+.dashboard-section {
+  margin-bottom: 2rem;
+  padding: 0.5rem;
+}
+
 header {
   background-color: black;
   left: 0;
@@ -164,7 +169,7 @@ nav li a:hover {
   text-decoration:none;
 }
 
-.title-bar {
+.title-bar, .dashboard-section h3 {
   align-items: center;
   background: -webkit-linear-gradient(#D4AF37, #e9ce77);
   border-radius: var(--border-radius-blocks);
@@ -178,7 +183,11 @@ nav li a:hover {
   width: 100%;
 }
 
-.title-bar h1, .title-bar h2 {
+.dashboard-section h3 {
+  padding: 0.5rem;
+}
+
+.title-bar h1, .title-bar h2, .dashboard-section h3 {
   color: #333;
   margin-bottom: 1rem;
 }
@@ -279,10 +288,6 @@ article a {
   justify-content: space-around;
   list-style: none;
   padding-left: 5px;
-}
-
-.user-tags .tag-list {
-  margin-top: 0;
 }
 
 .tags-wrap {
@@ -466,9 +471,9 @@ textarea {
   width: fit-content;
 }
 
-#sign-up-error, #login-error {
-  display: none;
-  color:rgb(243, 97, 97);
+#sign-up-error, #login-error, #update-message {
+  font-size: 80%;
+  text-align: center;
 }
 
 .signup-form input, .signin-form input {
@@ -483,7 +488,8 @@ textarea {
 }
 
 #sign-in-btn,
-#sign-up-btn {
+#sign-up-btn,
+#update-btn {
   background-color: black;
   color: rgb(212, 175, 55);
   display: block;
@@ -491,7 +497,8 @@ textarea {
 }
 
 #sign-in-btn:hover,
-#sign-up-btn:hover {
+#sign-up-btn:hover,
+#update-btn:hover {
   font-weight: bold;
   text-transform:uppercase;
   font-style: italic;
@@ -563,8 +570,11 @@ textarea {
   background: -webkit-linear-gradient(#24344D, #8CA0B1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 120%;
   font-weight: bold;
+}
+
+#edit-post-btn {
+  font-size: 120%;
 }
 
 #add-post-btn:hover,
@@ -601,10 +611,30 @@ footer p .logo {
 }
 
 /* dashboard-specific styles */
-.welcome-msg {
-  width: 40rem;
-  max-width: 80%;
-  padding-left: 1rem;
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile-card {
+  background-color: whitesmoke;
+  border-radius: var(--border-radius-blocks);
+  display: block;
+  font-size: 90%;
+  margin: 0 auto;
+  padding: 0.5rem;
+  width: fit-content;
+}
+
+.profile-card .update-form input {
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius-controls);
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 100%;
+  margin: 0.7rem 0 0;
+  padding: 0.5rem;
+  width: 14rem;
 }
 
 .subnav {
@@ -612,17 +642,12 @@ footer p .logo {
 }
 
 .user-tags {
-  padding: 1rem;
-}
-
-.user-tags ul {
-  border: 1px solid #666;
   border-radius: var(--border-radius-controls);
   justify-content: center;
   margin: 1rem 0;
   width: 100%;
   text-align: center;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .post-list {
@@ -662,10 +687,6 @@ footer p .logo {
   padding: 0.2rem 2rem 0.2rem 1rem;
 }
 
-#your-posts-title {
-  padding-bottom: 5px;
-}
-
 #your-posts ul {
   list-style-type: none;
   padding: 0;
@@ -696,10 +717,8 @@ footer p .logo {
     margin: 4rem auto;
   }
 
-  .title-bar {
-    display: flex;
+  .title-bar, .dashboard-section h3 {
     flex-direction: row;
-    flex-wrap: wrap;
     text-align: left;
   }
 
@@ -723,6 +742,14 @@ footer p .logo {
     justify-content: space-between;
   }
 
+  .dashboard-section .sign-in-card {
+    margin: 0;
+  }
+
+  .profile {
+    flex-wrap: nowrap;
+  }
+  
   #edit-form .post-toolbar {
     justify-content: space-between;
   }

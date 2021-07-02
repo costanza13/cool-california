@@ -103,7 +103,7 @@ router.post('/login', (req, res) => {
   })
     .then(dbUserData => {
       if (!dbUserData) {
-        res.status(400).json({ message: 'No user with that email address!' });
+        res.status(400).json({ message: 'Invalid username!' });
         return;
       }
 
@@ -166,19 +166,31 @@ router.delete('/tag/:id', withAuthApi, (req, res) => {
     });
 });
 
-router.put('/:id', withAuthApi, (req, res) => {
-  if (parseInt(req.params.id) === req.session.user_id) {
+router.put('/', withAuthApi, (req, res) => {
+  if (req.session.loggedIn) {
+
+    const savedSession = req.session;
+
+    const updateData = {};
+    if (req.body.username) {
+      updateData.username = req.body.username;
+    }
+    if (req.body.email) {
+      updateData.email = req.body.email;
+    }
+    if (req.body.nickname) {
+      updateData.nickname = req.body.nickname;
+    }
+    if (req.body.password) {
+      updateData.password = req.body.password;
+    }
+    console.log('update user', updateData);
     User.update(
-      {
-        username: req.body.username,
-        email: req.body.email,
-        nickname: req.body.nickname,
-        password: req.body.password
-      },
+      updateData,
       {
         individualHooks: true,
         where: {
-          id: req.params.id
+          id: req.session.user_id
         }
       })
       .then(dbUserData => {
@@ -186,7 +198,15 @@ router.put('/:id', withAuthApi, (req, res) => {
           res.status(404).json({ message: 'No user found with this id' });
           return;
         }
-        res.json(dbUserData);
+        req.session.save(() => {
+          // update the relevant bits in the stored session
+          req.session.user_id = savedSession.user_id;
+          req.session.username = req.body.username ? req.body.username : savedSession.username;
+          req.session.nickname = req.body.nickname ? req.body.nickname : savedSession.nickname;
+          req.session.loggedIn = true;
+  
+          res.json({ user: dbUserData, message: 'Session information updated.' });
+        });
       })
       .catch(err => {
         console.log(err);

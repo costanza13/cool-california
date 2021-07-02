@@ -13,6 +13,7 @@ router.get('/', withAuth, (req, res) => {
     },
     attributes: [
       'id',
+      'username',
       'nickname',
       'email',
       [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE user.id = vote.user_id AND `like`)'), 'likes_count'],
@@ -95,13 +96,13 @@ router.get('/', withAuth, (req, res) => {
             return merged;
           });
 
-          const dashboard = { 
-            user, 
-            posts, 
-            other_tags: allTags, 
+          const dashboard = {
+            user,
+            posts,
+            other_tags: allTags,
             loggedIn: req.session.loggedIn
-            };
-          console.log('dashboard data', dashboard);
+          };
+          // console.log('dashboard data', dashboard);
           res.render('dashboard-posts', dashboard);
         })
     })
