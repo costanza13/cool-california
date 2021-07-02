@@ -6,10 +6,14 @@ const { getPostQueryAttributes, getPostQueryInclude, processPostsDbData } = requ
 
 const sortPosts = function (posts, query) {
   return posts;  // posts.sort((a, b) => (a.like_score > b.like_score) ? -1 : 1);
-
 }
 
 router.get('/', (req, res) => {
+
+  // if the user has never been to the site before, give 'em a welcome message
+  if (!req.session.loggedIn && !req.cookies.cc) {
+    return res.cookie('cc', 1, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true }).render('welcome');
+  }
 
   const attributes = getPostQueryAttributes(req.session);
   const include = getPostQueryInclude();
