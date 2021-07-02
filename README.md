@@ -4,7 +4,7 @@
 
 Cool California is a collaborative social network for California Adventurers. Join a community of adventurers sharing great (and not-so-great) destinations for biking, chilling, climbing, hiking, skiing, surfing, or swimming. 
 
-Users can upload photos, share brief stories, and provide the location of Cool California places they've visited- whether they loved or hated them. Rate other users' posts, or find places to explore suggested by other users with similar interests.
+Users can upload photos, share brief stories, and provide the location of Cool California places they've visited&mdash;whether they loved or hated them&mdash;rate other users' posts, or find places to explore suggested by other users with similar interests.
 
 ## Overview
 
@@ -35,8 +35,6 @@ Cool California has following features and functionalities:
 
 ## Technologies Used
 
-Cool California is 
-
 Cool California leverages these packages which must be installed to use:
 
 * bcrypt https://www.npmjs.com/package/bcrypt
@@ -63,6 +61,12 @@ package/connect-session-sequelize
 * sequelize https://www.npmjs.com/package/sequelize 
 
 <!-- update with photos when final layout ready to submit -->
+
+## Contributors
+
+* (jeff-follestad)[https://github.com/jeff-follestad]
+* (bgerner)[https://github.com/bgerner]
+* (costanza13)[https://github.com/costanza13]
 
 ## Links
 

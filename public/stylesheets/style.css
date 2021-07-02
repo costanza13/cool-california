@@ -1,6 +1,7 @@
 :root {
   --bg-color-primary-start: #d4af37;
   --bg-color-primary-end: #c0c0c0;
+  --bg-primary: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end));
   --main-link-color: #d4af37;
   --bg-color-secondary-start: #3e567c;
   --bg-color-secondary-end: #a7bbcb;
@@ -20,7 +21,8 @@
 }
 
 body {
-  background: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end));
+  /* background: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end)); */
+  background: var(--bg-primary);
   background-repeat: no-repeat;
   background-attachment: fixed;
 }

@@ -272,11 +272,8 @@ const getVoted = function (type, session) {
 router.get('/likes', withAuth, (req, res) => {
   getVoted('likes', req.session)
     .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
-      posts.forEach(post => {
-        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        post.liked = true;
-      });
+      let posts = processPostsDbData(dbPostData, req.session);
+      posts = sortPosts(posts, req.query);
       const homepageData = { posts, loggedIn: req.session.loggedIn, title: 'Places you like', nextUrl: '/likes' + req.params.id, no_results: "You haven't liked any places yet." };
       // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
@@ -314,12 +311,7 @@ router.get('/post/:id', (req, res) => {
     include
   })
     .then(dbPostData => {
-      const post = dbPostData.get({ plain: true });
-      if (post.votes[0] && post.votes[0].like) {
-        post.liked = true;
-      } else if (post.votes[0] && post.votes[0].like === false) {
-        post.disliked = true;
-      }
+      const post = processPostsDbData([dbPostData], req.session)[0];
       post.loggedIn = req.session.loggedIn;
       // console.log(post);
       res.render('single-post', post);
