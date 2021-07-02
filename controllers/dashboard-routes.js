@@ -75,7 +75,7 @@ router.get('/', withAuth, (req, res) => {
             if (post.votes[0] && post.votes[0].like) {
               post.liked = true;
             } else if (post.votes[0] && post.votes[0].like === false) {
-              post.unliked = true;
+              post.disliked = true;
             }
             post.allowEdit = true;
           });
@@ -184,7 +184,7 @@ router.get('/dislikes', withAuth, (req, res) => {
       console.log('disliked posts', posts);
       posts.forEach(post => {
         post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        post.unliked = true;
+        post.disliked = true;
       });
       res.render('dashboard-likes', { posts, tab: 'Disliked', loggedIn: req.session.loggedIn });
     })
