@@ -12,7 +12,7 @@ var imageUploadWidget = cloudinary.createUploadWidget(
   (error, result) => {
     if (!error && result && result.event === "success") {
       console.log('Done! Here is the image info: ', result.info);
-      document.querySelector('input[name="image_url"]').value = result.info.secure_url;
+      document.querySelector('input[name="image-url"]').value = result.info.secure_url;
     }
   }
 )
@@ -26,7 +26,6 @@ async function editFormHandler(event) {
   const latitude = document.querySelector('input[name="latitude"]').value;
   const longitude = document.querySelector('input[name="longitude"]').value;
   const tags = document.querySelector('input[name="tag-ids"]').value;
-
 
   const response = await fetch(`/api/posts${post_id ? '/' + post_id : ''}`, {
     method: (post_id ? 'PUT' : 'POST'),
@@ -52,7 +51,6 @@ async function editFormHandler(event) {
 }
 
 const updateTagIdsInput = function (tag_id, checked) {
-  console.log('tag input:', tag_id, checked);
   if (checked) {
     tagsSelected.push(tag_id);
   } else {
@@ -60,8 +58,6 @@ const updateTagIdsInput = function (tag_id, checked) {
       tagsSelected.splice(tagsSelected.indexOf(tag_id), 1);
     }
   }
-  console.log(tagsSelected);
-
   tagIdsInputEl.value = tagsSelected.join(',');
 };
 
@@ -76,7 +72,8 @@ for (let i = 0; i < tagInputEls.length; i++) {
   tagInputEls[i].addEventListener('change', tagHandler);
   updateTagIdsInput(tagInputEls[i].value, tagInputEls[i].checked);
 }
-document.querySelector('#upload-image').addEventListener('click', function () {
+document.querySelector('#upload-image').addEventListener('click', function (event) {
+  event.preventDefault();
   imageUploadWidget.open();
 }, false);
 document.querySelector('#edit-form').addEventListener('submit', editFormHandler);

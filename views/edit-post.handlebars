@@ -18,7 +18,7 @@
         placeholder="Post content...">{{#if post.description}}{{post.description}}{{/if}}</textarea>
     </div>
     <div>
-      <label for="image_url">Photo:</label><br>
+      <label for="image-url">Photo:</label><br>
       <div id="image-url-wrap">
         <input class="post-input" type="text" name="image-url" {{#if post.id}} value="{{post.image_url}}" {{/if}}
           placeholder="Photo URL" />&nbsp;or&nbsp;<button id="upload-image">upload photo</button>

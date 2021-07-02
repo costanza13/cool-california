@@ -64,9 +64,9 @@ package/connect-session-sequelize
 
 ## Contributors
 
-* (jeff-follestad)[https://github.com/jeff-follestad]
-* (bgerner)[https://github.com/bgerner]
-* (costanza13)[https://github.com/costanza13]
+* [jeff-follestad](https://github.com/jeff-follestad)
+* [bgerner](https://github.com/bgerner)
+* [costanza13](https://github.com/costanza13)
 
 ## Links
 
