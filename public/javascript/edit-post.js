@@ -22,7 +22,7 @@ async function editFormHandler(event) {
 
   const title = document.querySelector('input[name="title"]').value;
   const description = document.querySelector('textarea[name="description"]').value;
-  const image_url = document.querySelector('input[name="image_url"]').value;
+  const image_url = document.querySelector('input[name="image-url"]').value;
   const latitude = document.querySelector('input[name="latitude"]').value;
   const longitude = document.querySelector('input[name="longitude"]').value;
   const tags = document.querySelector('input[name="tag-ids"]').value;
@@ -76,7 +76,7 @@ for (let i = 0; i < tagInputEls.length; i++) {
   tagInputEls[i].addEventListener('change', tagHandler);
   updateTagIdsInput(tagInputEls[i].value, tagInputEls[i].checked);
 }
-document.querySelector('input[name="image_url"]').addEventListener('click', function () {
+document.querySelector('#upload-image').addEventListener('click', function () {
   imageUploadWidget.open();
 }, false);
 document.querySelector('#edit-form').addEventListener('submit', editFormHandler);
