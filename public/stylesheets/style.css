@@ -3,12 +3,14 @@
   --bg-color-primary-end: #c0c0c0;
   --bg-primary: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end));
   --main-link-color: #d4af37;
+  --default-button-background-color: #191d05;
   --bg-color-secondary-start: #3e567c;
   --bg-color-secondary-end: #a7bbcb;
   --border-radius-controls: 0.3rem;
   --border-radius-blocks: 0.5rem;
   --like-color: #24344D;
   --dislike-color: #905923;
+  --base-font-size: 18px;
 }
   /* --like-color: #a0d86c; */
   /* --dislike-color: #f38782; */
@@ -16,9 +18,15 @@
 * {
   box-sizing: border-box;
   color: black;
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Nunito', sans-serif;
+  font-size: var(--base-font-size);
   margin: 0;
 }
+
+h1 { font-size: 200%; }
+h2 { font-size: 180%; }
+h3 { font-size: 160%; }
+h4 { font-size: 140%; }
 
 body {
   /* background: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end)); */
@@ -46,18 +54,20 @@ p.center {
 }
 
 p.small {
-  font-size: 80%;
+  font-size: 100%;
   margin: 0;
   padding: 0.2rem;
 }
 
-button {
+button, .btn {
+  background-color: var(--default-button-background-color);
   border: none;
   border-radius: var(--border-radius-controls);
+  color: var(--main-link-color);
   cursor: pointer;
   display: inline-block;
   font-size: 100%;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   text-decoration: none;
 }
 
@@ -65,15 +75,6 @@ button {
   margin: 130px auto;
   padding: 1rem;
   max-width: 1000px;
-}
-
-content {
-  display: block;
-  width: 100%;
-}
-
-section>div {
-  margin-bottom: 1rem;
 }
 
 header {
@@ -95,29 +96,32 @@ header {
   max-width: 1000px;
 }
 
-.header-content h3 {
+#header-logo, #logo {
   background: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end));
   -webkit-background-clip: text;
   -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
   font-family: 'Mr Dafoe', cursive;
-  font-size: 40px;
+  font-size: 42px;
 }
 
-.filter-control {
-  background: transparent;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  text-align: right;
+#splash {
+  font-size: 100%;
+  text-align: center;
 }
 
-.filter-select {
-  color:rgb(212, 175, 55);
-  background: black;
-  border: 2px solid black;
-  padding: 0.2rem;
-  border-radius: var(--border-radius-controls);
+#splash > p {
+  text-align: center;
+}
+
+#splash > .logo {
+  font-size: 12vw;
+}
+
+#splash > button {
+  background-color: var(--default-button-background-color);
+  color: var(--main-link-color);
 }
 
 nav {
@@ -149,12 +153,12 @@ nav li a {
   font-weight:500;
   background: black;
   color: #c0c0c0;
-  font-style: italic;
   text-decoration: none;
   text-shadow: 1px 1px rgb(36, 52, 77, 1)
 }
 
 nav li a:hover {
+  font-style: italic;
   font-weight: 600;
   background: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end));
   -webkit-background-clip: text;
@@ -164,7 +168,31 @@ nav li a:hover {
   text-decoration:none;
 }
 
-.title-bar {
+content {
+  display: block;
+  width: 100%;
+}
+
+section>div {
+  margin-bottom: 1rem;
+}
+
+.filter-control {
+  background: transparent;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  text-align: right;
+}
+
+.filter-select {
+  color:rgb(212, 175, 55);
+  background: var(--default-button-background-color);
+  border: 2px solid var(--default-button-background-color);
+  padding: 0.2rem;
+  border-radius: var(--border-radius-controls);
+}
+
+.title-bar, .dashboard-section h3 {
   align-items: center;
   background: -webkit-linear-gradient(#D4AF37, #e9ce77);
   border-radius: var(--border-radius-blocks);
@@ -191,6 +219,17 @@ nav li a:hover {
 
 .filter-controls {
   text-align: right;
+}
+
+#sort-controls {
+  font-size: 80%;
+  margin: 0;
+  padding: 0.2em 0.5em;
+  text-align: right;
+}
+
+#sort-controls a {
+  font-size: 100%;
 }
 
 article, .comments {
@@ -254,6 +293,10 @@ article a {
 .place-image.small {
   max-height: 400px;
 }
+.post-title {
+  color: var(--main-link-color);
+  margin: 1rem;
+}
 
 .post-byline {
   padding: 0.4rem!important;
@@ -302,7 +345,7 @@ article a {
   border-radius: var(--border-radius-controls);
   box-shadow: none;
   color:rgb(212, 175, 55);
-  background: black;
+  background: var(--default-button-background-color);
   text-shadow: 0px 0px rgb(212, 175, 55);
   cursor: pointer;
   padding: .2rem .7rem;
@@ -402,15 +445,14 @@ div.social-bar p {
   margin-bottom: 1.5rem;
 }
 
-.save-btn, .delete-btn {
-  background-color: var(--main-link-color);
+.save-btn {
+  background-color: #366136;
   color: whitesmoke;
-  font-size: 100%;
-  margin: 4px 2px;
 }
 
 .delete-btn {
-  background-color: rgb(218, 36, 12);
+  background-color: #cc3f0a;
+  color: whitesmoke;
 }
 
 textarea {
@@ -457,7 +499,7 @@ textarea {
   font-weight: bold;
 }
 
-.sign-in-card {
+.card, .sign-in-card, #splash {
   background-color: whitesmoke;
   border-radius: var(--border-radius-blocks);
   display: block;
@@ -483,8 +525,9 @@ textarea {
 }
 
 #sign-in-btn,
-#sign-up-btn {
-  background-color: black;
+#sign-up-btn,
+#update-btn {
+  background-color: var(--default-button-background-color);
   color: rgb(212, 175, 55);
   display: block;
   margin: 0.5rem auto;
@@ -493,7 +536,6 @@ textarea {
 #sign-in-btn:hover,
 #sign-up-btn:hover {
   font-weight: bold;
-  text-transform:uppercase;
   font-style: italic;
 }
 
@@ -563,6 +605,11 @@ textarea {
   background: -webkit-linear-gradient(#24344D, #8CA0B1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 120%;
+}
+
+#edit-post-btn {
   font-size: 120%;
   font-weight: bold;
 }
@@ -601,10 +648,35 @@ footer p .logo {
 }
 
 /* dashboard-specific styles */
-.welcome-msg {
-  width: 40rem;
-  max-width: 80%;
-  padding-left: 1rem;
+.dashboard-section {
+  margin-bottom: 2rem;
+  padding: 0.5rem;
+}
+
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile-card {
+  background-color: whitesmoke;
+  border-radius: var(--border-radius-blocks);
+  display: block;
+  font-size: 90%;
+  margin: 0 auto;
+  padding: 0.5rem;
+  width: fit-content;
+}
+
+.profile-card .update-form input {
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius-controls);
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 100%;
+  margin: 0.7rem 0 0;
+  padding: 0.5rem;
+  width: 14rem;
 }
 
 .subnav {
@@ -688,7 +760,7 @@ footer p .logo {
 
   .wrapper {
     margin: 88px auto;
-    padding: 1rem 3rem;
+    padding: 1rem 2rem;
     max-width: 1000px;
   }
 

@@ -1,6 +1,6 @@
 <div class="title-bar">
   {{#if title}}
-  <h1 id="homepage-header">{{title}}</h1>
+  <h2 id="homepage-header">{{title}}</h2>
   {{/if}}
   {{#if loggedIn}}
   <div class="filter-control">
@@ -13,6 +13,12 @@
   {{/if}}
 </div>
 {{#if posts.length}}
+<div id="sort-controls">
+  Sort:
+  <a href="?order=recent">newest</a> |
+  <a href="?order=likes">most liked</a> |
+  <a href="?order=comments">most discussed</a>
+</div>
 {{#each posts as |post|}}
 {{> post-card post}}
 {{/each}}

@@ -21,7 +21,7 @@
       <label for="image_url">Photo:</label><br>
       <div id="image-url-wrap">
         <input class="post-input" type="text" name="image-url" {{#if post.id}} value="{{post.image_url}}" {{/if}}
-          placeholder="Photo URL" />&nbsp;or&nbsp;<button id="upload-image">Upload Photo</button>
+          placeholder="Photo URL" />&nbsp;or&nbsp;<button id="upload-image">upload photo</button>
       </div>
     </div>
     <div>
@@ -47,8 +47,8 @@
     </div>
     <div class="post-toolbar">
       <div>
-        <button class="save-btn" type="submit">Save post</button>
-        {{#if post.id}}<button type="button" class="delete-post-btn delete-btn">Delete post</button>{{/if}}
+        <button class="btn save-btn" type="submit">save post</button>
+        {{#if post.id}}<button type="button" id="delete-post-btn" class="btn delete-btn">delete post</button>{{/if}}
       </div>
       {{#if post.id}}<div>created by you on {{format_date post.created_at}}</div>{{/if}}
     </div>
