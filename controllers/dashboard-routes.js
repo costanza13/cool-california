@@ -198,8 +198,13 @@ router.get('/create', withAuth, (req, res) => {
   const post = {
     id: 0,
     title: '',
-    body: '',
-  };
+    description: '',
+    image_url: '',
+    latitude: '',
+    longitude: '',
+    tags: [],
+    loggedIn: req.session.loggedIn
+  }
   Tag.findAll({
     attributes: ['id', 'tag_name']
   })
