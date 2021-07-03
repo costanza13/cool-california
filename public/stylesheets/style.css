@@ -43,6 +43,10 @@ a:link {
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 p {
   line-height: 1.5;
   margin: 0.5rem 0;
@@ -54,21 +58,31 @@ p.center {
 }
 
 p.small {
-  font-size: 100%;
+  font-size: 80%;
   margin: 0;
   padding: 0.2rem;
+}
+
+p.small > a {
+  color: var(--main-link-color);
+  font-size: 100%;
 }
 
 button, .btn {
   background-color: var(--default-button-background-color);
   border: none;
   border-radius: var(--border-radius-controls);
+  box-shadow: grey 2px 2px 2px;
   color: var(--main-link-color);
   cursor: pointer;
   display: inline-block;
   font-size: 100%;
   padding: 0.5rem 2rem;
   text-decoration: none;
+}
+
+button:active {
+  box-shadow: none;
 }
 
 .wrapper {
@@ -89,7 +103,6 @@ header {
 .header-content {
   align-items: center;
   justify-content: space-around;
-  box-shadow: 0 0 25px 0 black;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
@@ -148,7 +161,7 @@ nav li {
   width: 6rem;
 }
 
-nav li a {
+nav li a:link, nav li a:visited {
   font-size: 1.1rem;
   font-weight:500;
   background: black;
@@ -158,14 +171,13 @@ nav li a {
 }
 
 nav li a:hover {
-  font-style: italic;
   font-weight: 600;
   background: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
   text-shadow: none;
-  text-decoration:none;
+  text-decoration: underline;
 }
 
 content {
@@ -359,11 +371,13 @@ article a {
 
 .tag-list-item-btn, .tag-input + label {
   background: #c0c0c0;
+  box-shadow: grey 2px 2px 2px;
   color: #24344D;
 }
 
 .tag-list-item-btn.selected, .tag-input:checked + label {
   background: #111111;
+  box-shadow: none;
   color: var(--main-link-color)
 }
 
@@ -400,7 +414,7 @@ div.social-bar p {
   background-color: whitesmoke;
   border: 1px solid var(--like-color);
   border-radius: var(--border-radius-controls);
-  box-shadow: 2px 2px 3px #465e83;
+  box-shadow: grey 2px 2px 2px;
   color: #a0d86c;
   display: inline-block;
   padding: 3px;
@@ -533,17 +547,6 @@ textarea {
   margin: 0.5rem auto;
 }
 
-#sign-in-btn:hover,
-#sign-up-btn:hover,
-#update-btn:hover {
-  font-weight: bold;
-  font-style: italic;
-}
-
-.italic-h:hover {
-  font-style: italic;
-}
-
 .comments ul {
   border-bottom: 1px solid #666;
   list-style-type: none;
@@ -607,11 +610,11 @@ textarea {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
-  font-size: 120%;
+  font-size: 80%;
 }
 
 #edit-post-btn {
-  font-size: 120%;
+  font-size: 110%;
 }
 
 #add-post-btn:hover,
