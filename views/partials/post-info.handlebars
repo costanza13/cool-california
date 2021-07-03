@@ -25,11 +25,9 @@
     </div>
   </div>
   <div class="spd2">
-    <div>
-      <p>{{description}}</p>
-    </div>
-    {{> tags this}}
+    <div class="description">{{description}}</div>
   </div>
+  {{> tags this}}
   <div class="social-bar">
     <p><a id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural "comment"
         comment_count}}</a></p>

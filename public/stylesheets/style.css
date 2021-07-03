@@ -10,7 +10,8 @@
   --border-radius-blocks: 0.5rem;
   --like-color: #24344D;
   --dislike-color: #905923;
-  --base-font-size: 18px;
+  --base-font-size-desktop: 18px;
+  --base-font-size-mobile: 16px;
 }
   /* --like-color: #a0d86c; */
   /* --dislike-color: #f38782; */
@@ -19,14 +20,14 @@
   box-sizing: border-box;
   color: black;
   font-family: 'Nunito', sans-serif;
-  font-size: var(--base-font-size);
+  font-size: var(--base-font-size-mobile);
   margin: 0;
 }
 
-h1 { font-size: 200%; }
-h2 { font-size: 180%; }
-h3 { font-size: 160%; }
-h4 { font-size: 140%; }
+h1 { font-size: calc(8px + 4vw); }
+h2 { font-size: calc(12px + 3vw); }
+h3 { font-size: calc(14px + 2vw); }
+h4 { font-size: calc(10px + 2vw); }
 
 body {
   /* background: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end)); */
@@ -237,14 +238,14 @@ section>div {
   text-align: right;
 }
 
-#sort-controls {
-  font-size: 80%;
+div.sort-controls {
+  font-size: 90%;
   margin: 0;
   padding: 0.2em 0.5em;
-  text-align: right;
+  text-align: center;
 }
 
-#sort-controls a {
+div.sort-controls a {
   font-size: 100%;
 }
 
@@ -252,7 +253,7 @@ article, .comments {
   background: -webkit-linear-gradient(var(--bg-color-secondary-start), var(--bg-color-secondary-end));
   border-radius: var(--border-radius-blocks);
   padding: 1rem;
-  margin: 0 0 2rem;
+  margin: 0 0 1rem;
   width: 100%;
 }
 
@@ -265,18 +266,21 @@ article a {
 }
 
 .spd1 {
-  height: 100px;
   display: inline-block;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
   padding: 0;
   text-align: center;
   width: 100%;
 }
+
 .spd1 h2 {
   margin: 1rem 0 2rem;
 }
 
 .spd2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   border-radius: var(--border-radius-blocks);
   padding: 1rem 1rem 0;
 }
@@ -309,9 +313,10 @@ article a {
 .place-image.small {
   max-height: 400px;
 }
+
 .post-title {
   color: var(--main-link-color);
-  margin: 1rem;
+  margin: 0 0 1rem;
 }
 
 .post-byline {
@@ -319,15 +324,16 @@ article a {
 }
 
 .map-container {
-  border-style: inset;
-  border: 2px inset #6a809c;
-  float: right;
-  margin-left: 0.4rem;
   margin-top: 1rem;
   padding: 0!important;
+  text-align: center;
 }
 
 .embedded-map {
+  flex-basis: 100%;
+  margin: 0 0.5rem 0.5rem;
+  border-style: inset;
+  border: 2px inset #6a809c;
   max-width: 200px;
   flex-shrink: 1;
 }
@@ -343,7 +349,7 @@ article a {
 .tags-wrap {
   align-items: center;
   display: flex;
-  margin: 1rem 0;
+  margin: 1rem;
 }
 
 .tag-list-item {
@@ -412,6 +418,10 @@ div.social-bar p {
 
 #comment-count {
   color: black;
+}
+
+.vote-wrap {
+  margin: 0.5rem;
 }
 
 .vote-input + label {
@@ -754,6 +764,15 @@ footer p .logo {
 
 /* responsive breakpoints */
 @media screen and (min-width: 680px) {
+  * {
+    font-size: var(--base-font-size-desktop);
+  }
+
+  h1 { font-size: 36px; }
+  h2 { font-size: 32px; }
+  h3 { font-size: 28px; }
+  h4 { font-size: 24px; }
+  
   .header-content {
     justify-content: space-between;
   }
@@ -786,16 +805,43 @@ footer p .logo {
     margin-bottom: 0;
   }
 
+  div.sort-controls {
+    font-size: 80%;
+    text-align: right;
+  }
+
+  article, .comments {
+    margin-bottom: 2rem;
+    padding: 1rem;
+  }
+
+  .spd2 {
+    flex-direction: row;
+  }
+
+  .description {
+    padding: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .map-container {
+    padding: 0!important;
+    text-align: center;
+    width: fit-content;
+    max-width: 300px;
+  }
+  
+  .map-container .embedded-map {
+    max-width: 300px;
+    width: calc(210px + 8vw);
+  }
+  
   .subnav {
     font-size: initial;
   }
 
   .post-list {
     margin: 1rem;
-  }
-  
-  .map-container .embedded-map {
-    max-width: 100%;
   }
   
   div.social-bar {
@@ -825,23 +871,6 @@ footer p .logo {
   
   #edit-form .post-toolbar {
     justify-content: space-between;
-  }
-}
-
-@media screen and (max-width: 580px) {
-  .map-container {
-    display:inline-block;
-    float: none;
-    margin: 1rem auto 0;
-    align-items: center;
-    max-width: 100%;
-    height: auto
-  }
-
-  .spd2 {
-    clear: both;
-    display: flex;
-    flex-direction: column;
   }
 }
 
