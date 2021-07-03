@@ -23,15 +23,7 @@ const postData = [
     image_url: 'https://res.cloudinary.com/cool-california/image/upload/v1624669719/DSCN6650-scaled_pkdbf2',
     latitude: 39.31862,
     longitude: -119.92171,
-    user_id: 2
-  },
-  {
-    title: 'The Moon',
-    description: 'A bit out of the way, the moon is a great destination for anyone wanting to "get away from it all" for a day or two. Parking is never a problem, but getting there can be a bit challenging, and you can\'t really use GPS. Definitely worth the effort, though. Once there, the hiking is pretty much the easy part. With 1/6 Earth\'s gravity, even the steepest ascents are a walk in the park -- and falls don\'t hurt nearly as much. Be warned, you may need to book your visit years in advance.',
-    image_url: 'https://res.cloudinary.com/cool-california/image/upload/v1624669719/vpjik6wtqcnmh37ldlo0.jpg',
-    latitude: 0,
-    longitude: 0,
-    user_id: 2
+    user_id: 1
   },
   {
     title: 'Donner Lake - Truckee, CA',
@@ -40,6 +32,14 @@ const postData = [
     latitude: 39.3227113,
     longitude: -120.2972872,
     user_id: 2
+  },
+  {
+    title: 'Tennessee Valley',
+    description: "Tennessee Valley Trail is a 3.4 mile heavily trafficked out and back trail located near Sausalito, California that features beautiful wild flowers and is good for all skill levels. The trail offers a number of activity options and is accessible year-round. Horses are also able to use this trail.",
+    image_url: 'https://res.cloudinary.com/cool-california/image/upload/v1625105237/cnbbun1lchmie7wrlpku.jpg',
+    latitude: null,
+    longitude: null,
+    user_id: 3
   },
   {
     title: 'Glenshire Lake - Truckee, CA',

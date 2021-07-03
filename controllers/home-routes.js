@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
       posts = sortPosts(posts, req.query);
 
       // console.log('home posts', posts);
-      res.render('homepage', { posts, title: "Cool places", loggedIn: req.session.loggedIn });
+      res.render('homepage', { posts, title: "Cool places to check out", loggedIn: req.session.loggedIn });
     })
     .catch(err => {
       console.log(err);
