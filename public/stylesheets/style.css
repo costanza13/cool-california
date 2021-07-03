@@ -368,10 +368,14 @@ article a {
   text-decoration: none;
 }
 
+.tag-list-item a:hover {
+  text-decoration: underline;
+}
+
 .tag-list-item-btn, .tag-input + label {
   background: #c0c0c0;
   box-shadow: grey 2px 2px 2px;
-  color: #24344D;
+  color: whitesmoke;
 }
 
 .tag-list-item-btn.selected, .tag-input:checked + label {
