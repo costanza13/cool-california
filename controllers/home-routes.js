@@ -1,82 +1,34 @@
 const router = require('express').Router();
-const sequelize = require('../config/connection');
 const { Op } = require('sequelize');
 const { Post, User, Comment, PostTag, UserTag, Tag, Vote } = require('../models');
 const { withAuth } = require('../utils/auth');
+const { getPostQueryAttributes, getPostQueryInclude, processPostsDbData } = require('../utils/query-utils');
 
-const POST_IMAGE_WIDTH = 400;
-
-const getPostQueryAttributes = function (session) {
-  // post attributes we want to see
-  const attributes = [
-    'id',
-    'title',
-    'description',
-    'image_url',
-    'latitude',
-    'longitude',
-    'map_url',
-    'created_at',
-    [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-    [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-    [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count'],
-  ];
-
-  // apply user-specific parameters
-  if (session.loggedIn) {
-    attributes.push(
-      [sequelize.literal('(SELECT `like` FROM vote WHERE vote.post_id = post.id AND vote.user_id = ' + session.user_id + ')'), 'vote']
-    )
-  }
-
-  return attributes;
-}
-
-const sortPosts = function (posts, orderBy) {
-  return posts;
+const sortPosts = function (posts, query) {
+  return posts;  // posts.sort((a, b) => (a.like_score > b.like_score) ? -1 : 1);
 }
 
 router.get('/', (req, res) => {
 
+  // if the user has never been to the site before, give 'em a welcome message
+  if (!req.session.loggedIn && !req.cookies.cc) {
+    return res.cookie('cc', 1, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true }).render('welcome');
+  }
+
   const attributes = getPostQueryAttributes(req.session);
+  const include = getPostQueryInclude();
 
   Post.findAll({
     attributes,
     order: [['created_at', 'DESC'], ['id', 'DESC']],
-    include: [
-      {
-        model: Tag,
-        attributes: [['id', 'tag_id'], 'tag_name'],
-        through: {
-          model: PostTag,
-          attributes: []
-        },
-      },
-      {
-        model: User,
-        attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-      },
-      {
-        model: Vote,
-        attributes: ['like']
-      }
-    ]
+    include
   })
     .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
-      posts.forEach(post => {
-        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        if (req.session.loggedIn) {
-          if (post.vote === 1) {
-            post.liked = true;
-          } else if (post.vote === 0) {
-            post.unliked = true;
-          }
-          post.can_vote = true;
-        }
-      });
+      let posts = processPostsDbData(dbPostData, req.session);
+      posts = sortPosts(posts, req.query);
+
       // console.log('home posts', posts);
-      res.render('homepage', { posts, title: "Awesome Places", loggedIn: req.session.loggedIn });
+      res.render('homepage', { posts, title: "Cool places", loggedIn: req.session.loggedIn });
     })
     .catch(err => {
       console.log(err);
@@ -87,6 +39,7 @@ router.get('/', (req, res) => {
 router.get('/user/:id', (req, res) => {
 
   const attributes = getPostQueryAttributes(req.session);
+  const include = getPostQueryInclude();
 
   Post.findAll({
     where: {
@@ -94,24 +47,7 @@ router.get('/user/:id', (req, res) => {
     },
     attributes,
     order: [['created_at', 'DESC'], ['id', 'DESC']],
-    include: [
-      {
-        model: Tag,
-        attributes: [['id', 'tag_id'], 'tag_name'],
-        through: {
-          model: PostTag,
-          attributes: []
-        },
-      },
-      {
-        model: User,
-        attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-      },
-      {
-        model: Vote,
-        attributes: ['like']
-      }
-    ]
+    include
   })
     .then(dbPostData => {
       User.findOne({
@@ -122,17 +58,10 @@ router.get('/user/:id', (req, res) => {
       })
         .then(dbUserData => {
           if (dbUserData) {
-            const posts = dbPostData.map(post => post.get({ plain: true }));
-            posts.forEach(post => {
-              post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-              if (post.votes[0] && post.votes[0].like) {
-                post.liked = true;
-              } else if (post.votes[0] && post.votes[0].like === false) {
-                post.unliked = true;
-              }
-            });
+            let posts = processPostsDbData(dbPostData, req.session);
+            posts = sortPosts(posts, req.query);
             const nickname = dbUserData.dataValues.nickname;
-            res.render('homepage', { posts, loggedIn: req.session.loggedIn, title: nickname + "'s Places", nextUrl: '/user/' + req.params.id });
+            res.render('homepage', { posts, loggedIn: req.session.loggedIn, title: nickname + "'s Places", nextUrl: '/user/' + req.params.id, no_results: `${nickname} hasn't posted anything.` });
           } else {
             res.render('error', { status: 404, message: 'User not found' });
           }
@@ -179,32 +108,17 @@ const findByTag = function (tagString, session) {
       })
 
       const attributes = getPostQueryAttributes(session);
-
+      const include = getPostQueryInclude();
       const postsQuery = {
         attributes,
         order: [['created_at', 'DESC'], ['id', 'DESC']],
-        include: [
-          {
-            model: Tag,
-            attributes: [['id', 'tag_id'], 'tag_name'],
-            through: {
-              model: PostTag,
-              attributes: []
-            }
-          },
-          {
-            model: User,
-            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-          },
-          {
-            model: Vote,
-            attributes: ['like']
-          }
-        ]
+        include
       };
 
       if (postIds.length) {
         postsQuery.where = { id: { [Op.in]: postIds } };
+      } else if (tagString.length) {
+        postsQuery.where = { id: 0 };
       }
 
       return Post.findAll(postsQuery);
@@ -213,22 +127,12 @@ const findByTag = function (tagString, session) {
 
 router.get('/tag/:tag_name', (req, res) => {
   findByTag(req.params.tag_name, req.session)
-    .then(dbTagPostData => {
-      let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
-
-      const orderBy = 'whatever';
+    .then(dbPostData => {
+      let posts = processPostsDbData(dbPostData, req.session);
       posts = sortPosts(posts, req.query);
 
-      posts.forEach(post => {
-        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        if (post.votes[0] && post.votes[0].like) {
-          post.liked = true;
-        } else if (post.votes[0] && post.votes[0].like === false) {
-          post.unliked = true;
-        }
-      });
-      const tag_string = req.params.tag_name.split(',').join(', ');
-      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/tag/' + req.params.id };
+      const tag_string = req.params.tag_name.split(',').map(tag => tag[0].toUpperCase() + tag.substring(1)).join(', ');
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, tag_string, nextUrl: '/tag/' + req.params.tag_name, no_results: `No places match ${tag_string}.` };
       // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
     })
@@ -257,23 +161,13 @@ router.get('/interests', (req, res) => {
       const byTags = dbUserTagData.tags.map(tag => tag.get({ plain: true }).tag_name).join(',');
       // const byTags = req.query.tags ? req.query.tags : '';
       findByTag(byTags, req.session)
-        .then(dbTagPostData => {
+        .then(dbPostData => {
           // console.log('MCCMCCMCC multi tag', dbTagPostData);
-          let posts = dbTagPostData.map(tag => tag.get({ plain: true }));
-
-          const orderBy = 'whatever';
+          let posts = processPostsDbData(dbPostData, req.session);
           posts = sortPosts(posts, req.query);
 
-          posts.forEach(post => {
-            post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-            if (post.votes[0] && post.votes[0].like) {
-              post.liked = true;
-            } else if (post.votes[0] && post.votes[0].like === false) {
-              post.unliked = true;
-            }
-          });
-          const tag_string = byTags ? byTags.split(',').join(', ') : 'any interest';
-          const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/tag/' + req.params.id };
+          const title = 'Places you might enjoy';
+          const homepageData = { posts, loggedIn: req.session.loggedIn, title, nextUrl: '/interests', no_results: `No places match your interests.` };
           // console.log('homepage data', homepageData);
           res.render('homepage', homepageData);
         })
@@ -296,6 +190,7 @@ const getVoted = function (type, session) {
       const postIds = votedPostIds.map(postVote => postVote.get({ plain: true }).post_id);
 
       const attributes = getPostQueryAttributes(session);
+      const include = getPostQueryInclude();
 
       return Post.findAll({
         where: {
@@ -303,24 +198,7 @@ const getVoted = function (type, session) {
         },
         attributes,
         order: [['created_at', 'DESC'], ['id', 'DESC']],
-        include: [
-          {
-            model: Tag,
-            attributes: [['id', 'tag_id'], 'tag_name'],
-            through: {
-              model: PostTag,
-              attributes: []
-            },
-          },
-          {
-            model: User,
-            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-          },
-          {
-            model: Vote,
-            attributes: [['id', 'vote_id'], 'like']
-          }
-        ]
+        include
       });
     });
 };
@@ -328,12 +206,9 @@ const getVoted = function (type, session) {
 router.get('/likes', withAuth, (req, res) => {
   getVoted('likes', req.session)
     .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
-      posts.forEach(post => {
-        post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-        post.liked = true;
-      });
-      const homepageData = { posts, loggedIn: req.session.loggedIn, title: 'Places you like', nextUrl: '/likes' + req.params.id };
+      let posts = processPostsDbData(dbPostData, req.session);
+      posts = sortPosts(posts, req.query);
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: 'Places you like', nextUrl: '/likes' + req.params.id, no_results: "You haven't liked any places yet." };
       // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
     })
@@ -354,46 +229,23 @@ router.get('/login', (req, res) => {
 router.get('/post/:id', (req, res) => {
 
   const attributes = getPostQueryAttributes(req.session);
+  const include = getPostQueryInclude();
+  include.push({
+    model: Comment,
+    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+    include: {
+      model: User,
+      attributes: ['nickname']
+    }
+  });
 
   Post.findOne({
-    where: {
-      id: req.params.id
-    },
+    where: { id: req.params.id },
     attributes,
-    include: [
-      {
-        model: Tag,
-        attributes: [['id', 'tag_id'], 'tag_name'],
-        through: {
-          model: PostTag,
-          attributes: []
-        },
-      },
-      {
-        model: User,
-        attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-      },
-      {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-        include: {
-          model: User,
-          attributes: ['nickname']
-        }
-      },
-      {
-        model: Vote,
-        attributes: ['like']
-      }
-    ]
+    include
   })
     .then(dbPostData => {
-      const post = dbPostData.get({ plain: true });
-      if (post.votes[0] && post.votes[0].like) {
-        post.liked = true;
-      } else if (post.votes[0] && post.votes[0].like === false) {
-        post.unliked = true;
-      }
+      const post = processPostsDbData([dbPostData], req.session)[0];
       post.loggedIn = req.session.loggedIn;
       // console.log(post);
       res.render('single-post', post);

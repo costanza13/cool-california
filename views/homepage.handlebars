@@ -1,20 +1,31 @@
 <div class="title-bar">
   {{#if title}}
-  <h1 id="homepage-header">{{title}}</h1>
+  <h2 id="homepage-header">{{title}}</h2>
   {{/if}}
   {{#if loggedIn}}
   <div class="filter-control">
     <select name="filter" class="filter-select">
-      <option value="all-posts">Show Everything</option>
+      <option value="all-posts">Everything</option>
       <option value="user-tags">Your Interests</option>
       <option value="user-likes">Your Likes</option>
+      {{#if tag_string}}<option value="all-posts" selected="selected">{{tag_string}} spots</option>{{/if}}
     </select>
   </div>
   {{/if}}
 </div>
+{{#if posts.length}}
+<div id="sort-controls">
+  Sort:
+  <a href="?order=recent">newest</a> |
+  <a href="?order=likes">most liked</a> |
+  <a href="?order=comments">most discussed</a>
+</div>
 {{#each posts as |post|}}
 {{> post-card post}}
 {{/each}}
+{{else}}
+<p class="no-results">{{no_results}}</p>
+{{/if}}
 <script src="/javascript/vote.js"></script>
 {{#if loggedIn}}
 <script src="/javascript/filter.js"></script>

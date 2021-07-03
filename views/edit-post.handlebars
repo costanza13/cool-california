@@ -1,15 +1,15 @@
-<article class="post">
-  <p><a href="/dashboard"> &larr; Back to dashboard</a></p>
-  <div style="margin-bottom:1rem">
-    <h2>{{#if post.id}}Edit{{else}}New{{/if}} Post</h2>
-  </div>
+<a href="/dashboard"> &larr; Back to dashboard</a>
+<div style="margin:1rem 0">
+  <h2>{{#if post.id}}Edit Your{{else}}Create A New{{/if}} Post</h2>
+</div>
 
+<article class="edit-post">
   <form id="edit-form">
     <input type="hidden" name="id" value="{{#if post.id}}{{post.id}}{{/if}}" />
     <input type="hidden" name="tag-ids" value="" />
     <div>
       <label for="title">Title:</label><br>
-      <input id="post-input" type="text" name="title" {{#if post.id}} value="{{post.title}}" {{/if}}
+      <input class="post-input" type="text" name="title" {{#if post.id}} value="{{post.title}}" {{/if}}
         placeholder="Post Title" />
     </div>
     <div>
@@ -18,18 +18,23 @@
         placeholder="Post content...">{{#if post.description}}{{post.description}}{{/if}}</textarea>
     </div>
     <div>
-      <label for="image_url">Upload A Photo:</label><br>
-      <input id="post-input" type="text" name="image_url" {{#if post.id}} value="{{post.image_url}}" {{/if}}
-        placeholder="Upload a photo" readonly="readonly" />
+      <label for="image-url">Photo:</label><br>
+      <div id="image-url-wrap">
+        <input class="post-input" type="text" name="image-url" {{#if post.id}} value="{{post.image_url}}" {{/if}}
+          placeholder="Photo URL" />&nbsp;or&nbsp;<button id="upload-image">upload photo</button>
+      </div>
     </div>
     <div>
-      <label for="latitude">Location:</label><br>
-      <input id="post-input" type="text" name="latitude" {{#if post.id}} value="{{post.latitude}}" {{/if}}
-        placeholder="latitude" />
-      <input id="post-input" type="text" name="longitude" {{#if post.id}} value="{{post.longitude}}" {{/if}}
-        placeholder="longitude" />
+      <label>Location:</label><br>
+      <div id="coordinates-wrap">
+        <input class="post-input" type="text" name="latitude" {{#if post.id}} value="{{post.latitude}}" {{/if}}
+          placeholder="latitude" />
+        <input class="post-input" type="text" name="longitude" {{#if post.id}} value="{{post.longitude}}" {{/if}}
+          placeholder="longitude" />
+      </div>
     </div>
     <div id="tag-section">
+      <label>Great for:</label>
       <ul class="tag-list tag-inputs">
         {{#each tags}}
         <li class="tag-list-item">
@@ -40,17 +45,12 @@
         {{/each}}
       </ul>
     </div>
-    <div>
-      {{#if post.id}}
-      by you on {{format_date post.created_at}}
-      |
-      <a href="/post/{{post.id}}">{{post.comments.length}} {{format_plural 'comment' post.comments.length}}</a>
-      {{/if}}
-    </div>
-    <div>
-      <br>
-      <button class="save-btn" type="submit">Save post</button>
-      {{#if post.id}}<button type="button" class="delete-post-btn delete-btn">Delete post</button>{{/if}}
+    <div class="post-toolbar">
+      <div>
+        <button class="btn save-btn" type="submit">save post</button>
+        {{#if post.id}}<button type="button" id="delete-post-btn" class="btn delete-btn">delete post</button>{{/if}}
+      </div>
+      {{#if post.id}}<div>created by you on {{format_date post.created_at}}</div>{{/if}}
     </div>
   </form>
 </article>

@@ -2,42 +2,75 @@
   <div class="title-bar">
     <h2>Your Dashboard</h2>
     <nav class="subnav">
-      <a class="dash-link italic-h" href="/dashboard">View Posts</a> |
-      <a class="dash-link italic-h" href="/dashboard/likes">View Likes</a> |
-      <a class="dash-link italic-h" href="/dashboard/dislikes">View Dislikes</a>
+      <a class="dash-link" href="/dashboard#your-posts">View Posts</a> |
+      <a class="dash-link" href="/dashboard/likes">View Likes</a> |
+      <a class="dash-link" href="/dashboard/dislikes">View Dislikes</a>
     </nav>
   </div>
 
-  <div class="welcome-msg">
-    <h4>Hi {{user.nickname}}!</h4>
-    <p>
-      Welcome to your account dashboard!
-      <br><br>
-      Here you can manage your existing posts, add a new one, or
-      view posts you've liked or disliked.
-    </p>
+  <div class="dashboard-section">
+    <div class="profile">
+      <div>
+        <h4>Hi {{user.nickname}}!</h4>
+        <p>
+          Welcome to your account dashboard!
+          <br><br>
+          Here you can manage your existing posts, add a new one, or
+          view posts you've liked or disliked.
+        </p>
+      </div>
+      <div class="profile-separator">&nbsp;</div>
+      <div class="profile-card">
+        <p style="margin:0;padding:0;text-align:center;">Your Account Info</p>
+        <form class="update-form">
+          <div>
+            <input type="text" id="username-update" autocomplete="username" placeholder="username"
+              value="{{user.username}}" />
+          </div>
+          <div>
+            <input type="text" id="email-update" autocomplete="email" placeholder="email" value="{{user.email}}" />
+          </div>
+          <div>
+            <input type="text" id="nickname-update" autocomplete="name" placeholder="nickname"
+              value="{{user.nickname}}" />
+          </div>
+          <div>
+            <input type="password" id="password-update" autocomplete="new-password" placeholder="new password" />
+          </div>
+          <div>
+            <button id="update-btn" type="submit">update</button>
+          </div>
+          <div id="update-message">
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <div class="user-tags">
+  <div class="dashboard-section">
     <h3>Your Interests</h3>
-    <p style="padding-bottom:0;text-align:center;">Select some tags to help find places you might like&hellip;</p>
-    <ul class="tag-list">
-      {{#each other_tags as |tag|}}
-      <li class="tag-list-item">
-        <input id="tag-{{tag.tag_id}}-btn" class="tag-input hidden" type="checkbox" value="{{tag.tag_id}}" {{#if
-          tag.selected}} checked="checked" {{/if}} />
-        <label for="tag-{{tag.tag_id}}-btn">{{tag.tag_name}}</label>
-      </li>
-      {{/each}}
-    </ul>
+    <div style="padding:0;text-align:center;">
+      Select some tags to help find places you might like&hellip;
+      <ul class="user-tags tag-list">
+        {{#each other_tags as |tag|}}
+        <li class="tag-list-item">
+          <input id="tag-{{tag.tag_id}}-btn" class="tag-input hidden" type="checkbox" value="{{tag.tag_id}}" {{#if
+            tag.selected}} checked="checked" {{/if}} />
+          <label for="tag-{{tag.tag_id}}-btn">{{tag.tag_name}}</label>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
   </div>
 </section>
 
-<section id="your-posts">
-  <div class="post-toolbar">
-    <h3 id="your-posts-title">Your Posts ({{posts.length}})</h3>
-    <a id="add-post-btn" class="italic-h" href="/dashboard/create"><i class="far fa-plus-square"></i> Add a new post</a>
-  </div>
+<section id="your-posts" class="dashboard-section">
+  <h3>Your Posts ({{posts.length}})<div class="post-toolbar">
+      <span class="add-post-btn"><i class="fas fa-plus"></i> <a href="/dashboard/create">Add a new
+        post</a></span>
+    </div>
+  </h3>
+
   {{#if posts.length}}
   <ul class="post-list">
     {{#each posts as |post|}}
@@ -50,5 +83,5 @@
   <p style="text-align:center">You haven't shared any amazing destinations yet.</p>
   {{/if}}
 </section>
-<script src="/javascript/user-tags.js"></script>
 <script src="/javascript/vote.js"></script>
+<script src="/javascript/dashboard.js"></script>

@@ -40,8 +40,8 @@ async function voteHandler(event) {
   if (response.ok) {
     response.json().then(voteData => {
       console.log('success: ', voteData);
-      likeControlsEl.querySelector('.like-count').textContent = voteData.likes;
-      likeControlsEl.querySelector('.dislike-count').textContent = voteData.dislikes;
+      likeControlsEl.querySelector('.vote-input.like + label .like-count').textContent = voteData.likes;
+      likeControlsEl.querySelector('.vote-input.dislike + label .like-count').textContent = voteData.dislikes;
       switch (voteData.vote) {
         case 'like':
           dislikeButton.checked = false;

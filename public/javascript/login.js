@@ -1,3 +1,12 @@
+const flashMessage = function(messageEl, messageContent) {
+  messageEl.innerHTML = messageContent;
+  messageEl.classList.remove('hidden');
+  setTimeout(function() {
+    messageEl.classList.add('hidden')
+    messageEl.innerHTML = '';
+  }, 3000)
+}
+
 async function signupFormHandler(event) {
   event.preventDefault();
 
@@ -22,9 +31,9 @@ async function signupFormHandler(event) {
       document.location.replace(nextUrl);
     } else {
       const error = await response.json();
-      const errorText = document.querySelector('#sign-up-error');
-      errorText.innerText = error.message;
-      errorText.setAttribute("style", "display: block !important");
+      const messageEl = document.querySelector('#sign-up-error');
+      const messageContent = '<span style="color:red">' + error.message + '</span>';
+      flashMessage(messageEl, messageContent);
     }
   }
 }
@@ -50,9 +59,9 @@ async function loginFormHandler(event) {
       setTimeout(() => { document.location.replace(nextUrl); }, 1);
     } else {
       const error = await response.json();
-      const errorText = document.querySelector('#login-error');
-      errorText.innerText = error.message;
-      errorText.setAttribute("style", "display: block !important");
+      const messageEl = document.querySelector('#login-error');
+      const messageContent = '<span style="color:red">' + error.message + '</span>';
+      flashMessage(messageEl, messageContent);
     }
   }
 }
