@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -68,12 +68,12 @@ router.get('/user/:id', (req, res) => {
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json(err);
+          res.render('error', { status: 500, message: 'Internal Server Error' });
         });
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -138,7 +138,7 @@ router.get('/tag/:tag_name', (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -173,7 +173,7 @@ router.get('/interests', (req, res) => {
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json(err);
+          res.render('error', { status: 500, message: 'Internal Server Error' });
         });
     });
 });
@@ -214,7 +214,7 @@ router.get('/likes', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -255,7 +255,7 @@ router.get('/post/:id', (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 

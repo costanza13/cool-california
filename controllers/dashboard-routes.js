@@ -78,7 +78,7 @@ router.get('/', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -119,7 +119,7 @@ router.get('/likes', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -136,7 +136,7 @@ router.get('/dislikes', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -203,7 +203,7 @@ router.get('/edit/:id', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
