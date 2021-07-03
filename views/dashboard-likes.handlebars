@@ -2,8 +2,7 @@
   {{> dashboard-titlebar}}
   {{#if posts.length}}
   <div id="your-voted-posts" class="dashboard-section">
-    <h3 id="your-posts-title">Your {{tab}} Places</h3>
-    <p>You've {{tab}} {{posts.length}} {{format_plural 'place' posts.length}}.</p>
+    <h3 id="your-posts-title">Your {{tab}} Places ({{posts.length}})</h3>
     <ul class="post-list">
       {{#each posts as |post|}}
       {{> post-card post}}

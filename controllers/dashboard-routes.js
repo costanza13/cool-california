@@ -3,6 +3,7 @@ const sequelize = require('../config/connection');
 const { Op } = require('sequelize');
 const { Post, User, Comment, Tag, PostTag, Vote, UserTag } = require('../models');
 const { withAuth } = require('../utils/auth');
+const { getPostQueryAttributes, getPostQueryInclude, processPostsDbData, sortPosts } = require('../utils/query-utils');
 
 const POST_IMAGE_WIDTH = 400;
 
@@ -32,54 +33,23 @@ router.get('/', withAuth, (req, res) => {
   })
     .then(dbUserData => {
       const user = dbUserData.get({ plain: true });
+
+      const attributes = getPostQueryAttributes(req.session);
+      const include = getPostQueryInclude();
+
       return Post.findAll({
         where: {
           user_id: req.session.user_id
         },
-        attributes: [
-          'id',
-          'title',
-          'description',
-          'image_url',
-          'latitude',
-          'longitude',
-          'map_url',
-          'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-        ],
+        attributes,
         order: [['created_at', 'DESC'], ['id', 'DESC']],
-        include: [
-          {
-            model: Tag,
-            attributes: [['id', 'tag_id'], 'tag_name'],
-            through: {
-              model: PostTag,
-              attributes: []
-            },
-          },
-          {
-            model: User,
-            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-          },
-          {
-            model: Vote,
-            attributes: [['id', 'vote_id'], 'like']
-          }
-        ]
+        include
       })
         .then(dbPostData => {
-          const posts = dbPostData.map(post => post.get({ plain: true }));
-          posts.forEach(post => {
-            post.image_url_sized = post.image_url ? post.image_url.replace('upload/', 'upload/' + `c_scale,w_${POST_IMAGE_WIDTH}/`) : '';
-            if (post.votes[0] && post.votes[0].like) {
-              post.liked = true;
-            } else if (post.votes[0] && post.votes[0].like === false) {
-              post.disliked = true;
-            }
-            post.allowEdit = true;
-          });
+          let posts = processPostsDbData(dbPostData, req.session);
+          posts = sortPosts(posts, req.query);
+
+          posts.forEach(post => { post.allowEdit = true; });
           return { user, posts };
         });
     })
@@ -108,7 +78,7 @@ router.get('/', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -122,42 +92,17 @@ const getVoted = function (req, type) {
   })
     .then(votedPostIds => {
       const postIds = votedPostIds.map(postVote => postVote.get({ plain: true }).post_id);
+
+      const attributes = getPostQueryAttributes(req.session);
+      const include = getPostQueryInclude();
+
       return Post.findAll({
         where: {
           id: { [Op.in]: postIds }
         },
-        attributes: [
-          'id',
-          'title',
-          'description',
-          'image_url',
-          'latitude',
-          'longitude',
-          'map_url',
-          'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-          [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-        ],
+        attributes,
         order: [['created_at', 'DESC'], ['id', 'DESC']],
-        include: [
-          {
-            model: Tag,
-            attributes: [['id', 'tag_id'], 'tag_name'],
-            through: {
-              model: PostTag,
-              attributes: []
-            },
-          },
-          {
-            model: User,
-            attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-          },
-          {
-            model: Vote,
-            attributes: [['id', 'vote_id'], 'like']
-          }
-        ]
+        include
       });
     });
 };
@@ -174,7 +119,7 @@ router.get('/likes', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -191,7 +136,7 @@ router.get('/dislikes', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 
@@ -216,49 +161,31 @@ router.get('/create', withAuth, (req, res) => {
 });
 
 router.get('/edit/:id', withAuth, (req, res) => {
+  const attributes = getPostQueryAttributes(req.session);
+  const include = getPostQueryInclude();
+  include.push({
+    model: Comment,
+    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+    include: {
+      model: User,
+      attributes: ['nickname']
+    }
+  });
+
   Post.findOne({
     where: {
       id: req.params.id,
       user_id: req.session.user_id
     },
-    attributes: [
-      'id',
-      'title',
-      'description',
-      'image_url',
-      'latitude',
-      'longitude',
-      'map_url',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND `like`)'), 'likes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id AND NOT `like`)'), 'dislikes'],
-      [sequelize.literal('(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id)'), 'comment_count']
-    ],
-    include: [
-      {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-        include: {
-          model: User,
-          attributes: ['nickname']
-        }
-      },
-      {
-        model: Tag,
-        attributes: [['id', 'tag_id'], 'tag_name'],
-        through: {
-          model: PostTag,
-          attributes: []
-        },
-      },
-      {
-        model: User,
-        attributes: ['nickname']
-      }
-    ]
+    attributes,
+    include
   })
     .then(dbPostData => {
-      const post = dbPostData.get({ plain: true });
+      if (!dbPostData) {
+        return res.render('error', { status: 404, message: 'Post not found' });
+      }
+      const post = processPostsDbData([dbPostData], req.session)[0];
+
       // get all available tags
       Tag.findAll({
         attributes: ['id', 'tag_name']
@@ -276,7 +203,7 @@ router.get('/edit/:id', withAuth, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      res.render('error', { status: 500, message: 'Internal Server Error' });
     });
 });
 

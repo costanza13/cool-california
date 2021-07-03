@@ -42,10 +42,6 @@ const getPostQueryInclude = function () {
     {
       model: User,
       attributes: [['id', 'post_author_id'], ['nickname', 'post_author']]
-    },
-    {
-      model: Vote,
-      attributes: ['like']
     }
   ]
 }

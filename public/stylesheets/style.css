@@ -2,19 +2,25 @@
   --bg-color-primary-start: #d4af37;
   --bg-color-primary-end: #c0c0c0;
   --bg-primary: -webkit-linear-gradient(var(--bg-color-primary-start), var(--bg-color-primary-end));
-  --main-link-color: #d4af37;
-  --default-button-background-color: #191d05;
   --bg-color-secondary-start: #3e567c;
   --bg-color-secondary-end: #a7bbcb;
+  --bg-secondary: -webkit-linear-gradient(var(--bg-color-secondary-start), var(--bg-color-secondary-end));
+  --bg-toolbar: -webkit-linear-gradient(#D4AF37, #e9ce77);
+  --link-color-primary: #d4af37;
+  --default-button-background-color: #191d05;
   --border-radius-controls: 0.3rem;
-  --border-radius-blocks: 0.5rem;
-  --like-color: #24344D;
-  --dislike-color: #905923;
+  --border-radius-blocks: 0.4rem;
   --base-font-size-desktop: 18px;
   --base-font-size-mobile: 16px;
+  --like-color: #24344D;
+  --dislike-color: #905923;
 }
-  /* --like-color: #a0d86c; */
-  /* --dislike-color: #f38782; */
+/* --bg-primary: #fff; */
+/* --bg-secondary: rgb(157, 165, 134); */
+/* --bg-toolbar: rgb(157, 165, 134); */
+/* --link-color-primary: #fcff3d; */
+/* --like-color: #a0d86c; */
+/* --dislike-color: #f38782; */
 
 * {
   box-sizing: border-box;
@@ -48,6 +54,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.v-spacer {
+  height: 1rem;
+}
+
 p {
   line-height: 1.5;
   margin: 0.5rem 0;
@@ -65,7 +75,7 @@ p.small {
 }
 
 p.small > a {
-  color: var(--main-link-color);
+  color: var(--link-color-primary);
   font-size: 100%;
 }
 
@@ -74,7 +84,7 @@ button, .btn {
   border: none;
   border-radius: var(--border-radius-controls);
   box-shadow: grey 2px 2px 2px;
-  color: var(--main-link-color);
+  color: var(--link-color-primary);
   cursor: pointer;
   display: inline-block;
   font-size: 100%;
@@ -135,7 +145,7 @@ header {
 
 #splash > button {
   background-color: var(--default-button-background-color);
-  color: var(--main-link-color);
+  color: var(--link-color-primary);
 }
 
 nav {
@@ -207,7 +217,7 @@ section>div {
 
 .title-bar, .dashboard-section h3 {
   align-items: center;
-  background: -webkit-linear-gradient(#D4AF37, #e9ce77);
+  background: var(--bg-toolbar);
   border-radius: var(--border-radius-blocks);
   display: flex;
   flex-direction: column;
@@ -250,7 +260,7 @@ div.sort-controls a {
 }
 
 article, .comments {
-  background: -webkit-linear-gradient(var(--bg-color-secondary-start), var(--bg-color-secondary-end));
+  background: var(--bg-secondary);
   border-radius: var(--border-radius-blocks);
   padding: 1rem;
   margin: 0 0 1rem;
@@ -262,7 +272,7 @@ article.edit-post {
 }
 
 article a {
-  color: var(--main-link-color);
+  color: var(--link-color-primary);
 }
 
 .spd1 {
@@ -299,7 +309,7 @@ article a {
 
 .spd2 a,
 .post a {
-  color: var(--main-link-color);
+  color: var(--link-color-primary);
 }
 
 .place-image {
@@ -315,7 +325,7 @@ article a {
 }
 
 .post-title {
-  color: var(--main-link-color);
+  color: var(--link-color-primary);
   margin: 0 0 1rem;
 }
 
@@ -387,7 +397,7 @@ article a {
 .tag-list-item-btn.selected, .tag-input:checked + label {
   background: var(--default-button-background-color);
   box-shadow: none;
-  color: var(--main-link-color)
+  color: var(--link-color-primary)
 }
 
 .tag-input + label::before {
