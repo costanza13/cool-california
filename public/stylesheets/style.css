@@ -658,13 +658,23 @@ footer p .logo {
 
 /* dashboard-specific styles */
 .dashboard-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 0.5rem;
 }
 
 .profile {
+  background-color: whitesmoke;
+  border-radius: var(--border-radius-blocks);
   display: flex;
-  flex-wrap: wrap;
+  padding: 1rem;
+  flex-direction: column;
+}
+
+.profile-separator {
+  background-color: gray;
+  height: 1px;
+  width: auto;
+  margin: 1rem;
 }
 
 .profile-card {
@@ -673,7 +683,6 @@ footer p .logo {
   display: block;
   font-size: 90%;
   margin: 0 auto;
-  padding: 0.5rem;
   width: fit-content;
 }
 
@@ -685,7 +694,7 @@ footer p .logo {
   font-size: 100%;
   margin: 0.7rem 0 0;
   padding: 0.5rem;
-  width: 14rem;
+  width: 100%;
 }
 
 .subnav {
@@ -798,7 +807,20 @@ footer p .logo {
   }
 
   .profile {
-    flex-wrap: nowrap;
+    flex-direction: row;
+  }
+
+  .profile-separator {
+    height: auto;
+    width: 1px;
+  }
+  
+  .profile-card {
+    width: fit-content;
+  }
+
+  .profile-card .update-form input {
+    width: 12rem;
   }
   
   #edit-form .post-toolbar {
