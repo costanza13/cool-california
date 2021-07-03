@@ -200,7 +200,7 @@ section>div {
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 0.5rem;
   margin: 1rem 0 2rem;
   text-align: center;
   width: 100%;

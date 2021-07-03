@@ -5,9 +5,10 @@
   {{#if loggedIn}}
   <div class="filter-control">
     <select name="filter" class="filter-select">
-      <option value="all-posts">Show Everything</option>
+      <option value="all-posts">Everything</option>
       <option value="user-tags">Your Interests</option>
       <option value="user-likes">Your Likes</option>
+      {{#if tag_string}}<option value="all-posts" selected="selected">{{tag_string}} spots</option>{{/if}}
     </select>
   </div>
   {{/if}}

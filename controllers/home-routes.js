@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
       posts = sortPosts(posts, req.query);
 
       // console.log('home posts', posts);
-      res.render('homepage', { posts, title: "Awesome Places", loggedIn: req.session.loggedIn });
+      res.render('homepage', { posts, title: "Cool places", loggedIn: req.session.loggedIn });
     })
     .catch(err => {
       console.log(err);
@@ -131,8 +131,8 @@ router.get('/tag/:tag_name', (req, res) => {
       let posts = processPostsDbData(dbPostData, req.session);
       posts = sortPosts(posts, req.query);
 
-      const tag_string = req.params.tag_name.split(',').join(', ');
-      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/tag/' + req.params.tag_name, no_results: `No places match ${tag_string}.` };
+      const tag_string = req.params.tag_name.split(',').map(tag => tag[0].toUpperCase() + tag.substring(1)).join(', ');
+      const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, tag_string, nextUrl: '/tag/' + req.params.tag_name, no_results: `No places match ${tag_string}.` };
       // console.log('homepage data', homepageData);
       res.render('homepage', homepageData);
     })
@@ -166,8 +166,8 @@ router.get('/interests', (req, res) => {
           let posts = processPostsDbData(dbPostData, req.session);
           posts = sortPosts(posts, req.query);
 
-          const tag_string = byTags ? byTags.split(',').join(', ') : 'any interest';
-          const homepageData = { posts, loggedIn: req.session.loggedIn, title: "Places for " + tag_string, nextUrl: '/interests', no_results: `No places match your interests.` };
+          const title = 'Places you might enjoy';
+          const homepageData = { posts, loggedIn: req.session.loggedIn, title, nextUrl: '/interests', no_results: `No places match your interests.` };
           // console.log('homepage data', homepageData);
           res.render('homepage', homepageData);
         })
