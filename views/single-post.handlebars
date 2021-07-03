@@ -3,7 +3,7 @@
     <a id="titttle" href="/post/{{id}}"><h1 class="post-title">{{title}}</h1></a>
     <img class="place-image" src="{{image_url}}" />
     <div class="post-byline">
-      Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a>
+      Posted by <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a>
       on {{format_date created_at}}
     </div>
   </div>
@@ -16,7 +16,7 @@
     <p>{{description}}</p>
     {{> tags this}}
     <div class="social-bar">
-      <div><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural 'comment' comment_count}}</a></div>
+      <div><a id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural 'comment' comment_count}}</a></div>
       {{> like-controls this}}
     </div>
   </div>

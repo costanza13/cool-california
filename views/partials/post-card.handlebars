@@ -5,7 +5,7 @@
     <img class="place-image small" src="{{image_url}}" />
     {{/if}}
     <div class="post-byline">
-      Posted by <a class="italic-h" href="/user/{{user.post_author_id}}">{{user.post_author}}</a>
+      Posted by <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a>
       on {{format_date created_at}}
     </div>
   </div>
@@ -13,7 +13,7 @@
     <p>{{description}}</p>
     {{> tags this}}
     <div class="social-bar">
-      <p><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></p>
+      <p><a id="comment-count" href="/post/{{id}}">{{comment_count}} comments</a></p>
       {{> like-controls this}}
     </div>
   </div>

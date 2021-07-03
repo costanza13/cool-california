@@ -2,9 +2,9 @@
   <div class="title-bar">
     <h2>Your Dashboard</h2>
     <nav class="subnav">
-      <a class="dash-link italic-h" href="/dashboard#your-posts">View Posts</a> |
-      <a class="dash-link italic-h" href="/dashboard/likes">View Likes</a> |
-      <a class="dash-link italic-h" href="/dashboard/dislikes">View Dislikes</a>
+      <a class="dash-link" href="/dashboard#your-posts">View Posts</a> |
+      <a class="dash-link" href="/dashboard/likes">View Likes</a> |
+      <a class="dash-link" href="/dashboard/dislikes">View Dislikes</a>
     </nav>
   </div>
 
@@ -65,8 +65,8 @@
 
 <section id="your-posts" class="dashboard-section">
   <h3>Your Posts ({{posts.length}})<div class="post-toolbar">
-      <a id="add-post-btn" class="italic-h" href="/dashboard/create"><i class="far fa-plus-square"></i> Add a new
-        post</a>
+      <span class="add-post-btn"><i class="fas fa-plus"></i> <a href="/dashboard/create">Add a new
+        post</a></span>
     </div>
   </h3>
 

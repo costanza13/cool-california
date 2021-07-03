@@ -604,22 +604,24 @@ textarea {
   margin: 0 0.4rem 0 0;
 }
 
-#add-post-btn,
-#edit-post-btn {
+.add-post-btn > i, .add-post-btn > a,
+.edit-post-btn > i, .edit-post-btn > a {
   background: -webkit-linear-gradient(#24344D, #8CA0B1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
-  font-size: 80%;
-}
-
-#edit-post-btn {
   font-size: 110%;
 }
 
-#add-post-btn:hover,
-#edit-post-btn:hover {
+.edit-post-btn > i, .edit-post-btn > a {
+  font-size: 100%;
+}
+
+.add-post-btn:hover a, .add-post-btn:hover i,
+.edit-post-btn:hover a, .edit-post-btn:hover i {
   font-weight: bolder;
+  -webkit-text-fill-color: whitesmoke;
+  -webkit-background-clip: none;
 }
 
 footer {

@@ -1,23 +1,26 @@
 <div class="post-toolbar">
   <span>Posted {{format_date created_at}}</span>
   {{#if allowEdit}}
-  <span><a id="edit-post-btn" class="italic-h" href="/dashboard/edit/{{id}}"><i class="far fa-edit"></i> Edit</a></span>
+  <span class="edit-post-btn"><i class="far fa-edit"></i> <a href="/dashboard/edit/{{id}}">
+      Edit</a></span>
   {{/if}}
 </div>
 <article class="post">
   <div class="spd1">
-    <a id="titttle" href="/post/{{id}}"><h1 class="post-title">{{title}}</h1></a>
+    <a id="titttle" href="/post/{{id}}">
+      <h1 class="post-title">{{title}}</h1>
+    </a>
     <div class="dashboard-image-wrap">
       {{#if image_url}}
       <img class="place-image" src="{{image_url}}" title="{{image_url}}" />
-        {{else}}
-        <img class="embedded-map" src="/images/no-post-image.png" /></a>
+      {{else}}
+      <img class="embedded-map" src="/images/no-post-image.png" /></a>
       {{/if}}
       {{#if map_url}}
       <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank">
         <img class="embedded-map" src="{{map_url}}" /></a>
-        {{else}}
-        <img class="embedded-map" src="/images/no-map-image.png" /></a>
+      {{else}}
+      <img class="embedded-map" src="/images/no-map-image.png" /></a>
       {{/if}}
     </div>
   </div>
@@ -28,7 +31,7 @@
     {{> tags this}}
   </div>
   <div class="social-bar">
-    <p><a class="italic-h" id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural "comment"
+    <p><a id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural "comment"
         comment_count}}</a></p>
     {{> like-controls this}}
   </div>
