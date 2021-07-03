@@ -353,7 +353,6 @@ article a {
 }
 
 .tag-list-item-btn, .tag-input + label {
-  border: 2px solid rgb(212, 175, 55);
   border-radius: var(--border-radius-controls);
   box-shadow: none;
   color:rgb(212, 175, 55);
@@ -376,7 +375,7 @@ article a {
 }
 
 .tag-list-item-btn.selected, .tag-input:checked + label {
-  background: #111111;
+  background: var(--default-button-background-color);
   box-shadow: none;
   color: var(--main-link-color)
 }
@@ -406,6 +405,7 @@ div.social-bar p {
   margin: 0 0 1;
   padding: 0;
 }
+
 #comment-count {
   color: black;
 }
