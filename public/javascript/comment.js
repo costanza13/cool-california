@@ -16,7 +16,8 @@ async function commentFormHandler(event) {
     });
 
     if (response.ok) {
-      document.location.reload();
+      // added 1-second delay, because immediate redirect creates race condition
+      setTimeout(() => { document.location.reload(); }, 1);      
     } else {
       alert(response.statusText);
     }

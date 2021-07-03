@@ -245,6 +245,9 @@ router.get('/post/:id', (req, res) => {
     include
   })
     .then(dbPostData => {
+      if (!dbPostData) {
+        return res.render('error', { status: 404, message: 'Post not found' });
+      }
       const post = processPostsDbData([dbPostData], req.session)[0];
       post.loggedIn = req.session.loggedIn;
       // console.log(post);
