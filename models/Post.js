@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
-const GoogleMapsAPI = require('googlemaps');
+const GoogleMapsUrl = require('../utils/googlemaps');
 
 class Post extends Model {
   // like or dislike a post
@@ -137,49 +137,16 @@ Post.init(
       // set up beforeCreate lifecycle "hook" functionality
       async beforeCreate(newPostData) {
         // embedded map
-        let map_url = false;
         if (newPostData.latitude && newPostData.longitude) {
-          const publicConfig = {
-            key: process.env.GOOGLE_MAPS_API_KEY,
-            stagger_time: 1000, // for elevationPath
-            encode_polylines: false,
-            secure: true, // use https
-          };
-          const gmAPI = new GoogleMapsAPI(publicConfig);
-          const params = {
-            center: newPostData.latitude + ',' + newPostData.longitude,
-            zoom: 13,
-            size: '300x300',
-            maptype: 'roadmap',
-            markers: [{ location: newPostData.latitude + ',' + newPostData.longitude }],
-            style: [{ feature: 'road', element: 'all' }]
-          };
-          newPostData.map_url = gmAPI.staticMap(params); // return static map URL
+          newPostData.map_url = GoogleMapsUrl(newPostData.latitude, newPostData.longitude);
         }
         return newPostData;
       },
 
       // set up beforeCreate lifecycle "hook" functionality
       async beforeUpdate(editPostData) {
-        // embedded map
-        let map_url = false;
         if (editPostData.latitude && editPostData.longitude) {
-          const publicConfig = {
-            key: process.env.GOOGLE_MAPS_API_KEY,
-            stagger_time: 1000, // for elevationPath
-            encode_polylines: false,
-            secure: true, // use https
-          };
-          const gmAPI = new GoogleMapsAPI(publicConfig);
-          const params = {
-            center: editPostData.latitude + ',' + editPostData.longitude,
-            zoom: 13,
-            size: '300x300',
-            maptype: 'roadmap',
-            markers: [{ location: editPostData.latitude + ',' + editPostData.longitude }],
-            style: [{ feature: 'road', element: 'all' }]
-          };
-          newPostData.map_url = gmAPI.staticMap(params); // return static map URL
+          editPostData.map_url = GoogleMapsUrl(editPostData.latitude, editPostData.longitude);
         }
         return editPostData;
       },

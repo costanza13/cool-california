@@ -52,8 +52,6 @@ package/connect-session-sequelize
 
 * express-session https://www.npmjs.com/package/express-session
 
-* googlemaps https://www.npmjs.com/package/google-maps 
-
 * handlebars https://www.npmjs.com/package/handlebars
 
 * mysql2 https://www.npmjs.com/package/mysql2 
