@@ -72,7 +72,17 @@ const processPostsDbData = function (postsData, session) {
 };
 
 const sortPosts = function (posts, query) {
-  return posts;
+  if (query.order) {
+    switch (query.order) {
+      case 'likes':
+        return posts.sort((a, b) => (a.like_score > b.like_score) ? -1 : 1);
+      case 'comments':
+        return posts.sort((a, b) => (a.comment_count > b.comment_count) ? -1 : 1);
+      default:
+        return posts;  // default sort - by created_at timestamp, descending
+    }
+  }
+  return posts;  // default sort - by created_at timestamp, descending
 }
 
 module.exports = { getPostQueryAttributes, getPostQueryInclude, processPostsDbData, sortPosts };
