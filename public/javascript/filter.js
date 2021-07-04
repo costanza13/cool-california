@@ -16,10 +16,12 @@ async function filterHandler(event) {
   document.location.replace(nextUrl);
 };
 
-if (document.location.href.indexOf('/interests') > -1) {
+if (document.location.pathname.indexOf('/interests') === 0) {
   filterSelectEl.value = 'user-tags';
-} else if (document.location.href.indexOf('/likes') > -1) {
+} else if (document.location.pathname.indexOf('/likes') === 0) {
   filterSelectEl.value = 'user-likes';
+} else if (document.location.pathname === '/') {
+  filterSelectEl.value = 'all-posts';
 }
 
 filterSelectEl.addEventListener('change', filterHandler);
