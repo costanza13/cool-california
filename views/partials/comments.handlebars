@@ -1,9 +1,9 @@
 <section id="comments" class="comments">
   <h3>Comments</h3>
   <div>
-    {{#if comments.length}}
+    {{#if post.comments.length}}
     <ul>
-      {{#each comments}}
+      {{#each post.comments}}
       <li class="comment">
         <div id="pre-comment">
           <div id="comment-user">{{user.nickname}} </div>
@@ -16,7 +16,7 @@
       {{/each}}
     </ul>
     {{/if}}
-    {{#if loggedIn}}
+    {{#if this.loggedIn}}
     <form class="comment-form">
       <div>
         <textarea id="text-input" name="comment-body" placeholder="Leave a comment..."></textarea>
@@ -26,7 +26,7 @@
       </div>
     </form>
     {{else}}
-    {{#unless this}}
+    {{#unless post.comments.length}}
     <p><em>No comments.</em></p>
     {{/unless}}
     {{/if}}

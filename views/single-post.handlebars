@@ -1,29 +1,31 @@
 <div class="v-spacer"></div>
 <article class="post">
   <div class="spd1">
-    <a id="titttle" href="/post/{{id}}">
-      <h1 class="post-title">{{title}}</h1>
+    <a id="titttle" href="/post/{{post.id}}">
+      <h1 class="post-title">{{post.title}}</h1>
     </a>
-    <img class="place-image" src="{{image_url}}" />
+    <img class="place-image" src="{{post.image_url}}" />
     <div class="post-byline">
-      Posted by <a href="/user/{{user.post_author_id}}">{{user.post_author}}</a>
-      on {{format_date created_at}}
+      Posted by <a href="/user/{{post.user.post_author_id}}">{{post.user.post_author}}</a>
+      on {{format_date post.created_at}}
     </div>
   </div>
   <div class="spd2">
-    <div class="description">{{description}}</div>
-    {{#if map_url}}
+    <div class="description">{{post.description}}</div>
+    {{#if post.map_url}}
     <div class="map-container">
-      <a href="https://www.google.com/maps/search/?api=1&query={{latitude}}%2C{{longitude}}" target="_blank"><img
-          class="embedded-map" src="{{map_url}}" /></a>
+      <a href="https://www.google.com/maps/search/?api=1&query={{post.latitude}}%2C{{post.longitude}}" target="_blank"><img
+          class="embedded-map" src="{{post.map_url}}" /></a>
     </div>
     {{/if}}
   </div>
-  {{> tags this}}
+  {{> tags post}}
   <div class="social-bar">
-    <div><a id="comment-count" href="/post/{{id}}">{{comment_count}} {{format_plural 'comment' comment_count}}</a></div>
-    {{> like-controls this}}
+    <div><a id="comment-count" href="/post/{{post.id}}">{{post.comment_count}} {{format_plural 'comment' post.comment_count}}</a></div>
+    {{> like-controls post}}
   </div>
 </article>
-{{> comments this}}
+{{#if showComments}}
+{{> comments}}
+{{/if}}
 <script src="/javascript/vote.js"></script>

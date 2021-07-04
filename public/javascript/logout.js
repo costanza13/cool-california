@@ -12,7 +12,11 @@ async function logout(event) {
 
   if (response.ok) {
     // added 1-second delay, because immediate redirect creates race condition with cookie storage
-    setTimeout(() => { document.location.replace('/'); }, 1);
+    if (document.location.pathname.indexOf('/post') === 0) {
+      setTimeout(() => { document.location.reload(); }, 1);
+    } else {
+      setTimeout(() => { document.location.replace('/'); }, 1);
+    }
   } else {
     alert(response.statusText);
   }
