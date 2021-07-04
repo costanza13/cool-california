@@ -2,11 +2,7 @@ const router = require('express').Router();
 const { Op } = require('sequelize');
 const { Post, User, Comment, PostTag, UserTag, Tag, Vote } = require('../models');
 const { withAuth } = require('../utils/auth');
-const { getPostQueryAttributes, getPostQueryInclude, processPostsDbData } = require('../utils/query-utils');
-
-const sortPosts = function (posts, query) {
-  return posts;  // posts.sort((a, b) => (a.like_score > b.like_score) ? -1 : 1);
-}
+const { getPostQueryAttributes, getPostQueryInclude, processPostsDbData, sortPosts } = require('../utils/query-utils');
 
 router.get('/', (req, res) => {
 
@@ -248,10 +244,13 @@ router.get('/post/:id', (req, res) => {
       if (!dbPostData) {
         return res.render('error', { status: 404, message: 'Post not found' });
       }
-      const post = processPostsDbData([dbPostData], req.session)[0];
-      post.loggedIn = req.session.loggedIn;
-      // console.log(post);
-      res.render('single-post', post);
+      const singlePost = {}
+      singlePost.post = processPostsDbData([dbPostData], req.session)[0];
+      singlePost.loggedIn = req.session.loggedIn;
+      singlePost.showComments = singlePost.post.comment_count || req.session.loggedIn;
+      singlePost.nextUrl = `/post/${req.params.id}`;
+      // console.log(singlePost);
+      res.render('single-post', singlePost);
     })
     .catch(err => {
       console.log(err);
