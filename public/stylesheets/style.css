@@ -14,6 +14,8 @@
   --base-font-size-mobile: 16px;
   --like-color: #24344D;
   --dislike-color: #905923;
+  --like-color-hover: #24344d27;
+  --dislike-color-hover: #905a2329;
 }
 /* --bg-primary: #fff; */
 /* --bg-secondary: rgb(157, 165, 134); */
@@ -443,11 +445,14 @@ div.social-bar p {
   display: inline-block;
   padding: 3px;
   text-align: center;
-  width: 4em;
+  width: 3em;
 }
 
 .vote-input + label > .like-count {
-  font-size: 80%;
+  font-size: 70%;
+  float: right;
+  margin-left: -1em;
+  margin-top: 0.3em;
 }
 
 .vote-input + label,
@@ -476,6 +481,14 @@ div.social-bar p {
 
 .vote-input.dislike:checked + label {
   background-color: var(--dislike-color);
+}
+
+.vote-input + label:hover {
+  background-color: var(--like-color-hover);
+}
+
+.vote-input.dislike + label:hover {
+  background-color: var(--dislike-color-hover);
 }
 
 .comments h3 {
