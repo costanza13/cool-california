@@ -676,6 +676,15 @@ footer p .logo {
   font-size: 140%;
 }
 
+footer a {
+  color: whitesmoke;
+  font-size: 90%;
+}
+
+footer a:link {
+  text-decoration: none;
+}
+
 /* dashboard-specific styles */
 .dashboard-section {
   margin-bottom: 1rem;
