@@ -209,12 +209,25 @@ section>div {
   text-align: right;
 }
 
+.filter-control {
+  -webkit-appearance:     none;
+  -moz-appearance:        none;
+  -ms-appearance:         none;
+  -o-appearance:          none;
+}
+
 .filter-select {
+  appearance: none;
   color:rgb(212, 175, 55);
   background: var(--default-button-background-color);
   border: 2px solid var(--default-button-background-color);
   padding: 0.2rem;
   border-radius: var(--border-radius-controls);
+}
+
+.filter-option {
+  color:rgb(212, 175, 55);
+  background: var(--default-button-background-color);
 }
 
 .title-bar, .dashboard-section h3 {
@@ -413,7 +426,7 @@ article a {
   content: "\f00c";
 }
 
-div.social-bar {
+div.post-stats {
   align-items: center;
   clear: both;
   display: flex;
@@ -423,7 +436,7 @@ div.social-bar {
   padding: 1rem 1rem 0;
 }
 
-div.social-bar p {
+div.post-stats p {
   margin: 0 0 1;
   padding: 0;
 }
@@ -876,7 +889,7 @@ footer a:link {
     margin: 1rem;
   }
   
-  div.social-bar {
+  div.post-stats {
     justify-content: space-between;
   }
 
