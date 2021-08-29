@@ -209,15 +209,15 @@ section>div {
   text-align: right;
 }
 
-.filter-control {
+.filter-option {
   -webkit-appearance:     none;
   -moz-appearance:        none;
   -ms-appearance:         none;
   -o-appearance:          none;
+  appearance:             none;
 }
 
 .filter-select {
-  appearance: none;
   color:rgb(212, 175, 55);
   background: var(--default-button-background-color);
   border: 2px solid var(--default-button-background-color);
@@ -226,6 +226,7 @@ section>div {
 }
 
 .filter-option {
+  appearance: none;
   color:rgb(212, 175, 55);
   background: var(--default-button-background-color);
 }
